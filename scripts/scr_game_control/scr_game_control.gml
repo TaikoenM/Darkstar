@@ -43,22 +43,17 @@ function game_controller_handle_hex_click(event_data) {
     var current_state = gamestate_get();
     
     if (current_state == GameState.MAP_EDITOR) {
+        // Get editor selected tile type - provide default if not set
+        var selected_tile = TerrainType.PLAINS; // Default terrain type
+        if (variable_global_exists("editor_selected_tile")) {
+            selected_tile = global.editor_selected_tile;
+        }
+        
         var cmd = input_create_command(CommandType.EDITOR_PLACE, {
             q: event_data.q,
             r: event_data.r,
-            tile_type: global.editor_selected_tile
+            tile_type: selected_tile
         });
         input_queue_command(cmd);
     }
-}
-
-/// @function hex_pixel_to_axial(px, py)
-/// @description Convert pixel coordinates to axial hex coordinates
-/// @param {real} px X position in pixels
-/// @param {real} py Y position in pixels
-/// @return {struct} Struct with q and r axial coordinates
-function hex_pixel_to_axial(px, py) {
-    // TODO: Implement hex coordinate conversion
-    // This is a placeholder - will be implemented in scr_hex_utils
-    return { q: 0, r: 0 };
 }

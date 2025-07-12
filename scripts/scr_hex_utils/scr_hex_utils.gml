@@ -42,12 +42,12 @@ function hex_axial_to_pixel(q, r) {
         }
     }
     
-    var x = hex_size * (sqrt(3) * q + sqrt(3)/2 * r);
-    var y = hex_size * (3/2 * r);
+    var pixel_x = hex_size * (sqrt(3) * q + sqrt(3)/2 * r);
+    var pixel_y = hex_size * (3/2 * r);
     
     return {
-        x: x,
-        y: y
+        x: pixel_x,
+        y: pixel_y
     };
 }
 
@@ -94,7 +94,7 @@ function hex_distance(q1, r1, q2, r2) {
 /// @description Get all six neighboring hex coordinates
 /// @param {real} q Center hex q coordinate
 /// @param {real} r Center hex r coordinate
-/// @return {array} Array of neighbor coordinate structs
+/// @return {Array<Struct>} Array of neighbor coordinate structs
 function hex_neighbors(q, r) {
     var directions = [
         {q: 1, r: 0}, {q: 1, r: -1}, {q: 0, r: -1},
@@ -118,7 +118,7 @@ function hex_neighbors(q, r) {
 /// @param {real} r1 Start hex r coordinate
 /// @param {real} q2 End hex q coordinate
 /// @param {real} r2 End hex r coordinate
-/// @return {array} Array of hex coordinates along the line
+/// @return {Array<Struct>} Array of hex coordinates along the line
 function hex_line(q1, r1, q2, r2) {
     var distance = hex_distance(q1, r1, q2, r2);
     var results = [];
@@ -130,9 +130,9 @@ function hex_line(q1, r1, q2, r2) {
     
     for (var i = 0; i <= distance; i++) {
         var t = i / distance;
-        var q = q1 * (1 - t) + q2 * t;
-        var r = r1 * (1 - t) + r2 * t;
-        var rounded = hex_round(q, r);
+        var lerp_q = q1 * (1 - t) + q2 * t;
+        var lerp_r = r1 * (1 - t) + r2 * t;
+        var rounded = hex_round(lerp_q, lerp_r);
         array_push(results, rounded);
     }
     
@@ -144,7 +144,7 @@ function hex_line(q1, r1, q2, r2) {
 /// @param {real} center_q Center hex q coordinate
 /// @param {real} center_r Center hex r coordinate
 /// @param {real} radius Ring radius
-/// @return {array} Array of hex coordinates in the ring
+/// @return {Array<Struct>} Array of hex coordinates in the ring
 function hex_ring(center_q, center_r, radius) {
     if (radius == 0) {
         return [{q: center_q, r: center_r}];
@@ -176,7 +176,7 @@ function hex_ring(center_q, center_r, radius) {
 /// @param {real} center_q Center hex q coordinate
 /// @param {real} center_r Center hex r coordinate
 /// @param {real} radius Maximum radius
-/// @return {array} Array of all hex coordinates within radius
+/// @return {Array<Struct>} Array of all hex coordinates within radius
 function hex_spiral(center_q, center_r, radius) {
     var results = [];
     
@@ -213,8 +213,8 @@ function hex_from_string(hex_string) {
         return undefined;
     }
     
-    var q = real(parts[0]);
-    var r = real(parts[1]);
+    var q_val = real(parts[0]);
+    var r_val = real(parts[1]);
     
-    return {q: q, r: r};
+    return {q: q_val, r: r_val};
 }

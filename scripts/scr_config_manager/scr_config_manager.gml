@@ -59,11 +59,11 @@ function config_load() {
         // Check if file is empty or corrupted
         try {
             ini_open(global.config_file);
-            var test_value = ini_read_string("Display", "width", "");
+            var test_value = ini_read_string("Display", "width", "NOT_FOUND");
             ini_close();
             
-            // If no sections exist or key returns empty, file is empty/corrupted
-            if (test_value == "") {
+            // If no sections exist or key returns default, file is empty/corrupted
+            if (test_value == "NOT_FOUND") {
                 needs_save = true;
             }
         } catch (error) {
@@ -91,15 +91,20 @@ function config_load() {
         global.game_options.ui.button_spacing = ini_read_real("UI", "button_spacing", global.game_options.ui.button_spacing);
         global.game_options.ui.font_size = ini_read_real("UI", "font_size", global.game_options.ui.font_size);
         
-        // Asset paths
-        global.game_options.assets.images_path = ini_read_string("Assets", "images_path", global.game_options.assets.images_path);
-        global.game_options.assets.sounds_path = ini_read_string("Assets", "sounds_path", global.game_options.assets.sounds_path);
-        global.game_options.assets.data_path = ini_read_string("Assets", "data_path", global.game_options.assets.data_path);
+        // Asset paths - ensure we have valid defaults
+        var default_images_path = global.game_options.assets.images_path;
+        var default_sounds_path = global.game_options.assets.sounds_path;
+        var default_data_path = global.game_options.assets.data_path;
+        
+        global.game_options.assets.images_path = ini_read_string("Assets", "images_path", default_images_path);
+        global.game_options.assets.sounds_path = ini_read_string("Assets", "sounds_path", default_sounds_path);
+        global.game_options.assets.data_path = ini_read_string("Assets", "data_path", default_data_path);
         
         // Logging settings
         global.game_options.logging.enabled = ini_read_real("Logging", "enabled", global.game_options.logging.enabled);
         global.game_options.logging.level = ini_read_real("Logging", "level", global.game_options.logging.level);
-        global.game_options.logging.file = ini_read_string("Logging", "file", global.game_options.logging.file);
+        var default_log_file = global.game_options.logging.file;
+        global.game_options.logging.file = ini_read_string("Logging", "file", default_log_file);
         
         // Menu layout
         global.game_options.menu.center_x_offset = ini_read_real("Menu", "center_x_offset", global.game_options.menu.center_x_offset);
@@ -142,15 +147,15 @@ function config_save() {
         ini_write_real("UI", "button_spacing", global.game_options.ui.button_spacing);
         ini_write_real("UI", "font_size", global.game_options.ui.font_size);
         
-        // Asset paths
-        ini_write_string("Assets", "images_path", global.game_options.assets.images_path);
-        ini_write_string("Assets", "sounds_path", global.game_options.assets.sounds_path);
-        ini_write_string("Assets", "data_path", global.game_options.assets.data_path);
+        // Asset paths - ensure we write valid strings
+        ini_write_string("Assets", "images_path", string(global.game_options.assets.images_path));
+        ini_write_string("Assets", "sounds_path", string(global.game_options.assets.sounds_path));
+        ini_write_string("Assets", "data_path", string(global.game_options.assets.data_path));
         
         // Logging settings
         ini_write_real("Logging", "enabled", global.game_options.logging.enabled);
         ini_write_real("Logging", "level", global.game_options.logging.level);
-        ini_write_string("Logging", "file", global.game_options.logging.file);
+        ini_write_string("Logging", "file", string(global.game_options.logging.file));
         
         // Menu layout
         ini_write_real("Menu", "center_x_offset", global.game_options.menu.center_x_offset);

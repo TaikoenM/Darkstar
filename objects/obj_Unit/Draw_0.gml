@@ -15,14 +15,14 @@ if (unit_sprite != -1 && sprite_exists(unit_sprite)) {
         faction_color = unit_data.faction_color;
     }
     
-    var sprite_index = 0;
-    if (variable_struct_exists(unit_data, "sprite_index")) {
-        sprite_index = unit_data.sprite_index;
+    var sprite_frame = 0;
+    if (variable_struct_exists(unit_data, "sprite_frame")) {
+        sprite_frame = unit_data.sprite_frame;
     }
     
     draw_sprite_ext(
         unit_sprite,
-        sprite_index,
+        sprite_frame,
         visual_x,
         visual_y,
         1, 1, 0,
@@ -65,7 +65,15 @@ if (health_bar_alpha > 0) {
     if (variable_struct_exists(unit_data, "health") && variable_struct_exists(unit_data, "max_health")) {
         draw_set_alpha(health_bar_alpha);
         var health_percent = unit_data.health / unit_data.max_health;
-        var health_color = (health_percent > 0.5) ? c_lime : (health_percent > 0.25) ? c_yellow : c_red;
+        
+        // Determine health bar color using proper GML syntax
+        var health_color = c_red;  // Default to red
+        if (health_percent > 0.5) {
+            health_color = c_lime;
+        } else if (health_percent > 0.25) {
+            health_color = c_yellow;
+        }
+        
         draw_set_color(health_color);
         draw_rectangle(visual_x - bar_width/2, bar_y, visual_x - bar_width/2 + (bar_width * health_percent), bar_y + bar_height, false);
     }

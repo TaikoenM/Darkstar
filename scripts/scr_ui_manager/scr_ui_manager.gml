@@ -2,8 +2,16 @@
 /// @description Create and open a UI panel
 /// @param {string} panel_type Type of panel to open
 /// @param {struct} data Data to pass to the panel
-/// @return {id} Instance ID of created panel
+/// @return {Id.Instance} Instance ID of created panel
 function ui_open_panel(panel_type, data = {}) {
+    // Validate panel_type parameter
+    if (is_undefined(panel_type) || !is_string(panel_type) || panel_type == "") {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "UIManager", "Invalid panel type provided", "Panel type must be a non-empty string");
+        }
+        return noone;
+    }
+    
     // Check if UIManager exists
     if (!instance_exists(obj_UIManager)) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
@@ -62,7 +70,7 @@ function ui_open_panel(panel_type, data = {}) {
         // Initialize panel with data
         with (panel_instance) {
             if (variable_instance_exists(id, "panel_data")) {
-                panel_data = data;
+                panel_data = other.data;
             }
             if (variable_instance_exists(id, "panel_type")) {
                 panel_type = other.panel_type;
@@ -83,7 +91,7 @@ function ui_open_panel(panel_type, data = {}) {
 
 /// @function ui_close_panel(panel_instance)
 /// @description Close a UI panel
-/// @param {id} panel_instance Instance ID of panel to close
+/// @param {Id.Instance} panel_instance Instance ID of panel to close
 function ui_close_panel(panel_instance) {
     if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
@@ -115,7 +123,7 @@ function ui_close_panel(panel_instance) {
 
 /// @function ui_focus_panel(panel_instance)
 /// @description Give input focus to a panel
-/// @param {id} panel_instance Panel to focus
+/// @param {Id.Instance} panel_instance Panel to focus
 function ui_focus_panel(panel_instance) {
     if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
