@@ -184,11 +184,13 @@ function menu_callback_exit() {
     // Save configuration
     config_save();
     
-    // Clean up systems
+    // Clean up systems in reverse order
+    ui_cleanup();
     input_cleanup();
     assets_cleanup();
     gamestate_cleanup();
     
+    // Exit the game
     game_end();
 }
 

@@ -207,6 +207,18 @@ function input_update() {
     global.input_state.mouse_gui_pos_x = device_mouse_x_to_gui(0);
     global.input_state.mouse_gui_pos_y = device_mouse_y_to_gui(0);
     
+    // Debug logging for mouse movement
+    if (global.log_level == LogLevel.DEBUG) {
+        static last_mouse_x = 0;
+        static last_mouse_y = 0;
+        if (mouse_x != last_mouse_x || mouse_y != last_mouse_y) {
+            logger_write(LogLevel.DEBUG, "InputManager", 
+                        string("Mouse moved to ({0}, {1})", mouse_x, mouse_y), "Input tracking");
+            last_mouse_x = mouse_x;
+            last_mouse_y = mouse_y;
+        }
+    }
+    
     // Don't process game input if UI has focus
     if (global.input_state.ui_has_focus) {
         return;
@@ -214,12 +226,16 @@ function input_update() {
     
     // Check for pause
     if (keyboard_check_pressed(global.input_mapping.pause)) {
+        logger_write(LogLevel.DEBUG, "InputManager", "Pause key pressed", "Key: " + string(global.input_mapping.pause));
         var pause_command = input_create_command(CommandType.PAUSE, {});
         input_queue_command(pause_command);
     }
     
     // Check for primary action (left click)
     if (mouse_check_button_pressed(global.input_mapping.action_primary)) {
+        logger_write(LogLevel.DEBUG, "InputManager", 
+                    string("Primary action at ({0}, {1})", global.input_state.mouse_pos_x, global.input_state.mouse_pos_y), 
+                    "Mouse button: " + string(global.input_mapping.action_primary));
         var action_command = input_create_command(CommandType.ACTION_PRIMARY, {
             x: global.input_state.mouse_pos_x,
             y: global.input_state.mouse_pos_y,
@@ -231,6 +247,9 @@ function input_update() {
     
     // Check for secondary action (right click)
     if (mouse_check_button_pressed(global.input_mapping.action_secondary)) {
+        logger_write(LogLevel.DEBUG, "InputManager", 
+                    string("Secondary action at ({0}, {1})", global.input_state.mouse_pos_x, global.input_state.mouse_pos_y), 
+                    "Mouse button: " + string(global.input_mapping.action_secondary));
         var action_command = input_create_command(CommandType.ACTION_SECONDARY, {
             x: global.input_state.mouse_pos_x,
             y: global.input_state.mouse_pos_y,
@@ -238,6 +257,16 @@ function input_update() {
             gui_y: global.input_state.mouse_gui_pos_y
         });
         input_queue_command(action_command);
+    }
+    
+    // Debug logging for any key press
+    if (global.log_level == LogLevel.DEBUG && keyboard_check_pressed(vk_anykey)) {
+        for (var key = 0; key < 255; key++) {
+            if (keyboard_check_pressed(key)) {
+                logger_write(LogLevel.DEBUG, "InputManager", 
+                            string("Key pressed: {0}", key), "Raw input");
+            }
+        }
     }
 }
 

@@ -1,22 +1,26 @@
 # Project Summary
-**Generated on:** 2025-07-12 19:04:05
+**Generated on:** 2025-07-12 20:53:07
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 67
+**Total Files:** 79
 
-### .GML Files (35 files)
+### .GML Files (41 files)
+- `objects\obj_DevConsole\CleanUp_0.gml` (67 bytes)
+- `objects\obj_DevConsole\Create_0.gml` (168 bytes)
+- `objects\obj_DevConsole\Draw_64.gml` (2496 bytes)
+- `objects\obj_DevConsole\Step_0.gml` (2822 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
 - `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
 - `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
 - `objects\obj_MainMenuManager\Create_0.gml` (2154 bytes)
-- `objects\obj_MenuButton\Create_0.gml` (499 bytes)
-- `objects\obj_MenuButton\Draw_0.gml` (826 bytes)
-- `objects\obj_MenuButton\Mouse_11.gml` (73 bytes)
-- `objects\obj_MenuButton\Mouse_7.gml` (357 bytes)
-- `objects\obj_MenuButton\Step_0.gml` (313 bytes)
+- `objects\obj_MenuButton\Create_0.gml` (636 bytes)
+- `objects\obj_MenuButton\Draw_0.gml` (757 bytes)
+- `objects\obj_MenuButton\Mouse_10.gml` (18 bytes)
+- `objects\obj_MenuButton\Mouse_11.gml` (71 bytes)
+- `objects\obj_MenuButton\Mouse_4.gml` (458 bytes)
 - `objects\obj_UIManager\CleanUp_0.gml` (13 bytes)
 - `objects\obj_UIManager\Create_0.gml` (482 bytes)
 - `objects\obj_Unit\Create_0.gml` (349 bytes)
@@ -25,43 +29,48 @@
 - `objects\obj_Unit\Mouse_5.gml` (399 bytes)
 - `objects\obj_Unit\Step_0.gml` (698 bytes)
 - `objects\obj_game_controller\CleanUp_0.gml` (541 bytes)
-- `objects\obj_game_controller\Create_0.gml` (1668 bytes)
+- `objects\obj_game_controller\Create_0.gml` (1726 bytes)
 - `objects\obj_game_controller\Draw_64.gml` (1960 bytes)
 - `objects\obj_game_controller\Other_4.gml` (1681 bytes)
 - `objects\obj_game_controller\Step_0.gml` (2612 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.gml` (10385 bytes)
 - `scripts\scr_config_manager\scr_config_manager.gml` (10254 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2221 bytes)
+- `scripts\scr_dev_console\scr_dev_console.gml` (17701 bytes)
 - `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (5871 bytes)
 - `scripts\scr_game_control\scr_game_control.gml` (2224 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4890 bytes)
-- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (4446 bytes)
+- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (4627 bytes)
 - `scripts\scr_hex_utils\scr_hex_utils.gml` (7424 bytes)
-- `scripts\scr_input_manager\scr_input_manager.gml` (9809 bytes)
+- `scripts\scr_input_manager\scr_input_manager.gml` (11345 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
-- `scripts\scr_logger\scr_logger.gml` (2665 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (10277 bytes)
+- `scripts\scr_logger\scr_logger.gml` (3586 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (10335 bytes)
+- `scripts\scr_test_suites\scr_test_suites.gml` (22551 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (6975 bytes)
 
 ### .MD Files (1 files)
-- `project_summary.md` (19726 bytes)
+- `project_summary.md` (20104 bytes)
 
-### .PNG Files (1 files)
+### .PNG Files (3 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
+- `sprites\spr_button\38752966-343f-47bb-a30f-4897623cb5d6.png` (403 bytes)
+- `sprites\spr_button\layers\38752966-343f-47bb-a30f-4897623cb5d6\4c04fe41-176e-4945-844b-e2ec1689ccad.png` (403 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3214 bytes)
+- `DarkStar.resource_order` (3499 bytes)
 
-### .YY Files (28 files)
+### .YY Files (32 files)
 - `objects\obj_DataManager\obj_DataManager.yy` (726 bytes)
+- `objects\obj_DevConsole\obj_DevConsole.yy` (1369 bytes)
 - `objects\obj_GameState\obj_GameState.yy` (722 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
 - `objects\obj_MainMenuBackground\obj_MainMenuBackground.yy` (903 bytes)
 - `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (1058 bytes)
-- `objects\obj_MenuButton\obj_MenuButton.yy` (1528 bytes)
+- `objects\obj_MenuButton\obj_MenuButton.yy` (1602 bytes)
 - `objects\obj_UIManager\obj_UIManager.yy` (1046 bytes)
 - `objects\obj_Unit\obj_Unit.yy` (1515 bytes)
-- `objects\obj_game_controller\obj_game_controller.yy` (1539 bytes)
+- `objects\obj_game_controller\obj_game_controller.yy` (1538 bytes)
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1619 bytes)
@@ -71,6 +80,7 @@
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (257 bytes)
 - `scripts\scr_config_manager\scr_config_manager.yy` (259 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.yy` (265 bytes)
+- `scripts\scr_dev_console\scr_dev_console.yy` (253 bytes)
 - `scripts\scr_enums_and_constants\scr_enums_and_constants.yy` (269 bytes)
 - `scripts\scr_game_control\scr_game_control.yy` (255 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.yy` (267 bytes)
@@ -80,20 +90,43 @@
 - `scripts\scr_json_utils\scr_json_utils.yy` (251 bytes)
 - `scripts\scr_logger\scr_logger.yy` (243 bytes)
 - `scripts\scr_menu_system\scr_menu_system.yy` (253 bytes)
+- `scripts\scr_test_suites\scr_test_suites.yy` (253 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.yy` (251 bytes)
+- `sprites\spr_button\spr_button.yy` (3193 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (5963 bytes)
+- `DarkStar.yyp` (6317 bytes)
 
 
 ---
 ## Part B: GameMaker Objects and Events
-**Total Objects:** 9
+**Total Objects:** 10
 
 ### Object: obj_DataManager
 **Description:** No description available
 **Path:** `objects\obj_DataManager`
 **Events:** No events found
+
+### Object: obj_DevConsole
+**Description:** Clean up console resources
+**Path:** `objects\obj_DevConsole`
+**Events (4):**
+- **CleanUp_0** (Clean Up Event)
+  - *Description:* Clean up console resources
+  - *Path:* `objects\obj_DevConsole\CleanUp_0.gml`
+
+- **Create_0** (Create Event)
+  - *Description:* Initialize developer console
+  - *Path:* `objects\obj_DevConsole\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Description:* Render the developer console
+  - *Path:* `objects\obj_DevConsole\Draw_64.gml`
+
+- **Step_0** (Step Event)
+  - *Description:* Handle console input and updates
+  - *Path:* `objects\obj_DevConsole\Step_0.gml`
+
 
 ### Object: obj_GameState
 **Description:** No description available
@@ -147,17 +180,16 @@
   - *Description:* Draw button with current visual state
   - *Path:* `objects\obj_MenuButton\Draw_0.gml`
 
+- **Mouse_10** (Mouse Event)
+  - *Path:* `objects\obj_MenuButton\Mouse_10.gml`
+
 - **Mouse_11** (Mouse Event)
   - *Description:* Reset press state if mouse leaves
   - *Path:* `objects\obj_MenuButton\Mouse_11.gml`
 
-- **Mouse_7** (Mouse Event)
-  - *Description:* Handle mouse release and notify observers
-  - *Path:* `objects\obj_MenuButton\Mouse_7.gml`
-
-- **Step_0** (Step Event)
-  - *Description:* Update button hover state
-  - *Path:* `objects\obj_MenuButton\Step_0.gml`
+- **Mouse_4** (Mouse Event)
+  - *Description:* Handle mouse pressed and notify observers
+  - *Path:* `objects\obj_MenuButton\Mouse_4.gml`
 
 
 ### Object: obj_UIManager
@@ -225,7 +257,7 @@
 
 ---
 ## Part C: Script Files and Functions
-**Total Scripts:** 13
+**Total Scripts:** 15
 
 ### Script: scr_asset_manager
 **Description:** Initialize the asset management system Creates data structures for asset caching and loads manifest file Requires config system to be initialized first for asset paths
@@ -273,6 +305,157 @@
 **Path:** `scripts\scr_debug_file_system\scr_debug_file_system.gml`
 **Functions (1):**
 - **`debug_file_system()`**
+
+
+### Script: scr_dev_console
+**Description:** Developer console functions and commands Provides in-game debugging and testing capabilities @function string_split(str, delimiter) Split a string by delimiter (compatibility function) @param {string} str String to split @param {string} delimiter Delimiter to split by @return {Array<string>} Array of split strings
+**Path:** `scripts\scr_dev_console\scr_dev_console.gml`
+**Functions (52):**
+- **`dev_cmd_benchmark(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_benchmark(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_clear(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_clear(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_debug_level(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_debug_level(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_echo(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_echo(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_gamestate(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_gamestate(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_help(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_help(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_info(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_info(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_memory(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_memory(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_quit(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_quit(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_room_goto(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_room_goto(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_room_info(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_room_info(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_show_debug(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_show_debug(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_show_fps(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_show_fps(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_all(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_all(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_assets(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_config(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_input(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_json(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_logger(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_test_observer(args)`**
+  - *Arguments:* args
+
+- **`dev_console_cleanup()`**
+
+- **`dev_console_cleanup()`**
+
+- **`dev_console_execute(command_string)`**
+  - *Arguments:* command_string
+
+- **`dev_console_execute(command_string)`**
+  - *Arguments:* command_string
+
+- **`dev_console_init()`**
+
+- **`dev_console_init()`**
+
+- **`dev_console_log(message, color)`**
+  - *Arguments:* message, color
+
+- **`dev_console_log(message, color = c_white)`**
+  - *Arguments:* message, color = c_white
+
+- **`dev_console_register_commands()`**
+
+- **`dev_console_register_commands()`**
+
+- **`dev_console_toggle()`**
+
+- **`dev_console_toggle()`**
+
+- **`os_type_string()`**
+
+- **`os_type_string()`**
+
+- **`string_split(str, delimiter)`**
+  - *Arguments:* str, delimiter
+
+- **`string_split(str, delimiter)`**
+  - *Arguments:* str, delimiter
 
 
 ### Script: scr_enums_and_constants
@@ -544,6 +727,73 @@
   - *Arguments:* button_configs
 
 - **`menu_get_main_menu_buttons()`**
+
+
+### Script: scr_test_suites
+**Description:** Comprehensive test suites for all game systems Run via developer console or automated testing @function test_assert(condition, test_name, message) Assert a condition is true @param {bool} condition Condition to test @param {string} test_name Name of the test @param {string} message Failure message @return {bool} True if passed
+**Path:** `scripts\scr_test_suites\scr_test_suites.gml`
+**Functions (26):**
+- **`test_assert(condition, test_name, message)`**
+  - *Arguments:* condition, test_name, message
+
+- **`test_assert(condition, test_name, message = "")`**
+  - *Arguments:* condition, test_name, message = ""
+
+- **`test_assert_equals(actual, expected, test_name)`**
+  - *Arguments:* actual, expected, test_name
+
+- **`test_assert_equals(actual, expected, test_name)`**
+  - *Arguments:* actual, expected, test_name
+
+- **`test_assert_exists(value, test_name)`**
+  - *Arguments:* value, test_name
+
+- **`test_assert_exists(value, test_name)`**
+  - *Arguments:* value, test_name
+
+- **`test_assert_not_equals(actual, expected, test_name)`**
+  - *Arguments:* actual, expected, test_name
+
+- **`test_assert_not_equals(actual, expected, test_name)`**
+  - *Arguments:* actual, expected, test_name
+
+- **`test_assert_type(value, type_check_func, test_name)`**
+  - *Arguments:* value, type_check_func, test_name
+
+- **`test_assert_type(value, type_check_func, test_name)`**
+  - *Arguments:* value, type_check_func, test_name
+
+- **`test_run_asset_tests()`**
+
+- **`test_run_asset_tests()`**
+
+- **`test_run_benchmarks()`**
+
+- **`test_run_benchmarks()`**
+
+- **`test_run_config_tests()`**
+
+- **`test_run_config_tests()`**
+
+- **`test_run_hex_tests()`**
+
+- **`test_run_hex_tests()`**
+
+- **`test_run_input_tests()`**
+
+- **`test_run_input_tests()`**
+
+- **`test_run_json_tests()`**
+
+- **`test_run_json_tests()`**
+
+- **`test_run_logger_tests()`**
+
+- **`test_run_logger_tests()`**
+
+- **`test_run_observer_tests()`**
+
+- **`test_run_observer_tests()`**
 
 
 ### Script: scr_ui_manager

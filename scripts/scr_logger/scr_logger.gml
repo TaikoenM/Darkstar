@@ -49,6 +49,12 @@ function logger_write(level, source, message, reason = "") {
         log_entry += string(" | Reason: {0}", reason);
     }
     
+    // Add debug info for DEBUG level
+    if (level == LogLevel.DEBUG && global.log_level == LogLevel.DEBUG) {
+        log_entry += string(" | Room: {0}", room_get_name(room));
+        log_entry += string(" | Frame: {0}", get_timer() / 1000);
+    }
+    
     // Write to file if file system is available
     try {
         var file = file_text_open_append(global.log_file);
@@ -62,4 +68,17 @@ function logger_write(level, source, message, reason = "") {
     
     // Always output to console for debugging
     show_debug_message(log_entry);
+    
+    // Also send to dev console if it exists
+    if (variable_global_exists("dev_console") && !is_undefined(global.dev_console)) {
+        var console_color = c_white;
+        switch(level) {
+            case LogLevel.DEBUG:    console_color = c_gray; break;
+            case LogLevel.INFO:     console_color = c_white; break;
+            case LogLevel.WARNING:  console_color = c_yellow; break;
+            case LogLevel.ERROR:    console_color = c_red; break;
+            case LogLevel.CRITICAL: console_color = c_fuchsia; break;
+        }
+        dev_console_log(string("[{0}] {1}: {2}", level_text, source, message), console_color);
+    }
 }

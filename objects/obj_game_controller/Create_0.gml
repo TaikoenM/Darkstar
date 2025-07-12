@@ -20,6 +20,7 @@ assets_init();
 // Create manager objects
 instance_create_layer(0, 0, "Managers", obj_InputManager);
 instance_create_layer(0, 0, "Managers", obj_UIManager);
+instance_create_layer(0, 0, "Managers", obj_DevConsole);
 
 // Pre-load critical assets
 assets_load_sprite("mainmenu_background");
