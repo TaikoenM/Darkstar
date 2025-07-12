@@ -16,6 +16,9 @@ function assets_init() {
 /// @description Load asset manifest file that maps asset keys to file paths
 /// @description Creates default manifest if none exists
 function assets_load_manifest() {
+	if (variable_global_exists("log_enabled") && global.log_enabled) {
+		logger_write(LogLevel.INFO, "AssetManager", "Starting assets_load_manifest function");
+	}
     var manifest_file = "";
     
     // Use correct property path with proper type checking
@@ -24,10 +27,10 @@ function assets_load_manifest() {
             variable_struct_exists(global.game_options.assets, "data_path")) {
             manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
         } else {
-            manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+            manifest_file = working_directory + "assets/data/asset_manifest.ini";
         }
     } else {
-        manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+        manifest_file = working_directory + "assets/data/asset_manifest.ini";
     }
     
     if (!file_exists(manifest_file)) {
@@ -83,10 +86,10 @@ function assets_create_default_manifest() {
             variable_struct_exists(global.game_options.assets, "data_path")) {
             manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
         } else {
-            manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+            manifest_file = working_directory + "assets/data/asset_manifest.ini";
         }
     } else {
-        manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+        manifest_file = working_directory + "assets/data/asset_manifest.ini";
     }
     
     try {

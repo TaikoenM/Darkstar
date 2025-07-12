@@ -140,9 +140,9 @@ enum TerrainType {
 #macro CONFIG_FILE "game_config.ini"
 #macro LOG_FILE "game_log.txt"
 #macro SAVE_FILE_EXTENSION ".sav"
-#macro DATA_PATH "datafiles/assets/data/"
-#macro IMAGES_PATH "datafiles/assets/images/"
-#macro SOUNDS_PATH "datafiles/assets/sounds/"
+#macro DATA_PATH "assets/data/"
+#macro IMAGES_PATH "assets/images/"
+#macro SOUNDS_PATH "assets/sounds/"
 
 // Network constants
 #macro DEFAULT_PORT 7777            // Default network port

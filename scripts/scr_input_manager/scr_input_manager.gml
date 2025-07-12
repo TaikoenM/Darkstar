@@ -61,7 +61,7 @@ function input_load_mapping() {
     if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
         mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
     } else {
-        mapping_file = working_directory + "datafiles/assets/data/input_mapping.ini";
+        mapping_file = working_directory + "assets/data/input_mapping.ini";
     }
     
     var mapping = {
@@ -122,7 +122,7 @@ function input_save_mapping() {
     if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
         mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
     } else {
-        mapping_file = working_directory + "datafiles/assets/data/input_mapping.ini";
+        mapping_file = working_directory + "assets/data/input_mapping.ini";
     }
     
     try {

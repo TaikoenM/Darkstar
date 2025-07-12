@@ -20,9 +20,9 @@ function config_init() {
             font_size: 24
         },
         assets: {
-            images_path: "datafiles/assets/images/",
-            sounds_path: "datafiles/assets/sounds/",
-            data_path: "datafiles/assets/data/"
+            images_path: "assets/images/",
+            sounds_path: "assets/sounds/",
+            data_path: "assets/data/"
         },
         logging: {
             enabled: true,

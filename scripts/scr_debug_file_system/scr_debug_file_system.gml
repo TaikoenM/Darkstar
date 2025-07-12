@@ -9,14 +9,14 @@ function debug_file_system() {
     // Test various file path combinations
     var test_paths = [
         "mainmenu_background.png",
-        "datafiles/mainmenu_background.png",
-        "datafiles/assets/images/mainmenu_background.png",
+        "mainmenu_background.png",
+        "assets/images/mainmenu_background.png",
         working_directory + "mainmenu_background.png",
-        working_directory + "datafiles/mainmenu_background.png",
-        working_directory + "datafiles/assets/images/mainmenu_background.png",
+        working_directory + "mainmenu_background.png",
+        working_directory + "assets/images/mainmenu_background.png",
         program_directory + "mainmenu_background.png",
-        program_directory + "datafiles/mainmenu_background.png",
-        program_directory + "datafiles/assets/images/mainmenu_background.png"
+        program_directory + "mainmenu_background.png",
+        program_directory + "assets/images/mainmenu_background.png"
     ];
     
     show_debug_message("\n--- Testing file existence ---");
