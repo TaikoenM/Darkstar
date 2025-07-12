@@ -1,15 +1,15 @@
 # Project Summary
-**Generated on:** 2025-07-12 20:53:07
+**Generated on:** 2025-07-12 22:54:11
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 79
+**Total Files:** 80
 
 ### .GML Files (41 files)
-- `objects\obj_DevConsole\CleanUp_0.gml` (67 bytes)
+- `objects\obj_DevConsole\CleanUp_0.gml` (995 bytes)
 - `objects\obj_DevConsole\Create_0.gml` (168 bytes)
-- `objects\obj_DevConsole\Draw_64.gml` (2496 bytes)
+- `objects\obj_DevConsole\Draw_64.gml` (6665 bytes)
 - `objects\obj_DevConsole\Step_0.gml` (2822 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
@@ -28,29 +28,30 @@
 - `objects\obj_Unit\Mouse_4.gml` (324 bytes)
 - `objects\obj_Unit\Mouse_5.gml` (399 bytes)
 - `objects\obj_Unit\Step_0.gml` (698 bytes)
-- `objects\obj_game_controller\CleanUp_0.gml` (541 bytes)
-- `objects\obj_game_controller\Create_0.gml` (1726 bytes)
+- `objects\obj_game_controller\CleanUp_0.gml` (4098 bytes)
+- `objects\obj_game_controller\Create_0.gml` (1749 bytes)
 - `objects\obj_game_controller\Draw_64.gml` (1960 bytes)
 - `objects\obj_game_controller\Other_4.gml` (1681 bytes)
 - `objects\obj_game_controller\Step_0.gml` (2612 bytes)
-- `scripts\scr_asset_manager\scr_asset_manager.gml` (10385 bytes)
-- `scripts\scr_config_manager\scr_config_manager.gml` (10254 bytes)
-- `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2221 bytes)
-- `scripts\scr_dev_console\scr_dev_console.gml` (17701 bytes)
-- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (5871 bytes)
+- `scripts\scr_asset_manager\scr_asset_manager.gml` (18347 bytes)
+- `scripts\scr_config_manager\scr_config_manager.gml` (10224 bytes)
+- `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2161 bytes)
+- `scripts\scr_dev_console\scr_dev_console.gml` (19125 bytes)
+- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (5841 bytes)
 - `scripts\scr_game_control\scr_game_control.gml` (2224 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4890 bytes)
-- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (4627 bytes)
+- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (6629 bytes)
 - `scripts\scr_hex_utils\scr_hex_utils.gml` (7424 bytes)
-- `scripts\scr_input_manager\scr_input_manager.gml` (11345 bytes)
+- `scripts\scr_input_manager\scr_input_manager.gml` (11325 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
-- `scripts\scr_logger\scr_logger.gml` (3586 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (10335 bytes)
-- `scripts\scr_test_suites\scr_test_suites.gml` (22551 bytes)
-- `scripts\scr_ui_manager\scr_ui_manager.gml` (6975 bytes)
+- `scripts\scr_logger\scr_logger.gml` (4968 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (11311 bytes)
+- `scripts\scr_test_suites\scr_test_suites.gml` (24648 bytes)
+- `scripts\scr_ui_manager\scr_ui_manager.gml` (7590 bytes)
 
-### .MD Files (1 files)
-- `project_summary.md` (20104 bytes)
+### .MD Files (2 files)
+- `project_full_report.md` (207891 bytes)
+- `project_summary.md` (26821 bytes)
 
 ### .PNG Files (3 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
@@ -73,7 +74,7 @@
 - `objects\obj_game_controller\obj_game_controller.yy` (1538 bytes)
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
-- `options\windows\options_windows.yy` (1619 bytes)
+- `options\windows\options_windows.yy` (1618 bytes)
 - `rooms\room_game_init\room_game_init.yy` (4463 bytes)
 - `rooms\room_main_menu\room_main_menu.yy` (3454 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
@@ -108,11 +109,11 @@
 **Events:** No events found
 
 ### Object: obj_DevConsole
-**Description:** Clean up console resources
+**Description:** Clean up console resources with better error handling
 **Path:** `objects\obj_DevConsole`
 **Events (4):**
 - **CleanUp_0** (Clean Up Event)
-  - *Description:* Clean up console resources
+  - *Description:* Clean up console resources with better error handling
   - *Path:* `objects\obj_DevConsole\CleanUp_0.gml`
 
 - **Create_0** (Create Event)
@@ -120,8 +121,10 @@
   - *Path:* `objects\obj_DevConsole\Create_0.gml`
 
 - **Draw_64** (Draw GUI Event)
-  - *Description:* Render the developer console
+  - *Description:* Render the developer console with improved text wrapping and display
   - *Path:* `objects\obj_DevConsole\Draw_64.gml`
+  - *Functions:*
+    - `wrap_text(text, max_width)`
 
 - **Step_0** (Step Event)
   - *Description:* Handle console input and updates
@@ -230,12 +233,14 @@
 
 
 ### Object: obj_game_controller
-**Description:** Clean up all systems on game exit
+**Description:** Clean up all systems on game exit with proper safety and order
 **Path:** `objects\obj_game_controller`
 **Events (5):**
 - **CleanUp_0** (Clean Up Event)
-  - *Description:* Clean up all systems on game exit
+  - *Description:* Clean up all systems on game exit with proper safety and order
   - *Path:* `objects\obj_game_controller\CleanUp_0.gml`
+  - *Functions:*
+    - `ui_cleanup()`
 
 - **Create_0** (Create Event)
   - *Description:* Initialize the game during startup phase Sets up all core systems in proper order and transitions to main menu This is the main entry point for the entire game
@@ -260,12 +265,14 @@
 **Total Scripts:** 15
 
 ### Script: scr_asset_manager
-**Description:** Initialize the asset management system Creates data structures for asset caching and loads manifest file Requires config system to be initialized first for asset paths
+**Description:** Enhanced asset management system with detailed logging and proper paths
 **Path:** `scripts\scr_asset_manager\scr_asset_manager.gml`
-**Functions (7):**
+**Functions (8):**
 - **`assets_cleanup()`**
 
 - **`assets_create_default_manifest()`**
+
+- **`assets_fix_manifest_paths()`**
 
 - **`assets_get_sprite(asset_key)`**
   - *Arguments:* asset_key
@@ -512,7 +519,7 @@
 
 
 ### Script: scr_gamestate_observer
-**Description:** Observer pattern implementation for GameState events Allows objects to register for and receive notifications about game events Initialize the observer system Called automatically by gamestate_init()
+**Description:** Observer pattern implementation for GameState events with safe cleanup Allows objects to register for and receive notifications about game events Initialize the observer system Called automatically by gamestate_init()
 **Path:** `scripts\scr_gamestate_observer\scr_gamestate_observer.gml`
 **Functions (5):**
 - **`gamestate_add_observer(event_name, callback)`**
@@ -691,11 +698,14 @@
 ### Script: scr_logger
 **Description:** Initialize the logging system with configuration settings Sets up global logging variables and creates initial log file Requires config system to be initialized first
 **Path:** `scripts\scr_logger\scr_logger.gml`
-**Functions (2):**
+**Functions (3):**
 - **`logger_init()`**
 
 - **`logger_write(level, source, message, reason = "")`**
   - *Arguments:* level, source, message, reason = ""
+
+- **`safe_cleanup_with_logging(system_name, cleanup_function)`**
+  - *Arguments:* system_name, cleanup_function
 
 
 ### Script: scr_menu_system
@@ -797,31 +807,18 @@
 
 
 ### Script: scr_ui_manager
-**Description:** Create and open a UI panel @param {string} panel_type Type of panel to open @param {struct} data Data to pass to the panel @return {Id.Instance} Instance ID of created panel
+**Description:** Create and open a UI panel
 **Path:** `scripts\scr_ui_manager\scr_ui_manager.gml`
-**Functions (10):**
+**Functions (5):**
 - **`ui_cleanup()`**
-
-- **`ui_cleanup()`**
-
-- **`ui_close_all_panels()`**
 
 - **`ui_close_all_panels()`**
 
 - **`ui_close_panel(panel_instance)`**
   - *Arguments:* panel_instance
 
-- **`ui_close_panel(panel_instance)`**
-  - *Arguments:* panel_instance
-
 - **`ui_focus_panel(panel_instance)`**
   - *Arguments:* panel_instance
-
-- **`ui_focus_panel(panel_instance)`**
-  - *Arguments:* panel_instance
-
-- **`ui_open_panel(panel_type, data)`**
-  - *Arguments:* panel_type, data
 
 - **`ui_open_panel(panel_type, data = {})`**
   - *Arguments:* panel_type, data = {}
