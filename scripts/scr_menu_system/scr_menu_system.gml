@@ -6,14 +6,8 @@
 /// @param {function} callback Function to call when button is clicked
 /// @return {struct} Button data structure with all properties set
 function menu_create_button_data(type, text, x, y, callback) {
-    var button_width = 300;
-    var button_height = 60;
-    
-    // Safe access to config for button dimensions
-    if (variable_global_exists("config") && !is_undefined(global.config)) {
-        button_width = global.config.menu_button_width;
-        button_height = global.config.menu_button_height;
-    }
+    var button_width = global.game_options.ui.button_width;
+    var button_height = global.game_options.ui.button_height;
     
     return {
         type: type,

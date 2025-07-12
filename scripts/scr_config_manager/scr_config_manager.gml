@@ -5,46 +5,50 @@ function config_init() {
     global.config_file = "game_config.ini";
     global.config_loaded = false;
     
-    // Initialize config structure with defaults
-    global.config = {
-        // Display settings
-        game_width: DEFAULT_GAME_WIDTH,
-        game_height: DEFAULT_GAME_HEIGHT,
-        fullscreen: DEFAULT_FULLSCREEN,
-        vsync: true,
-        
-        // UI settings
-        menu_button_width: 300,
-        menu_button_height: 60,
-        menu_button_spacing: 80,
-        menu_font_size: 24,
-        
-        // Asset paths - Updated to match your actual directory structure
-        asset_path_images: "datafiles/assets/images/",
-        asset_path_sounds: "datafiles/assets/sounds/",
-        asset_path_data: "datafiles/assets/data/",
-        
-        // Logging settings
-        log_enabled: true,
-        log_level: LogLevel.INFO,
-        log_file: "game_log.txt",
-        
-        // Menu layout
-        menu_center_x_offset: 0,
-        menu_center_y_offset: 0,
-        menu_start_y_offset: -240,
-        
-        // Performance settings
-        target_fps: 60,
-        fixed_timestep: true
+    // Initialize game options structure with subsections
+    global.game_options = {
+        display: {
+            width: 1920,
+            height: 1080,
+            fullscreen: false,
+            vsync: true
+        },
+        ui: {
+            button_width: 300,
+            button_height: 60,
+            button_spacing: 80,
+            font_size: 24
+        },
+        assets: {
+            images_path: "datafiles/assets/images/",
+            sounds_path: "datafiles/assets/sounds/",
+            data_path: "datafiles/assets/data/"
+        },
+        logging: {
+            enabled: true,
+            level: LogLevel.INFO,
+            file: "game_log.txt"
+        },
+        menu: {
+            center_x_offset: 0,
+            center_y_offset: 0,
+            start_y_offset: -240
+        },
+        performance: {
+            target_fps: 60,
+            fixed_timestep: true
+        }
     };
+    
+    // Keep global.config for backwards compatibility during transition
+    global.config = global.game_options;
     
     config_load();
     config_apply_display_settings();
 }
 
 /// @description Load configuration values from the INI file
-/// @description Reads settings from file and applies them to global.config
+/// @description Reads settings from file and applies them to global.game_options
 /// @description Creates default config file if none exists or if file is empty
 function config_load() {
     var needs_save = false;
@@ -76,38 +80,41 @@ function config_load() {
         ini_open(global.config_file);
         
         // Display settings
-        global.config.game_width = ini_read_real("Display", "width", global.config.game_width);
-        global.config.game_height = ini_read_real("Display", "height", global.config.game_height);
-        global.config.fullscreen = ini_read_real("Display", "fullscreen", global.config.fullscreen);
-        global.config.vsync = ini_read_real("Display", "vsync", global.config.vsync);
+        global.game_options.display.width = ini_read_real("Display", "width", global.game_options.display.width);
+        global.game_options.display.height = ini_read_real("Display", "height", global.game_options.display.height);
+        global.game_options.display.fullscreen = ini_read_real("Display", "fullscreen", global.game_options.display.fullscreen);
+        global.game_options.display.vsync = ini_read_real("Display", "vsync", global.game_options.display.vsync);
         
         // UI settings
-        global.config.menu_button_width = ini_read_real("UI", "button_width", global.config.menu_button_width);
-        global.config.menu_button_height = ini_read_real("UI", "button_height", global.config.menu_button_height);
-        global.config.menu_button_spacing = ini_read_real("UI", "button_spacing", global.config.menu_button_spacing);
-        global.config.menu_font_size = ini_read_real("UI", "font_size", global.config.menu_font_size);
+        global.game_options.ui.button_width = ini_read_real("UI", "button_width", global.game_options.ui.button_width);
+        global.game_options.ui.button_height = ini_read_real("UI", "button_height", global.game_options.ui.button_height);
+        global.game_options.ui.button_spacing = ini_read_real("UI", "button_spacing", global.game_options.ui.button_spacing);
+        global.game_options.ui.font_size = ini_read_real("UI", "font_size", global.game_options.ui.font_size);
         
         // Asset paths
-        global.config.asset_path_images = ini_read_string("Assets", "images_path", global.config.asset_path_images);
-        global.config.asset_path_sounds = ini_read_string("Assets", "sounds_path", global.config.asset_path_sounds);
-        global.config.asset_path_data = ini_read_string("Assets", "data_path", global.config.asset_path_data);
+        global.game_options.assets.images_path = ini_read_string("Assets", "images_path", global.game_options.assets.images_path);
+        global.game_options.assets.sounds_path = ini_read_string("Assets", "sounds_path", global.game_options.assets.sounds_path);
+        global.game_options.assets.data_path = ini_read_string("Assets", "data_path", global.game_options.assets.data_path);
         
         // Logging settings
-        global.config.log_enabled = ini_read_real("Logging", "enabled", global.config.log_enabled);
-        global.config.log_level = ini_read_real("Logging", "level", global.config.log_level);
-        global.config.log_file = ini_read_string("Logging", "file", global.config.log_file);
+        global.game_options.logging.enabled = ini_read_real("Logging", "enabled", global.game_options.logging.enabled);
+        global.game_options.logging.level = ini_read_real("Logging", "level", global.game_options.logging.level);
+        global.game_options.logging.file = ini_read_string("Logging", "file", global.game_options.logging.file);
         
         // Menu layout
-        global.config.menu_center_x_offset = ini_read_real("Menu", "center_x_offset", global.config.menu_center_x_offset);
-        global.config.menu_center_y_offset = ini_read_real("Menu", "center_y_offset", global.config.menu_center_y_offset);
-        global.config.menu_start_y_offset = ini_read_real("Menu", "start_y_offset", global.config.menu_start_y_offset);
+        global.game_options.menu.center_x_offset = ini_read_real("Menu", "center_x_offset", global.game_options.menu.center_x_offset);
+        global.game_options.menu.center_y_offset = ini_read_real("Menu", "center_y_offset", global.game_options.menu.center_y_offset);
+        global.game_options.menu.start_y_offset = ini_read_real("Menu", "start_y_offset", global.game_options.menu.start_y_offset);
         
         // Performance settings
-        global.config.target_fps = ini_read_real("Performance", "target_fps", global.config.target_fps);
-        global.config.fixed_timestep = ini_read_real("Performance", "fixed_timestep", global.config.fixed_timestep);
+        global.game_options.performance.target_fps = ini_read_real("Performance", "target_fps", global.game_options.performance.target_fps);
+        global.game_options.performance.fixed_timestep = ini_read_real("Performance", "fixed_timestep", global.game_options.performance.fixed_timestep);
         
         ini_close();
         global.config_loaded = true;
+        
+        // Update backwards compatibility reference
+        global.config = global.game_options;
         
     } catch (error) {
         global.config_loaded = false;
@@ -124,35 +131,35 @@ function config_save() {
         ini_open(global.config_file);
         
         // Display settings
-        ini_write_real("Display", "width", global.config.game_width);
-        ini_write_real("Display", "height", global.config.game_height);
-        ini_write_real("Display", "fullscreen", global.config.fullscreen);
-        ini_write_real("Display", "vsync", global.config.vsync);
+        ini_write_real("Display", "width", global.game_options.display.width);
+        ini_write_real("Display", "height", global.game_options.display.height);
+        ini_write_real("Display", "fullscreen", global.game_options.display.fullscreen);
+        ini_write_real("Display", "vsync", global.game_options.display.vsync);
         
         // UI settings
-        ini_write_real("UI", "button_width", global.config.menu_button_width);
-        ini_write_real("UI", "button_height", global.config.menu_button_height);
-        ini_write_real("UI", "button_spacing", global.config.menu_button_spacing);
-        ini_write_real("UI", "font_size", global.config.menu_font_size);
+        ini_write_real("UI", "button_width", global.game_options.ui.button_width);
+        ini_write_real("UI", "button_height", global.game_options.ui.button_height);
+        ini_write_real("UI", "button_spacing", global.game_options.ui.button_spacing);
+        ini_write_real("UI", "font_size", global.game_options.ui.font_size);
         
         // Asset paths
-        ini_write_string("Assets", "images_path", global.config.asset_path_images);
-        ini_write_string("Assets", "sounds_path", global.config.asset_path_sounds);
-        ini_write_string("Assets", "data_path", global.config.asset_path_data);
+        ini_write_string("Assets", "images_path", global.game_options.assets.images_path);
+        ini_write_string("Assets", "sounds_path", global.game_options.assets.sounds_path);
+        ini_write_string("Assets", "data_path", global.game_options.assets.data_path);
         
         // Logging settings
-        ini_write_real("Logging", "enabled", global.config.log_enabled);
-        ini_write_real("Logging", "level", global.config.log_level);
-        ini_write_string("Logging", "file", global.config.log_file);
+        ini_write_real("Logging", "enabled", global.game_options.logging.enabled);
+        ini_write_real("Logging", "level", global.game_options.logging.level);
+        ini_write_string("Logging", "file", global.game_options.logging.file);
         
         // Menu layout
-        ini_write_real("Menu", "center_x_offset", global.config.menu_center_x_offset);
-        ini_write_real("Menu", "center_y_offset", global.config.menu_center_y_offset);
-        ini_write_real("Menu", "start_y_offset", global.config.menu_start_y_offset);
+        ini_write_real("Menu", "center_x_offset", global.game_options.menu.center_x_offset);
+        ini_write_real("Menu", "center_y_offset", global.game_options.menu.center_y_offset);
+        ini_write_real("Menu", "start_y_offset", global.game_options.menu.start_y_offset);
         
         // Performance settings
-        ini_write_real("Performance", "target_fps", global.config.target_fps);
-        ini_write_real("Performance", "fixed_timestep", global.config.fixed_timestep);
+        ini_write_real("Performance", "target_fps", global.game_options.performance.target_fps);
+        ini_write_real("Performance", "fixed_timestep", global.game_options.performance.fixed_timestep);
         
         ini_close();
         
@@ -168,19 +175,19 @@ function config_save() {
 /// @description Sets window size, fullscreen mode, VSync, and FPS based on config values
 function config_apply_display_settings() {
     // Set window size
-    window_set_size(global.config.game_width, global.config.game_height);
+    window_set_size(global.game_options.display.width, global.game_options.display.height);
     
     // Set fullscreen mode
-    window_set_fullscreen(global.config.fullscreen);
+    window_set_fullscreen(global.game_options.display.fullscreen);
     
     // Apply VSync
-    display_set_timing_method(global.config.vsync ? tm_systemtiming : tm_sleep);
+    display_set_timing_method(global.game_options.display.vsync ? tm_systemtiming : tm_sleep);
     
     // Set target FPS
-    game_set_speed(global.config.target_fps, gamespeed_fps);
+    game_set_speed(global.game_options.performance.target_fps, gamespeed_fps);
     
     // Update surface and application surface
-    surface_resize(application_surface, global.config.game_width, global.config.game_height);
+    surface_resize(application_surface, global.game_options.display.width, global.game_options.display.height);
 }
 
 /// @description Get a configuration value from a specific section and key
@@ -189,8 +196,13 @@ function config_apply_display_settings() {
 /// @param {any} default_value Default value if key not found
 /// @return {any} Configuration value or default if not found
 function config_get(section, key, default_value = undefined) {
-    var struct_key = string("{0}.{1}", section, key);
-    return struct_exists(global.config, struct_key) ? global.config[$ struct_key] : default_value;
+    if (struct_exists(global.game_options, section)) {
+        var section_struct = global.game_options[$ section];
+        if (struct_exists(section_struct, key)) {
+            return section_struct[$ key];
+        }
+    }
+    return default_value;
 }
 
 /// @description Set a configuration value for a specific section and key
@@ -198,6 +210,8 @@ function config_get(section, key, default_value = undefined) {
 /// @param {string} key Configuration key name
 /// @param {any} value Value to set
 function config_set(section, key, value) {
-    var struct_key = string("{0}.{1}", section, key);
-    global.config[$ struct_key] = value;
+    if (struct_exists(global.game_options, section)) {
+        var section_struct = global.game_options[$ section];
+        section_struct[$ key] = value;
+    }
 }

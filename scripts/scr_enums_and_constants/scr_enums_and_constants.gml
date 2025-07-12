@@ -60,6 +60,10 @@ enum CommandType {
 #macro DEFAULT_GAME_HEIGHT 1080     // Default window height in pixels  
 #macro DEFAULT_FULLSCREEN false     // Default fullscreen setting
 
-// Runtime display macros - updated after config loads
-#macro GAME_WIDTH (global.config_loaded ? global.config.game_width : DEFAULT_GAME_WIDTH)
-#macro GAME_HEIGHT (global.config_loaded ? global.config.game_height : DEFAULT_GAME_HEIGHT)
+// Network command types
+enum NetworkCommand {
+    CONNECT,            // Client connecting
+    DISCONNECT,         // Client disconnecting
+    STATE_UPDATE,       // Full state synchronization
+    COMMAND             // Player command
+}

@@ -1,16 +1,17 @@
+
 /// @description Initialize the logging system with configuration settings
 /// @description Sets up global logging variables and creates initial log file
 /// @description Requires config system to be initialized first
 function logger_init() {
     // Check if config system is available and logging is enabled
-    if (!variable_global_exists("config") || !global.config.log_enabled) {
+    if (!variable_global_exists("game_options") || !global.game_options.logging.enabled) {
         global.log_enabled = false;
         return;
     }
     
     global.log_enabled = true;
-    global.log_file = global.config.log_file;
-    global.log_level = global.config.log_level;
+    global.log_file = global.game_options.logging.file;
+    global.log_level = global.game_options.logging.level;
     global.log_session_start = date_current_datetime();
     
     // Clear previous log file

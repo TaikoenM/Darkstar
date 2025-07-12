@@ -20,9 +20,9 @@ function assets_load_manifest() {
     
     // Safe access to config
     if (variable_global_exists("config") && !is_undefined(global.config)) {
-        manifest_file = global.config.asset_path_data + "asset_manifest.ini";
+        manifest_file = working_directory + global.config.asset_path_data + "asset_manifest.ini";
     } else {
-        manifest_file = "datafiles/assets/data/asset_manifest.ini";
+        manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
     
     if (!file_exists(manifest_file)) {
@@ -48,13 +48,8 @@ function assets_load_manifest() {
             var asset_file = ini_read_string("Images", string("asset_{0}_file", i), "");
             
             if (asset_key != "" && asset_file != "") {
-                var full_path = "";
-                if (variable_global_exists("config") && !is_undefined(global.config)) {
-                    full_path = global.config.asset_path_images + asset_file;
-                } else {
-                    full_path = "datafiles/assets/images/" + asset_file;
-                }
-                global.asset_manifest[? asset_key] = full_path;
+                // For included files, just use the filename
+                global.asset_manifest[? asset_key] = asset_file;
             }
         }
         
@@ -78,22 +73,16 @@ function assets_create_default_manifest() {
     var manifest_file = "";
     
     if (variable_global_exists("config") && !is_undefined(global.config)) {
-        manifest_file = global.config.asset_path_data + "asset_manifest.ini";
+        manifest_file = working_directory + global.config.asset_path_data + "asset_manifest.ini";
     } else {
-        manifest_file = "datafiles/assets/data/asset_manifest.ini";
-    }
-    
-    // Ensure the directory exists
-    var directory = filename_dir(manifest_file);
-    if (!directory_exists(directory)) {
-        directory_create(directory);
+        manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
     
     try {
         // Open INI file for writing
         ini_open(manifest_file);
         
-        // Create default manifest entries
+        // Create default manifest entries - files from datafiles are accessed directly by name
         ini_write_real("Images", "count", 1);
         ini_write_string("Images", "asset_0_key", "mainmenu_background");
         ini_write_string("Images", "asset_0_file", "mainmenu_background.png");
@@ -126,12 +115,18 @@ function assets_load_sprite(asset_key) {
     // Check if already loaded
     if (ds_map_exists(global.loaded_sprites, asset_key)) {
         var cached_sprite = global.loaded_sprites[? asset_key];
-        if (!is_undefined(cached_sprite) && sprite_exists(cached_sprite)) {
-            return cached_sprite;
-        } else {
-            // Remove invalid cache entry
-            ds_map_delete(global.loaded_sprites, asset_key);
+        if (!is_undefined(cached_sprite)) {
+            // Check for special error values
+            if (cached_sprite == -1) {
+                // Already tried and failed, don't spam errors
+                return -1;
+            }
+            if (sprite_exists(cached_sprite)) {
+                return cached_sprite;
+            }
         }
+        // Remove invalid cache entry
+        ds_map_delete(global.loaded_sprites, asset_key);
     }
     
     // Get file path from manifest
@@ -141,46 +136,57 @@ function assets_load_sprite(asset_key) {
             logger_write(LogLevel.ERROR, "AssetManager", 
                         string("Asset key not found in manifest: {0}", asset_key), "Missing asset definition");
         }
+        // Cache the failure to prevent spam
+        global.loaded_sprites[? asset_key] = -1;
         return -1;
     }
     
-    // Check if file exists
-    if (!file_exists(file_path)) {
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.ERROR, "AssetManager", 
-                        string("Asset file not found: {0}", file_path), "Missing file");
-        }
-        return -1;
-    }
+    // In GameMaker, files in datafiles are included with the game
+    // Try different path variations
+    var paths_to_try = [
+        file_path,
+        working_directory + file_path,
+        filename_name(file_path)  // Just the filename
+    ];
     
-    try {
-        // Load the sprite
-        var sprite_id = sprite_add(file_path, 0, false, false, 0, 0);
+    var loaded_sprite = -1;
+    var path_found = "";
+    
+    for (var i = 0; i < array_length(paths_to_try); i++) {
+        var try_path = paths_to_try[i];
         
-        if (sprite_id == -1) {
-            if (variable_global_exists("log_enabled") && global.log_enabled) {
-                logger_write(LogLevel.ERROR, "AssetManager", 
-                            string("Failed to load sprite: {0}", file_path), "Sprite loading error");
+        try {
+            // Try to load the sprite
+            loaded_sprite = sprite_add(try_path, 0, false, false, 0, 0);
+            
+            if (loaded_sprite != -1) {
+                path_found = try_path;
+                break;
             }
-            return -1;
+        } catch (error) {
+            // Continue trying other paths
         }
-        
-        // Cache the loaded sprite
-        global.loaded_sprites[? asset_key] = sprite_id;
-        
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.INFO, "AssetManager", 
-                        string("Loaded sprite: {0} from {1}", asset_key, file_path), "Dynamic loading");
-        }
-        return sprite_id;
-        
-    } catch (error) {
+    }
+    
+    if (loaded_sprite == -1) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", 
-                        string("Exception loading sprite {0}: {1}", asset_key, error), "Loading exception");
+                        string("Failed to load sprite from any path variant: {0}", file_path), 
+                        "Tried multiple path formats");
         }
+        // Cache the failure to prevent spam
+        global.loaded_sprites[? asset_key] = -1;
         return -1;
     }
+    
+    // Cache the loaded sprite
+    global.loaded_sprites[? asset_key] = loaded_sprite;
+    
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.INFO, "AssetManager", 
+                    string("Loaded sprite: {0} from {1}", asset_key, path_found), "Dynamic loading");
+    }
+    return loaded_sprite;
 }
 
 /// @description Get a sprite resource, loading it if not already cached

@@ -2,11 +2,17 @@
 /// @description Sets up all core systems in proper order and transitions to main menu
 /// @description This is the main entry point for the entire game
 
+// Make this controller persistent
+persistent = true;
+
 // Initialize configuration first (before logging to get logging settings)
 config_init();
 
 // Initialize logging system (requires config to be initialized)
 logger_init();
+
+// Debug file system to understand how included files work
+debug_file_system();
 
 // Initialize other core systems
 gamestate_init();

@@ -32,6 +32,6 @@ while (!is_undefined(command)) {
 }
 
 // Update fixed timestep if enabled
-if (variable_global_exists("config") && global.config.fixed_timestep) {
+if (variable_global_exists("game_options") && global.game_options.performance.fixed_timestep) {
     // TODO: Implement fixed timestep logic
 }
