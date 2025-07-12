@@ -18,9 +18,14 @@ function assets_init() {
 function assets_load_manifest() {
     var manifest_file = "";
     
-    // Fixed: Use correct property path
+    // Use correct property path with proper type checking
     if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
+        if (variable_struct_exists(global.game_options, "assets") && 
+            variable_struct_exists(global.game_options.assets, "data_path")) {
+            manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
+        } else {
+            manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+        }
     } else {
         manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
@@ -72,9 +77,14 @@ function assets_load_manifest() {
 function assets_create_default_manifest() {
     var manifest_file = "";
     
-    // Fixed: Use correct property path
+    // Use correct property path with proper type checking
     if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
+        if (variable_struct_exists(global.game_options, "assets") && 
+            variable_struct_exists(global.game_options.assets, "data_path")) {
+            manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
+        } else {
+            manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
+        }
     } else {
         manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
@@ -106,9 +116,9 @@ function assets_create_default_manifest() {
 /// @return {Asset.GMSprite} Sprite resource ID or -1 if loading failed
 function assets_load_sprite(asset_key) {
     // Validate input
-    if (is_undefined(asset_key) || asset_key == "") {
+    if (is_undefined(asset_key) || asset_key == "" || !is_string(asset_key)) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.ERROR, "AssetManager", "Invalid asset key provided", "Empty or undefined key");
+            logger_write(LogLevel.ERROR, "AssetManager", "Invalid asset key provided", "Empty, undefined, or non-string key");
         }
         return -1;
     }
@@ -132,7 +142,7 @@ function assets_load_sprite(asset_key) {
     
     // Get file path from manifest
     var file_path = ds_map_find_value(global.asset_manifest, asset_key);
-    if (is_undefined(file_path)) {
+    if (is_undefined(file_path) || !is_string(file_path)) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", 
                         string("Asset key not found in manifest: {0}", asset_key), "Missing asset definition");
@@ -186,6 +196,10 @@ function assets_load_sprite(asset_key) {
 /// @param {string} asset_key Key identifier for the asset
 /// @return {Asset.GMSprite} Sprite resource ID or -1 if failed
 function assets_get_sprite(asset_key) {
+    if (is_undefined(asset_key) || !is_string(asset_key)) {
+        return -1;
+    }
+    
     var sprite_id = ds_map_find_value(global.loaded_sprites, asset_key);
     if (is_undefined(sprite_id) || !sprite_exists(sprite_id)) {
         return assets_load_sprite(asset_key);
@@ -197,6 +211,10 @@ function assets_get_sprite(asset_key) {
 /// @param {string} asset_key Key identifier for the asset
 /// @return {Asset.GMSprite} Valid sprite resource ID or -1 as fallback
 function assets_get_sprite_safe(asset_key) {
+    if (is_undefined(asset_key) || !is_string(asset_key)) {
+        return -1;
+    }
+    
     var sprite_id = assets_get_sprite(asset_key);
     
     // Return a valid sprite or -1

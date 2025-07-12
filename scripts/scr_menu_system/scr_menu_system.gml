@@ -6,8 +6,20 @@
 /// @param {function} callback Function to call when button is clicked
 /// @return {struct} Button data structure with all properties set
 function menu_create_button_data(type, text, x, y, callback) {
-    var button_width = global.game_options.ui.button_width;
-    var button_height = global.game_options.ui.button_height;
+    var button_width = 300;  // Default value
+    var button_height = 60;  // Default value
+    
+    // Get from config if available
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        if (variable_struct_exists(global.game_options, "ui")) {
+            if (variable_struct_exists(global.game_options.ui, "button_width")) {
+                button_width = global.game_options.ui.button_width;
+            }
+            if (variable_struct_exists(global.game_options.ui, "button_height")) {
+                button_height = global.game_options.ui.button_height;
+            }
+        }
+    }
     
     return {
         type: type,
@@ -73,17 +85,40 @@ function menu_create_buttons(button_configs) {
 /// @description Get configuration array for main menu buttons with proper positioning
 /// @return {Array<Struct>} Array of button configuration structs for main menu
 function menu_get_main_menu_buttons() {
-    var center_x = GAME_WIDTH / 2;
-    var center_y = GAME_HEIGHT / 2;
+    var center_x = 960;  // Default center
+    var center_y = 540;  // Default center
     var start_y = center_y - 240;
     var spacing = 80;
     
-    // Use config values if available
-    if (variable_global_exists("config") && !is_undefined(global.config)) {
-        center_x += global.config.menu_center_x_offset;
-        center_y += global.config.menu_center_y_offset;
-        start_y = center_y + global.config.menu_start_y_offset;
-        spacing = global.config.menu_button_spacing;
+    // Use display dimensions if available
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        if (variable_struct_exists(global.game_options, "display")) {
+            if (variable_struct_exists(global.game_options.display, "width") && 
+                variable_struct_exists(global.game_options.display, "height")) {
+                center_x = global.game_options.display.width / 2;
+                center_y = global.game_options.display.height / 2;
+                start_y = center_y - 240;
+            }
+        }
+        
+        // Apply menu offsets if available
+        if (variable_struct_exists(global.game_options, "menu")) {
+            if (variable_struct_exists(global.game_options.menu, "center_x_offset")) {
+                center_x += global.game_options.menu.center_x_offset;
+            }
+            if (variable_struct_exists(global.game_options.menu, "center_y_offset")) {
+                center_y += global.game_options.menu.center_y_offset;
+            }
+            if (variable_struct_exists(global.game_options.menu, "start_y_offset")) {
+                start_y = center_y + global.game_options.menu.start_y_offset;
+            }
+        }
+        
+        // Get button spacing if available
+        if (variable_struct_exists(global.game_options, "ui") && 
+            variable_struct_exists(global.game_options.ui, "button_spacing")) {
+            spacing = global.game_options.ui.button_spacing;
+        }
     }
     
     var buttons = [
@@ -169,16 +204,16 @@ function main_menu_handle_button_click(event_data) {
     switch (button_id) {
         case "NEW_GAME":
             // Create command to start new game
-            var cmd = input_create_command(CommandType.START_NEW_GAME, {});
-            input_queue_command(cmd);
+            var new_game_cmd = input_create_command(CommandType.START_NEW_GAME, {});
+            input_queue_command(new_game_cmd);
             break;
             
         case "CONTINUE":
             // Create command to load save
-            var cmd = input_create_command(CommandType.LOAD_GAME, {
+            var load_cmd = input_create_command(CommandType.LOAD_GAME, {
                 save_slot: "quicksave"
             });
-            input_queue_command(cmd);
+            input_queue_command(load_cmd);
             break;
             
         case "OPTIONS":
