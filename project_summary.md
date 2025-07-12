@@ -1,62 +1,67 @@
 # Project Summary
-**Generated on:** 2025-07-12 17:08:43
+**Generated on:** 2025-07-12 18:04:32
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 61
+**Total Files:** 68
 
-### .GML Files (31 files)
+### .GML Files (35 files)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
 - `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
-- `objects\obj_MainMenuManager\Create_0.gml` (3080 bytes)
+- `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
+- `objects\obj_MainMenuManager\Create_0.gml` (1096 bytes)
 - `objects\obj_MenuButton\Create_0.gml` (499 bytes)
-- `objects\obj_MenuButton\Draw_0.gml` (770 bytes)
+- `objects\obj_MenuButton\Draw_0.gml` (826 bytes)
 - `objects\obj_MenuButton\Mouse_11.gml` (73 bytes)
 - `objects\obj_MenuButton\Mouse_7.gml` (357 bytes)
 - `objects\obj_MenuButton\Step_0.gml` (313 bytes)
-- `objects\obj_UIManager\Create_0.gml` (572 bytes)
+- `objects\obj_UIManager\CleanUp_0.gml` (13 bytes)
+- `objects\obj_UIManager\Create_0.gml` (482 bytes)
 - `objects\obj_Unit\Create_0.gml` (349 bytes)
 - `objects\obj_Unit\Draw_0.gml` (1222 bytes)
 - `objects\obj_Unit\Mouse_4.gml` (324 bytes)
 - `objects\obj_Unit\Mouse_5.gml` (399 bytes)
 - `objects\obj_Unit\Step_0.gml` (698 bytes)
-- `objects\obj_ViewManager\Create_0.gml` (687 bytes)
-- `objects\obj_game_controller\Create_0.gml` (1561 bytes)
-- `objects\obj_game_controller\Step_0.gml` (1179 bytes)
+- `objects\obj_game_controller\CleanUp_0.gml` (541 bytes)
+- `objects\obj_game_controller\Create_0.gml` (1300 bytes)
+- `objects\obj_game_controller\Step_0.gml` (2612 bytes)
 - `objects\obj_main_menu_controller\Create_0.gml` (667 bytes)
 - `objects\obj_main_menu_controller\Draw_0.gml` (811 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.gml` (9542 bytes)
 - `scripts\scr_config_manager\scr_config_manager.gml` (9914 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2221 bytes)
-- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (2564 bytes)
-- `scripts\scr_game_control\scr_game_control.gml` (1952 bytes)
-- `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4373 bytes)
-- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (37 bytes)
+- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (2883 bytes)
+- `scripts\scr_game_control\scr_game_control.gml` (2400 bytes)
+- `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4890 bytes)
+- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (4446 bytes)
+- `scripts\scr_hex_utils\scr_hex_utils.gml` (28 bytes)
 - `scripts\scr_input_manager\scr_input_manager.gml` (9809 bytes)
+- `scripts\scr_json_utils\scr_json_utils.gml` (29 bytes)
 - `scripts\scr_logger\scr_logger.gml` (2665 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (6790 bytes)
-- `scripts\scr_ui_manager\scr_ui_manager.gml` (5527 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (8551 bytes)
+- `scripts\scr_ui_manager\scr_ui_manager.gml` (6570 bytes)
 
 ### .MD Files (1 files)
-- `project_summary.md` (7747 bytes)
+- `project_summary.md` (16358 bytes)
 
 ### .PNG Files (1 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3062 bytes)
+- `DarkStar.resource_order` (3336 bytes)
 
-### .YY Files (26 files)
+### .YY Files (29 files)
+- `objects\obj_DataManager\obj_DataManager.yy` (726 bytes)
+- `objects\obj_GameState\obj_GameState.yy` (722 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
 - `objects\obj_MainMenuBackground\obj_MainMenuBackground.yy` (903 bytes)
-- `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (897 bytes)
-- `objects\obj_MenuButton\obj_MenuButton.yy` (1689 bytes)
-- `objects\obj_UIManager\obj_UIManager.yy` (885 bytes)
+- `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (1058 bytes)
+- `objects\obj_MenuButton\obj_MenuButton.yy` (1528 bytes)
+- `objects\obj_UIManager\obj_UIManager.yy` (1046 bytes)
 - `objects\obj_Unit\obj_Unit.yy` (1515 bytes)
-- `objects\obj_ViewManager\obj_ViewManager.yy` (889 bytes)
-- `objects\obj_game_controller\obj_game_controller.yy` (1057 bytes)
+- `objects\obj_game_controller\obj_game_controller.yy` (1218 bytes)
 - `objects\obj_main_menu_controller\obj_main_menu_controller.yy` (1067 bytes)
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
@@ -71,18 +76,30 @@
 - `scripts\scr_game_control\scr_game_control.yy` (255 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.yy` (267 bytes)
 - `scripts\scr_gamestate_observer\scr_gamestate_observer.yy` (267 bytes)
+- `scripts\scr_hex_utils\scr_hex_utils.yy` (249 bytes)
 - `scripts\scr_input_manager\scr_input_manager.yy` (257 bytes)
+- `scripts\scr_json_utils\scr_json_utils.yy` (251 bytes)
 - `scripts\scr_logger\scr_logger.yy` (243 bytes)
 - `scripts\scr_menu_system\scr_menu_system.yy` (253 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.yy` (251 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (5819 bytes)
+- `DarkStar.yyp` (6083 bytes)
 
 
 ---
 ## Part B: GameMaker Objects and Events
-**Total Objects:** 9
+**Total Objects:** 10
+
+### Object: obj_DataManager
+**Description:** No description available
+**Path:** `objects\obj_DataManager`
+**Events:** No events found
+
+### Object: obj_GameState
+**Description:** No description available
+**Path:** `objects\obj_GameState`
+**Events:** No events found
 
 ### Object: obj_InputManager
 **Description:** Initialize the Input Manager Translates raw hardware input into abstract game commands Part of the Controller layer in MVC architecture
@@ -107,15 +124,16 @@
 
 
 ### Object: obj_MainMenuManager
-**Description:** Initialize main menu manager with observer pattern
+**Description:** Unregister observers when destroyed
 **Path:** `objects\obj_MainMenuManager`
-**Events (1):**
+**Events (2):**
+- **CleanUp_0** (Clean Up Event)
+  - *Description:* Unregister observers when destroyed
+  - *Path:* `objects\obj_MainMenuManager\CleanUp_0.gml`
+
 - **Create_0** (Create Event)
   - *Description:* Initialize main menu manager with observer pattern
   - *Path:* `objects\obj_MainMenuManager\Create_0.gml`
-  - *Functions:*
-    - `main_menu_handle_button_click(event_data)`
-    - `main_menu_handle_button_click(event_data)`
 
 
 ### Object: obj_MenuButton
@@ -127,6 +145,7 @@
   - *Path:* `objects\obj_MenuButton\Create_0.gml`
 
 - **Draw_0** (Draw Event)
+  - *Description:* Draw button with current visual state
   - *Path:* `objects\obj_MenuButton\Draw_0.gml`
 
 - **Mouse_11** (Mouse Event)
@@ -143,11 +162,14 @@
 
 
 ### Object: obj_UIManager
-**Description:** Initialize the UI Manager Manages UI panels, focus, and layering Works with ViewManager to display UI elements
+**Description:** Manages UI elements and input focus Simplified for native observer pattern
 **Path:** `objects\obj_UIManager`
-**Events (1):**
+**Events (2):**
+- **CleanUp_0** (Clean Up Event)
+  - *Path:* `objects\obj_UIManager\CleanUp_0.gml`
+
 - **Create_0** (Create Event)
-  - *Description:* Initialize the UI Manager Manages UI panels, focus, and layering Works with ViewManager to display UI elements
+  - *Description:* Manages UI elements and input focus Simplified for native observer pattern
   - *Path:* `objects\obj_UIManager\Create_0.gml`
 
 
@@ -176,19 +198,14 @@
   - *Path:* `objects\obj_Unit\Step_0.gml`
 
 
-### Object: obj_ViewManager
-**Description:** Initialize the View Manager Coordinates visual instances and synchronizes with GameState Part of the View layer in MVC architecture
-**Path:** `objects\obj_ViewManager`
-**Events (1):**
-- **Create_0** (Create Event)
-  - *Description:* Initialize the View Manager Coordinates visual instances and synchronizes with GameState Part of the View layer in MVC architecture
-  - *Path:* `objects\obj_ViewManager\Create_0.gml`
-
-
 ### Object: obj_game_controller
-**Description:** Initialize the game during startup phase Sets up all core systems in proper order and transitions to main menu This is the main entry point for the entire game
+**Description:** Clean up all systems on game exit
 **Path:** `objects\obj_game_controller`
-**Events (2):**
+**Events (3):**
+- **CleanUp_0** (Clean Up Event)
+  - *Description:* Clean up all systems on game exit
+  - *Path:* `objects\obj_game_controller\CleanUp_0.gml`
+
 - **Create_0** (Create Event)
   - *Description:* Initialize the game during startup phase Sets up all core systems in proper order and transitions to main menu This is the main entry point for the entire game
   - *Path:* `objects\obj_game_controller\Create_0.gml`
@@ -214,7 +231,7 @@
 
 ---
 ## Part C: Script Files and Functions
-**Total Scripts:** 11
+**Total Scripts:** 13
 
 ### Script: scr_asset_manager
 **Description:** Initialize the asset management system Creates data structures for asset caching and loads manifest file Requires config system to be initialized first for asset paths
@@ -272,7 +289,7 @@
 ### Script: scr_game_control
 **Description:** Handle unit selection events @param {struct} event_data Contains unit_id, modifiers
 **Path:** `scripts\scr_game_control\scr_game_control.gml`
-**Functions (6):**
+**Functions (8):**
 - **`game_controller_handle_hex_click(event_data)`**
   - *Arguments:* event_data
 
@@ -290,12 +307,18 @@
 
 - **`game_controller_handle_unit_order(event_data)`**
   - *Arguments:* event_data
+
+- **`hex_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
+
+- **`hex_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
 
 
 ### Script: scr_game_state_manager
 **Description:** Initialize the game state management system Sets up global state variables and callback system Must be called during game initialization before any state changes
 **Path:** `scripts\scr_game_state_manager\scr_game_state_manager.gml`
-**Functions (7):**
+**Functions (8):**
 - **`gamestate_change(new_state, reason = "")`**
   - *Arguments:* new_state, reason = ""
 
@@ -308,6 +331,9 @@
 
 - **`gamestate_get_previous()`**
 
+- **`gamestate_get_unit(unit_id)`**
+  - *Arguments:* unit_id
+
 - **`gamestate_init()`**
 
 - **`gamestate_register_callback(state, callback)`**
@@ -315,9 +341,27 @@
 
 
 ### Script: scr_gamestate_observer
+**Description:** Observer pattern implementation for GameState events Allows objects to register for and receive notifications about game events Initialize the observer system Called automatically by gamestate_init()
 **Path:** `scripts\scr_gamestate_observer\scr_gamestate_observer.gml`
+**Functions (5):**
+- **`gamestate_add_observer(event_name, callback)`**
+  - *Arguments:* event_name, callback
+
+- **`gamestate_notify_observers(event_name, event_data = {})`**
+  - *Arguments:* event_name, event_data = {}
+
+- **`gamestate_observer_cleanup()`**
+
+- **`gamestate_observer_init()`**
+
+- **`gamestate_remove_observer(event_name, callback)`**
+  - *Arguments:* event_name, callback
+
+
+### Script: scr_hex_utils
+**Path:** `scripts\scr_hex_utils\scr_hex_utils.gml`
 **Functions (1):**
-- **`scr_gamestate_observer()`**
+- **`scr_hex_utils()`**
 
 
 ### Script: scr_input_manager
@@ -367,6 +411,12 @@
 - **`input_update()`**
 
 
+### Script: scr_json_utils
+**Path:** `scripts\scr_json_utils\scr_json_utils.gml`
+**Functions (1):**
+- **`scr_json_utils()`**
+
+
 ### Script: scr_logger
 **Description:** Initialize the logging system with configuration settings Sets up global logging variables and creates initial log file Requires config system to be initialized first
 **Path:** `scripts\scr_logger\scr_logger.gml`
@@ -380,7 +430,13 @@
 ### Script: scr_menu_system
 **Description:** Create a menu button data structure with all necessary properties @param {Constant.ButtonType} type ButtonType enum value for the button type @param {string} text Display text for the button @param {real} x X position in GUI coordinates @param {real} y Y position in GUI coordinates @param {function} callback Function to call when button is clicked @return {struct} Button data structure with all properties set
 **Path:** `scripts\scr_menu_system\scr_menu_system.gml`
-**Functions (9):**
+**Functions (11):**
+- **`main_menu_handle_button_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`main_menu_handle_button_click(event_data)`**
+  - *Arguments:* event_data
+
 - **`menu_callback_continue()`**
 
 - **`menu_callback_exit()`**
