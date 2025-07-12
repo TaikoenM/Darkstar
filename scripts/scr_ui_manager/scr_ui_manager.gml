@@ -1,8 +1,4 @@
-/// @function ui_open_panel(panel_type, data)
 /// @description Create and open a UI panel
-/// @param {string} panel_type Type of panel to open
-/// @param {struct} data Data to pass to the panel
-/// @return {Id.Instance} Instance ID of created panel
 function ui_open_panel(panel_type, data = {}) {
     // Validate panel_type parameter
     if (is_undefined(panel_type) || !is_string(panel_type) || panel_type == "") {
@@ -89,9 +85,6 @@ function ui_open_panel(panel_type, data = {}) {
     return panel_instance;
 }
 
-/// @function ui_close_panel(panel_instance)
-/// @description Close a UI panel
-/// @param {Id.Instance} panel_instance Instance ID of panel to close
 function ui_close_panel(panel_instance) {
     if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
@@ -121,9 +114,6 @@ function ui_close_panel(panel_instance) {
     instance_destroy(panel_instance);
 }
 
-/// @function ui_focus_panel(panel_instance)
-/// @description Give input focus to a panel
-/// @param {Id.Instance} panel_instance Panel to focus
 function ui_focus_panel(panel_instance) {
     if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
@@ -150,8 +140,6 @@ function ui_focus_panel(panel_instance) {
     input_set_ui_focus(true);
 }
 
-/// @function ui_close_all_panels()
-/// @description Close all open UI panels
 function ui_close_all_panels() {
     if (!instance_exists(obj_UIManager)) {
         return;
@@ -179,16 +167,22 @@ function ui_close_all_panels() {
     input_set_ui_focus(false);
 }
 
-/// @function ui_cleanup()
-/// @description Cleanup UI manager resources
+/// @description Safe cleanup function that doesn't log to avoid dev console conflicts
 function ui_cleanup() {
+    // Close all panels first
     ui_close_all_panels();
     
+    // Clean up the panel instances map if it exists
     if (instance_exists(obj_UIManager)) {
-        ds_map_destroy(obj_UIManager.panel_instances);
+        with (obj_UIManager) {
+            if (variable_instance_exists(id, "panel_instances") && 
+                !is_undefined(panel_instances) && 
+                ds_exists(panel_instances, ds_type_map)) {
+                ds_map_destroy(panel_instances);
+            }
+        }
     }
     
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "UIManager", "UI Manager cleaned up", "System shutdown");
-    }
+    // Don't log here to avoid dev console conflicts during shutdown
+    // The calling code will handle logging if needed
 }

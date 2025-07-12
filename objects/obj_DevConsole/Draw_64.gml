@@ -1,4 +1,4 @@
-/// @description Render the developer console
+/// @description Render the developer console with text wrapping
 if (!global.dev_console.enabled) exit;
 
 var gui_width = display_get_gui_width();
@@ -22,29 +22,81 @@ draw_set_valign(fa_top);
 
 var line_height = 16;
 var margin = 10;
+var usable_width = gui_width - margin * 2;
 var y_pos = margin;
 
-// Draw history
+// Function to wrap text
+function wrap_text(text, max_width) {
+    var words = string_split(text, " ");
+    var lines = [];
+    var current_line = "";
+    
+    for (var i = 0; i < array_length(words); i++) {
+        var test_line = current_line;
+        if (current_line != "") test_line += " ";
+        test_line += words[i];
+        
+        if (string_width(test_line) <= max_width) {
+            current_line = test_line;
+        } else {
+            if (current_line != "") {
+                array_push(lines, current_line);
+                current_line = words[i];
+            } else {
+                // Single word is too long, force break
+                array_push(lines, words[i]);
+                current_line = "";
+            }
+        }
+    }
+    
+    if (current_line != "") {
+        array_push(lines, current_line);
+    }
+    
+    return lines;
+}
+
+// Draw history with wrapping
 var history_size = ds_list_size(global.dev_console.history);
 var start_index = global.dev_console.scroll_offset;
 var end_index = min(history_size, start_index + global.dev_console.visible_lines);
+var lines_drawn = 0;
 
-for (var i = start_index; i < end_index; i++) {
+for (var i = start_index; i < end_index && y_pos < console_height - line_height * 2; i++) {
     var entry = global.dev_console.history[| i];
+    var wrapped_lines = wrap_text(entry.text, usable_width);
+    
     draw_set_color(entry.color);
-    draw_text(margin, y_pos, entry.text);
-    y_pos += line_height;
+    for (var j = 0; j < array_length(wrapped_lines); j++) {
+        if (y_pos >= console_height - line_height * 2) break;
+        draw_text(margin, y_pos, wrapped_lines[j]);
+        y_pos += line_height;
+        lines_drawn++;
+    }
+    
+    // Prevent drawing too many lines
+    if (lines_drawn >= global.dev_console.visible_lines) break;
 }
 
 // Draw input line
 y_pos = console_height - line_height - margin;
 draw_set_color(global.dev_console.text_color);
-draw_text(margin, y_pos, "> " + global.dev_console.input_string);
+var input_text = "> " + global.dev_console.input_string;
+var input_lines = wrap_text(input_text, usable_width);
 
-// Draw cursor
+// Draw all input lines (in case input is very long)
+var input_start_y = y_pos - (array_length(input_lines) - 1) * line_height;
+for (var i = 0; i < array_length(input_lines); i++) {
+    draw_text(margin, input_start_y + i * line_height, input_lines[i]);
+}
+
+// Draw cursor on the last line
 if (global.dev_console.cursor_blink) {
-    var cursor_x = margin + string_width("> " + global.dev_console.input_string);
-    draw_line(cursor_x, y_pos, cursor_x, y_pos + line_height);
+    var last_line = input_lines[array_length(input_lines) - 1];
+    var cursor_x = margin + string_width(last_line);
+    var cursor_y = input_start_y + (array_length(input_lines) - 1) * line_height;
+    draw_line(cursor_x, cursor_y, cursor_x, cursor_y + line_height);
 }
 
 // Draw scroll indicator if needed

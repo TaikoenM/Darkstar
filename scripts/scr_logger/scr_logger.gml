@@ -57,10 +57,12 @@ function logger_write(level, source, message, reason = "") {
     
     // Write to file if file system is available
     try {
-        var file = file_text_open_append(global.log_file);
-        file_text_write_string(file, log_entry);
-        file_text_writeln(file);
-        file_text_close(file);
+        if (variable_global_exists("log_file") && global.log_file != "") {
+            var file = file_text_open_append(global.log_file);
+            file_text_write_string(file, log_entry);
+            file_text_writeln(file);
+            file_text_close(file);
+        }
     } catch (error) {
         // If file writing fails, at least output to debug console
         show_debug_message("LOG FILE ERROR: " + string(error));
@@ -69,8 +71,13 @@ function logger_write(level, source, message, reason = "") {
     // Always output to console for debugging
     show_debug_message(log_entry);
     
-    // Also send to dev console if it exists
-    if (variable_global_exists("dev_console") && !is_undefined(global.dev_console)) {
+    // Send to dev console if it exists and is safe to use
+    if (variable_global_exists("dev_console") && 
+        !is_undefined(global.dev_console) &&
+        variable_struct_exists(global.dev_console, "history") &&
+        !is_undefined(global.dev_console.history) &&
+        ds_exists(global.dev_console.history, ds_type_list)) {
+        
         var console_color = c_white;
         switch(level) {
             case LogLevel.DEBUG:    console_color = c_gray; break;
@@ -79,6 +86,29 @@ function logger_write(level, source, message, reason = "") {
             case LogLevel.ERROR:    console_color = c_red; break;
             case LogLevel.CRITICAL: console_color = c_fuchsia; break;
         }
+        
+        // Use safe dev console logging
         dev_console_log(string("[{0}] {1}: {2}", level_text, source, message), console_color);
+    }
+}
+
+/// @description Safe cleanup function that avoids logging during destruction
+function safe_cleanup_with_logging(system_name, cleanup_function) {
+    try {
+        cleanup_function();
+        // Only log if dev console is still available
+        if (variable_global_exists("dev_console") && 
+            !is_undefined(global.dev_console) &&
+            variable_struct_exists(global.dev_console, "history") &&
+            !is_undefined(global.dev_console.history) &&
+            ds_exists(global.dev_console.history, ds_type_list)) {
+            
+            logger_write(LogLevel.INFO, system_name, system_name + " cleaned up successfully", "System shutdown");
+        } else {
+            // Fallback to debug message if dev console unavailable
+            show_debug_message("[INFO] " + system_name + ": " + system_name + " cleaned up successfully");
+        }
+    } catch (error) {
+        show_debug_message("[ERROR] " + system_name + ": Cleanup failed - " + string(error));
     }
 }

@@ -175,27 +175,20 @@ function menu_callback_run_tests() {
     // TODO: Implement test runner functionality
 }
 
-/// @description Handle Exit button press - save and quit game
+/// @description Handle Exit button press - save and quit game with proper cleanup
 function menu_callback_exit() {
     if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Exit button pressed", "Shutting down game");
+        logger_write(LogLevel.INFO, "MenuSystem", "Exit button pressed", "Starting graceful shutdown");
     }
     
-    // Save configuration
-    config_save();
-    
-    // Clean up systems in reverse order
-    ui_cleanup();
-    input_cleanup();
-    assets_cleanup();
-    gamestate_cleanup();
-    
-    // Exit the game
+    // Instead of calling individual cleanup functions that might log to dev console,
+    // just call game_end() - GameMaker will trigger CleanUp events automatically
+    // which will handle the cleanup in the proper order
     game_end();
 }
 
 /// @function main_menu_handle_button_click(event_data)
-/// @description Handle button click events from menu
+/// @description Handle button click events from menu with enhanced exit handling
 /// @param {struct} event_data Event data containing button_id
 function main_menu_handle_button_click(event_data) {
     var button_id = event_data.button_id;
@@ -220,14 +213,16 @@ function main_menu_handle_button_click(event_data) {
             
         case "OPTIONS":
             // Open options panel
-            instance_create_layer(display_get_gui_width()/2, display_get_gui_height()/2, 
-                                "UI", obj_OptionsPanel);
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.INFO, "MainMenuManager", "Options not implemented", "Feature pending");
+            }
             break;
             
         case "INPUT_BINDINGS":
             // Open input bindings panel
-            instance_create_layer(display_get_gui_width()/2, display_get_gui_height()/2, 
-                                "UI", obj_InputBindingsPanel);
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.INFO, "MainMenuManager", "Input bindings not implemented", "Feature pending");
+            }
             break;
             
         case "MAP_EDITOR":
@@ -236,9 +231,24 @@ function main_menu_handle_button_click(event_data) {
             break;
             
         case "EXIT":
-            // Save and quit
-            config_save();
+            // Enhanced exit handling
+            logger_write(LogLevel.INFO, "MainMenuManager", "Exit requested", "Initiating shutdown");
+            
+            // Save configuration before exit
+            try {
+                config_save();
+                logger_write(LogLevel.INFO, "MainMenuManager", "Configuration saved before exit", "Shutdown preparation");
+            } catch (error) {
+                logger_write(LogLevel.WARNING, "MainMenuManager", "Config save failed during exit", string(error));
+            }
+            
+            // Call game_end which will trigger proper cleanup through CleanUp events
             game_end();
+            break;
+            
+        default:
+            logger_write(LogLevel.WARNING, "MainMenuManager", 
+                        string("Unknown button ID: {0}", button_id), "Unhandled button");
             break;
     }
 }

@@ -94,21 +94,54 @@ function dev_console_toggle() {
 /// @param {string} message Message to log
 /// @param {Constant.Color} color Text color
 function dev_console_log(message, color = c_white) {
+    // Safety checks before attempting to add to console
+    if (!variable_global_exists("dev_console")) {
+        return; // Console system not initialized
+    }
+    
+    if (is_undefined(global.dev_console)) {
+        return; // Console data is undefined
+    }
+    
+    if (!variable_struct_exists(global.dev_console, "history")) {
+        return; // History structure doesn't exist
+    }
+    
+    if (is_undefined(global.dev_console.history)) {
+        return; // History is undefined
+    }
+    
+    if (!ds_exists(global.dev_console.history, ds_type_list)) {
+        return; // History data structure has been destroyed
+    }
+    
+    // Create the log entry
     var entry = {
-        text: message,
+        text: string(message), // Ensure message is a string
         color: color,
         timestamp: current_time
     };
     
-    ds_list_add(global.dev_console.history, entry);
-    
-    // Limit history size
-    while (ds_list_size(global.dev_console.history) > global.dev_console.max_history) {
-        ds_list_delete(global.dev_console.history, 0);
+    try {
+        ds_list_add(global.dev_console.history, entry);
+        
+        // Limit history size - but only if we can safely check the size
+        if (variable_struct_exists(global.dev_console, "max_history") && 
+            !is_undefined(global.dev_console.max_history)) {
+            while (ds_list_size(global.dev_console.history) > global.dev_console.max_history) {
+                ds_list_delete(global.dev_console.history, 0);
+            }
+            
+            // Auto-scroll to bottom - but only if scroll_offset exists
+            if (variable_struct_exists(global.dev_console, "scroll_offset") && 
+                variable_struct_exists(global.dev_console, "visible_lines")) {
+                global.dev_console.scroll_offset = max(0, ds_list_size(global.dev_console.history) - global.dev_console.visible_lines);
+            }
+        }
+    } catch (error) {
+        // If dev console logging fails, at least try to output to debug console
+        show_debug_message("DEV_CONSOLE_ERROR: " + string(error) + " | Original message: " + string(message));
     }
-    
-    // Auto-scroll to bottom
-    global.dev_console.scroll_offset = max(0, ds_list_size(global.dev_console.history) - global.dev_console.visible_lines);
 }
 
 /// @function dev_console_execute(command_string)
