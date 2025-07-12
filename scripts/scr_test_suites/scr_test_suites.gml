@@ -78,20 +78,20 @@ function test_run_config_tests() {
     
     // Test 4: Default values
     total++;
-    if (test_assert_equals(global.game_options.display.width, 1920, "Default width")) passed++;
+    if (test_assert_equals(global.game_options.display.width, DEFAULT_GAME_WIDTH, "Default width")) passed++;
     total++;
-    if (test_assert_equals(global.game_options.display.height, 1080, "Default height")) passed++;
+    if (test_assert_equals(global.game_options.display.height, DEFAULT_GAME_HEIGHT, "Default height")) passed++;
     
-    // Test 5: Config get/set
-    var old_value = config_get("ui", "button_width");
-    config_set("ui", "button_width", 999);
+    // Test 5: Config get/set using new path notation
+    var old_value = config_get("ui.button_width");
+    config_set("ui.button_width", 999);
     total++;
-    if (test_assert_equals(config_get("ui", "button_width"), 999, "Config set/get")) passed++;
-    config_set("ui", "button_width", old_value); // Restore
+    if (test_assert_equals(config_get("ui.button_width"), 999, "Config set/get")) passed++;
+    config_set("ui.button_width", old_value); // Restore
     
     // Test 6: Save and load
     var temp_file = global.config_file;
-    global.config_file = "test_config.ini";
+    global.config_file = "test_config.json";
     config_save();
     
     // Modify in memory
@@ -149,7 +149,7 @@ function test_run_logger_tests() {
         dev_console_log("  ✓ Log level filtering", global.dev_console.success_color);
     }
     
-    // Test 4: Different log levels - with error handling
+    // Test 4: Different log levels
     var levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR, LogLevel.CRITICAL];
     for (var i = 0; i < array_length(levels); i++) {
         total++;
@@ -204,9 +204,8 @@ function test_run_asset_tests() {
     total++;
     if (test_assert_equals(safe_sprite, -1, "Safe getter returns -1")) passed++;
     
-    // Test 5: Asset caching - only test if manifest has entries
+    // Test 5: Asset caching
     if (variable_global_exists("asset_manifest") && ds_map_size(global.asset_manifest) > 0) {
-        // Get first available asset key
         var first_key = ds_map_find_first(global.asset_manifest);
         if (!is_undefined(first_key)) {
             var sprite1 = assets_get_sprite(first_key);
@@ -216,12 +215,12 @@ function test_run_asset_tests() {
         } else {
             total++;
             dev_console_log("  ! Skipping cache test - no assets in manifest", global.dev_console.info_color);
-            passed++; // Give this one a pass
+            passed++;
         }
     } else {
         total++;
         dev_console_log("  ! Skipping cache test - manifest empty", global.dev_console.info_color);
-        passed++; // Give this one a pass
+        passed++;
     }
     
     // Test 6: Invalid input handling
@@ -289,11 +288,11 @@ function test_run_input_tests() {
     total++;
     if (test_assert(!global.input_state.ui_has_focus, "UI focus cleared")) passed++;
     
-    // Test 7: Input mapping
+    // Test 7: Input mapping structure
     total++;
     if (test_assert_type(global.input_mapping, is_struct, "Input mapping is struct")) passed++;
     total++;
-    if (test_assert_exists(global.input_mapping.move_up, "Move up mapping exists")) passed++;
+    if (test_assert(variable_struct_exists(global.input_mapping, "keyboard"), "Keyboard mapping exists")) passed++;
     
     dev_console_log(string("Input tests: {0}/{1} passed", passed, total), 
                    passed == total ? global.dev_console.success_color : global.dev_console.error_color);
@@ -338,8 +337,7 @@ function test_run_observer_tests() {
     total++;
     if (test_assert(!test_called, "Observer removed successfully")) passed++;
     
-    // Test 5: Multiple observers - Use global variable to avoid scoping issues
-    // Create a global test counter to avoid scoping issues
+    // Test 5: Multiple observers
     global.test_observer_counter = 0;
     
     var func1 = function(data) { 
@@ -364,19 +362,16 @@ function test_run_observer_tests() {
     gamestate_remove_observer("multi_test", func1);
     gamestate_remove_observer("multi_test", func2);
     gamestate_remove_observer("multi_test", func3);
-    
-    // Clean up global test variable
     global.test_observer_counter = undefined;
     
     // Test 6: Error handling in observer
     var error_test_called = false;
     var error_func = function(data) { 
         error_test_called = true;
-        throw "Test error"; // Deliberately throw an error
+        throw "Test error";
     };
     gamestate_add_observer("error_test", error_func);
     
-    // Should not crash
     try {
         gamestate_notify_observers("error_test", {});
         total++;
@@ -392,7 +387,6 @@ function test_run_observer_tests() {
     // Test 7: Safe cleanup behavior
     total++;
     try {
-        // Test that cleanup functions don't crash with invalid state
         gamestate_remove_observer("nonexistent_event", function() {});
         passed++;
         dev_console_log("  ✓ Safe cleanup handling", global.dev_console.success_color);
@@ -590,7 +584,7 @@ function test_run_benchmarks() {
     // Benchmark 4: JSON operations
     var test_struct = { a: 1, b: 2, c: { d: 3, e: 4 } };
     start_time = get_timer();
-    for (var i = 0; i < iterations / 10; i++) { // Less iterations for expensive operation
+    for (var i = 0; i < iterations / 10; i++) {
         var copy = json_deep_copy(test_struct);
     }
     elapsed = (get_timer() - start_time) / 1000;
@@ -600,7 +594,7 @@ function test_run_benchmarks() {
     // Benchmark 5: Config get/set
     start_time = get_timer();
     for (var i = 0; i < iterations; i++) {
-        var value = config_get("ui", "button_width", 300);
+        var value = config_get("ui.button_width", 300);
     }
     elapsed = (get_timer() - start_time) / 1000;
     dev_console_log(string("Config get: {0} ops in {1}ms ({2} ops/ms)", 

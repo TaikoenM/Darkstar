@@ -1,5 +1,3 @@
-/// @description Draw debug information
-
 // Only draw debug info if debug flag is set
 if (!variable_global_exists("debug_show_info")) {
     global.debug_show_info = true; // Default to true for now
@@ -16,27 +14,45 @@ if (global.debug_show_info) {
     var y_pos = 10;
     var line_height = 20;
     
-    // Debug information
+    // Basic debug information
     var debug_info = [
         "=== DEBUG INFO ===",
         string("FPS: {0} / {1}", fps, fps_real),
         string("Room: {0}", room_get_name(room)),
-        string("Game State: {0}", gamestate_get()),
+        string("Scene State: {0}", scenestate_get()),
         string("Instances: {0}", instance_count),
         string("Time: {0}", current_time),
         "",
-        "Objects in room:",
-        string("- GameController: {0}", instance_exists(obj_game_controller)),
-        string("- MainMenuManager: {0}", instance_exists(obj_MainMenuManager)),
-        string("- InputManager: {0}", instance_exists(obj_InputManager)),
-        string("- UIManager: {0}", instance_exists(obj_UIManager)),
-        string("- MenuButtons: {0}", instance_number(obj_MenuButton)),
-        string("- Background: {0}", instance_exists(obj_MainMenuBackground))
+        "Objects in room:"
     ];
     
-    // Draw background for readability
+    // Dynamic object counting
+    var object_counts = ds_map_create();
+    
+    // Count all objects dynamically
+    with (all) {
+        var obj_name = object_get_name(object_index);
+        if (ds_map_exists(object_counts, obj_name)) {
+            object_counts[? obj_name]++;
+        } else {
+            object_counts[? obj_name] = 1;
+        }
+    }
+    
+    // Add object counts to debug info
+    var key = ds_map_find_first(object_counts);
+    while (!is_undefined(key)) {
+        array_push(debug_info, string("- {0}: {1}", key, object_counts[? key]));
+        key = ds_map_find_next(object_counts, key);
+    }
+    
+    ds_map_destroy(object_counts);
+    
+    // Calculate background size
     var max_width = 300;
     var total_height = array_length(debug_info) * line_height + 20;
+    
+    // Draw background for readability
     draw_set_color(c_black);
     draw_set_alpha(0.7);
     draw_rectangle(x_pos - 5, y_pos - 5, x_pos + max_width, y_pos + total_height, false);

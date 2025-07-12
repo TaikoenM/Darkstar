@@ -21,19 +21,7 @@ function assets_load_manifest() {
         logger_write(LogLevel.INFO, "AssetManager", "Starting manifest load process", "Loading asset definitions");
     }
     
-    var manifest_file = "";
-    
-    // Use correct property path with proper type checking
-    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        if (variable_struct_exists(global.game_options, "assets") && 
-            variable_struct_exists(global.game_options.assets, "data_path")) {
-            manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
-        } else {
-            manifest_file = working_directory + "assets/data/asset_manifest.ini";
-        }
-    } else {
-        manifest_file = working_directory + "assets/data/asset_manifest.ini";
-    }
+    var manifest_file = working_directory + DATA_PATH + ASSET_MANIFEST_FILE;
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "AssetManager", "Manifest file path determined", manifest_file);
@@ -46,10 +34,6 @@ function assets_load_manifest() {
             logger_write(LogLevel.WARNING, "AssetManager", "Asset manifest not found, creating default", manifest_file);
         }
         assets_create_default_manifest();
-        // After creating the file, continue and load it
-    } else {
-        // Fix any wrong paths in existing manifest
-        assets_fix_manifest_paths();
     }
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
@@ -57,50 +41,47 @@ function assets_load_manifest() {
     }
     
     try {
-        // Open the INI file for reading
-        ini_open(manifest_file);
-        
-        // Load image assets
-        var image_count = ini_read_real("Images", "count", 0);
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.INFO, "AssetManager", "Found image assets in manifest", 
-                        string("Count: {0}", image_count));
+        // Load JSON manifest
+        var manifest = json_load_file(manifest_file);
+        if (is_undefined(manifest)) {
+            assets_create_default_manifest();
+            manifest = json_load_file(manifest_file);
         }
         
-        for (var i = 0; i < image_count; i++) {
-            var asset_key = ini_read_string("Images", string("asset_{0}_key", i), "");
-            var asset_file = ini_read_string("Images", string("asset_{0}_file", i), "");
+        // Process images
+        if (variable_struct_exists(manifest, "images")) {
+            var images = manifest.images;
+            var image_keys = variable_struct_get_names(images);
             
-            if (asset_key != "" && asset_file != "") {
-                ds_map_add(global.asset_manifest, asset_key, asset_file);
-                if (variable_global_exists("log_enabled") && global.log_enabled) {
-                    logger_write(LogLevel.DEBUG, "AssetManager", "Loaded asset definition", 
-                                string("Key: '{0}' -> File: '{1}'", asset_key, asset_file));
-                }
-            } else {
-                if (variable_global_exists("log_enabled") && global.log_enabled) {
-                    logger_write(LogLevel.WARNING, "AssetManager", "Skipped invalid asset entry", 
-                                string("Index: {0}, Key: '{1}', File: '{2}'", i, asset_key, asset_file));
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.INFO, "AssetManager", "Found image assets in manifest", 
+                            string("Count: {0}", array_length(image_keys)));
+            }
+            
+            for (var i = 0; i < array_length(image_keys); i++) {
+                var asset_key = image_keys[i];
+                var asset_data = images[$ asset_key];
+                
+                if (variable_struct_exists(asset_data, "file")) {
+                    ds_map_add(global.asset_manifest, asset_key, asset_data.file);
+                    if (variable_global_exists("log_enabled") && global.log_enabled) {
+                        logger_write(LogLevel.DEBUG, "AssetManager", "Loaded asset definition", 
+                                    string("Key: '{0}' -> File: '{1}'", asset_key, asset_data.file));
+                    }
                 }
             }
         }
         
-        // Close the INI file
-        ini_close();
+        // Process sounds (for future use)
+        if (variable_struct_exists(manifest, "sounds")) {
+            // TODO: Process sound assets
+        }
         
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.INFO, "AssetManager", "Manifest load complete", 
                         string("Loaded {0} asset definitions successfully", ds_map_size(global.asset_manifest)));
-            
-            // Log all loaded assets for debugging
-            var key = ds_map_find_first(global.asset_manifest);
-            while (!is_undefined(key)) {
-                var file_path = global.asset_manifest[? key];
-                logger_write(LogLevel.DEBUG, "AssetManager", "Manifest entry", 
-                            string("'{0}' -> '{1}'", key, file_path));
-                key = ds_map_find_next(global.asset_manifest, key);
-            }
         }
+        
     } catch (error) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", "Error loading manifest", string(error));

@@ -1,14 +1,12 @@
-/// @description Handle room transitions
-
 logger_write(LogLevel.INFO, "GameController", "Room Start event triggered", string("Current room: {0}", room_get_name(room)));
 
 // Handle specific room initialization
 if (room == room_main_menu) {
     logger_write(LogLevel.INFO, "GameController", "Entered main menu room", "Setting up main menu");
     
-    // Ensure we're in the correct game state
-    if (gamestate_get() != GameState.MAIN_MENU) {
-        gamestate_change(GameState.MAIN_MENU, "Room transition to main menu");
+    // Ensure we're in the correct scene state
+    if (scenestate_get() != SceneState.MAIN_MENU) {
+        scenestate_change(SceneState.MAIN_MENU, "Room transition to main menu");
     }
     
     // Ensure required layers exist

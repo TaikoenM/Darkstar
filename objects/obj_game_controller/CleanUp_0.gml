@@ -1,7 +1,6 @@
-/// @description Clean up all systems on game exit with proper safety and order
+/// @description Clean up all systems on game exit with proper order
 
 // Important: Mark observer system as shutting down FIRST
-// This prevents objects from trying to unregister during cleanup
 if (variable_global_exists("observer_system_active")) {
     global.observer_system_active = false;
 }
@@ -10,10 +9,9 @@ logger_write(LogLevel.INFO, "GameController", "Starting game shutdown sequence",
 
 // Step 1: Unregister observers first to prevent new events during cleanup
 try {
-    // These calls will be safe because observer system is marked as inactive
-    gamestate_remove_observer("unit_clicked", game_controller_handle_unit_click);
-    gamestate_remove_observer("unit_order_issued", game_controller_handle_unit_order);
-    gamestate_remove_observer("hex_clicked", game_controller_handle_hex_click);
+    gamestate_remove_observer(EVENT_UNIT_CLICKED, game_controller_handle_unit_click);
+    gamestate_remove_observer(EVENT_UNIT_ORDER_ISSUED, game_controller_handle_unit_order);
+    gamestate_remove_observer(EVENT_HEX_CLICKED, game_controller_handle_hex_click);
     logger_write(LogLevel.INFO, "GameController", "Observers unregistered", "Cleanup step 1");
 } catch (error) {
     show_debug_message("[ERROR] Observer cleanup failed: " + string(error));
@@ -27,10 +25,9 @@ try {
     show_debug_message("[ERROR] Config save failed: " + string(error));
 }
 
-// Step 3: Clean up UI system using improved cleanup
+// Step 3: Clean up UI system
 try {
     if (instance_exists(obj_UIManager)) {
-        // Use the improved ui_cleanup function
         ui_cleanup();
         show_debug_message("[INFO] UI cleanup completed safely");
     }
@@ -54,44 +51,23 @@ try {
     show_debug_message("[ERROR] Asset cleanup failed: " + string(error));
 }
 
-// Step 6: Clean up game state (includes observer system)
+// Step 6: Clean up scene state
+try {
+    scenestate_cleanup();
+    logger_write(LogLevel.INFO, "GameController", "Scene state cleaned up", "Cleanup step 6");
+} catch (error) {
+    show_debug_message("[ERROR] Scene state cleanup failed: " + string(error));
+}
+
+// Step 7: Clean up game state (includes observer system)
 try {
     gamestate_cleanup();
-    logger_write(LogLevel.INFO, "GameController", "Game state cleaned up", "Cleanup step 6");
+    logger_write(LogLevel.INFO, "GameController", "Game state cleaned up", "Cleanup step 7");
 } catch (error) {
     show_debug_message("[ERROR] GameState cleanup failed: " + string(error));
 }
 
-// Step 7: Clean up dev console LAST (since other systems may try to log during cleanup)
-try {
-    // Clean up dev console manually without logging to avoid recursion
-    if (instance_exists(obj_DevConsole)) {
-        with (obj_DevConsole) {
-            // Clean up manually to avoid recursive logging
-            if (variable_global_exists("dev_console") && !is_undefined(global.dev_console)) {
-                if (variable_struct_exists(global.dev_console, "history") && 
-                    !is_undefined(global.dev_console.history) && 
-                    ds_exists(global.dev_console.history, ds_type_list)) {
-                    ds_list_destroy(global.dev_console.history);
-                }
-                
-                if (variable_struct_exists(global.dev_console, "command_history") && 
-                    !is_undefined(global.dev_console.command_history) && 
-                    ds_exists(global.dev_console.command_history, ds_type_list)) {
-                    ds_list_destroy(global.dev_console.command_history);
-                }
-            }
-            
-            if (variable_global_exists("dev_commands") && 
-                !is_undefined(global.dev_commands) && 
-                ds_exists(global.dev_commands, ds_type_map)) {
-                ds_map_destroy(global.dev_commands);
-            }
-        }
-        show_debug_message("[INFO] Dev console cleaned up");
-    }
-} catch (error) {
-    show_debug_message("[ERROR] Dev console cleanup failed: " + string(error));
-}
+// Note: DevConsole will clean itself up through its own CleanUp event
+// We don't need to manually clean it up here
 
 show_debug_message("[INFO] GameController: Game shutdown complete - All systems cleaned up");

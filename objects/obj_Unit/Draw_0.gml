@@ -1,8 +1,6 @@
-/// @description Draw unit based on data
-
 if (unit_data == undefined) exit;
 
-// Check if we have a valid sprite - use fallback if not
+// Check if we have a valid sprite
 var unit_sprite = -1;
 if (variable_struct_exists(unit_data, "sprite_name")) {
     unit_sprite = assets_get_sprite_safe(unit_data.sprite_name);
@@ -51,7 +49,7 @@ if (selected) {
 }
 
 // Draw health bar
-if (health_bar_alpha > 0) {
+if (health_bar_alpha > 0 && variable_struct_exists(unit_data, "health") && variable_struct_exists(unit_data, "max_health")) {
     var bar_width = 48;
     var bar_height = 6;
     var bar_y = visual_y - 40;
@@ -61,22 +59,19 @@ if (health_bar_alpha > 0) {
     draw_set_color(c_black);
     draw_rectangle(visual_x - bar_width/2, bar_y, visual_x + bar_width/2, bar_y + bar_height, false);
     
-    // Health - ensure we have valid health data
-    if (variable_struct_exists(unit_data, "health") && variable_struct_exists(unit_data, "max_health")) {
-        draw_set_alpha(health_bar_alpha);
-        var health_percent = unit_data.health / unit_data.max_health;
-        
-        // Determine health bar color using proper GML syntax
-        var health_color = c_red;  // Default to red
-        if (health_percent > 0.5) {
-            health_color = c_lime;
-        } else if (health_percent > 0.25) {
-            health_color = c_yellow;
-        }
-        
-        draw_set_color(health_color);
-        draw_rectangle(visual_x - bar_width/2, bar_y, visual_x - bar_width/2 + (bar_width * health_percent), bar_y + bar_height, false);
+    // Health
+    draw_set_alpha(health_bar_alpha);
+    var health_percent = unit_data.health / unit_data.max_health;
+    
+    var health_color = c_red;
+    if (health_percent > 0.5) {
+        health_color = c_lime;
+    } else if (health_percent > 0.25) {
+        health_color = c_yellow;
     }
+    
+    draw_set_color(health_color);
+    draw_rectangle(visual_x - bar_width/2, bar_y, visual_x - bar_width/2 + (bar_width * health_percent), bar_y + bar_height, false);
     
     draw_set_alpha(1);
     draw_set_color(c_white);

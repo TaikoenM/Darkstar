@@ -7,16 +7,16 @@ input_update();
 // Process queued commands
 var command = input_dequeue_command();
 while (!is_undefined(command)) {
-    // Execute command based on current game state
-    var current_state = gamestate_get();
+    // Execute command based on current scene state
+    var current_state = scenestate_get();
     
     switch (current_state) {
-        case GameState.MAIN_MENU:
+        case SceneState.MAIN_MENU:
             // Process menu commands
             switch (command.type) {
                 case CommandType.START_NEW_GAME:
                     // TODO: Initialize new game
-                    gamestate_change(GameState.IN_GAME, "Starting new game");
+                    scenestate_change(SceneState.IN_GAME, "Starting new game");
                     // TODO: Create game world
                     break;
                     
@@ -27,11 +27,11 @@ while (!is_undefined(command)) {
             }
             break;
             
-        case GameState.IN_GAME:
+        case SceneState.IN_GAME:
             // Process game commands
             switch (command.type) {
                 case CommandType.PAUSE:
-                    gamestate_change(GameState.PAUSED, "Game paused");
+                    scenestate_change(SceneState.PAUSED, "Game paused");
                     break;
                     
                 case CommandType.SELECT_UNIT:
@@ -43,14 +43,14 @@ while (!is_undefined(command)) {
             }
             break;
             
-        case GameState.PAUSED:
+        case SceneState.PAUSED:
             // Only process unpause commands
             if (command.type == CommandType.PAUSE) {
-                gamestate_change(GameState.IN_GAME, "Unpaused");
+                scenestate_change(SceneState.IN_GAME, "Unpaused");
             }
             break;
             
-        case GameState.MAP_EDITOR:
+        case SceneState.MAP_EDITOR:
             // Process editor commands
             switch (command.type) {
                 case CommandType.EDITOR_PLACE:

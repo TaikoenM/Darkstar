@@ -1,5 +1,5 @@
 /// @description Handle console input and updates
-if (keyboard_check_pressed(192)) { // Tilde key (~)
+if (keyboard_check_pressed(KEY_DEV_CONSOLE)) {
     dev_console_toggle();
 }
 

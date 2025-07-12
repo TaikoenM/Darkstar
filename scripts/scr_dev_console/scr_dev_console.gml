@@ -96,28 +96,28 @@ function dev_console_toggle() {
 function dev_console_log(message, color = c_white) {
     // Safety checks before attempting to add to console
     if (!variable_global_exists("dev_console")) {
-        return; // Console system not initialized
+        return;
     }
     
     if (is_undefined(global.dev_console)) {
-        return; // Console data is undefined
+        return;
     }
     
     if (!variable_struct_exists(global.dev_console, "history")) {
-        return; // History structure doesn't exist
+        return;
     }
     
     if (is_undefined(global.dev_console.history)) {
-        return; // History is undefined
+        return;
     }
     
     if (!ds_exists(global.dev_console.history, ds_type_list)) {
-        return; // History data structure has been destroyed
+        return;
     }
     
     // Create the log entry
     var entry = {
-        text: string(message), // Ensure message is a string
+        text: string(message),
         color: color,
         timestamp: current_time
     };
@@ -125,21 +125,20 @@ function dev_console_log(message, color = c_white) {
     try {
         ds_list_add(global.dev_console.history, entry);
         
-        // Limit history size - but only if we can safely check the size
+        // Limit history size
         if (variable_struct_exists(global.dev_console, "max_history") && 
             !is_undefined(global.dev_console.max_history)) {
             while (ds_list_size(global.dev_console.history) > global.dev_console.max_history) {
                 ds_list_delete(global.dev_console.history, 0);
             }
             
-            // Auto-scroll to bottom - but only if scroll_offset exists
+            // Auto-scroll to bottom
             if (variable_struct_exists(global.dev_console, "scroll_offset") && 
                 variable_struct_exists(global.dev_console, "visible_lines")) {
                 global.dev_console.scroll_offset = max(0, ds_list_size(global.dev_console.history) - global.dev_console.visible_lines);
             }
         }
     } catch (error) {
-        // If dev console logging fails, at least try to output to debug console
         show_debug_message("DEV_CONSOLE_ERROR: " + string(error) + " | Original message: " + string(message));
     }
 }
@@ -196,7 +195,7 @@ function dev_console_register_commands() {
     ds_map_add(global.dev_commands, "memory", dev_cmd_memory);
     
     // Game state commands
-    ds_map_add(global.dev_commands, "gamestate", dev_cmd_gamestate);
+    ds_map_add(global.dev_commands, "scenestate", dev_cmd_scenestate);
     ds_map_add(global.dev_commands, "room_goto", dev_cmd_room_goto);
     
     // Testing commands
@@ -233,7 +232,7 @@ function dev_cmd_help(args) {
     dev_console_log("  info              - Show system information", c_white);
     dev_console_log("  room_info         - Show current room information", c_white);
     dev_console_log("  memory            - Show memory usage", c_white);
-    dev_console_log("  gamestate [state] - Change game state", c_white);
+    dev_console_log("  scenestate [state]- Change scene state", c_white);
     dev_console_log("  room_goto [name]  - Go to specified room", c_white);
     dev_console_log("", c_white);
     dev_console_log("Testing commands:", global.dev_console.info_color);
@@ -370,11 +369,11 @@ function dev_cmd_memory(args) {
     dev_console_log("Debug mode: " + (debug_mode ? "ON" : "OFF"), c_white);
 }
 
-/// @function dev_cmd_gamestate(args)
-/// @description Change game state
-function dev_cmd_gamestate(args) {
+/// @function dev_cmd_scenestate(args)
+/// @description Change scene state
+function dev_cmd_scenestate(args) {
     if (array_length(args) == 0) {
-        dev_console_log("Current state: " + string(gamestate_get()), global.dev_console.info_color);
+        dev_console_log("Current state: " + string(scenestate_get()), global.dev_console.info_color);
         dev_console_log("Available states: INITIALIZING, MAIN_MENU, IN_GAME, PAUSED, MAP_EDITOR, OPTIONS, TESTING", c_white);
         return;
     }
@@ -383,18 +382,18 @@ function dev_cmd_gamestate(args) {
     var new_state = -1;
     
     switch (state_name) {
-        case "INITIALIZING": new_state = GameState.INITIALIZING; break;
-        case "MAIN_MENU": new_state = GameState.MAIN_MENU; break;
-        case "IN_GAME": new_state = GameState.IN_GAME; break;
-        case "PAUSED": new_state = GameState.PAUSED; break;
-        case "MAP_EDITOR": new_state = GameState.MAP_EDITOR; break;
-        case "OPTIONS": new_state = GameState.OPTIONS; break;
-        case "TESTING": new_state = GameState.TESTING; break;
+        case "INITIALIZING": new_state = SceneState.INITIALIZING; break;
+        case "MAIN_MENU": new_state = SceneState.MAIN_MENU; break;
+        case "IN_GAME": new_state = SceneState.IN_GAME; break;
+        case "PAUSED": new_state = SceneState.PAUSED; break;
+        case "MAP_EDITOR": new_state = SceneState.MAP_EDITOR; break;
+        case "OPTIONS": new_state = SceneState.OPTIONS; break;
+        case "TESTING": new_state = SceneState.TESTING; break;
     }
     
     if (new_state != -1) {
-        gamestate_change(new_state, "Console command");
-        dev_console_log("Game state changed to: " + state_name, global.dev_console.success_color);
+        scenestate_change(new_state, "Console command");
+        dev_console_log("Scene state changed to: " + state_name, global.dev_console.success_color);
     } else {
         dev_console_log("Invalid state: " + state_name, global.dev_console.error_color);
     }

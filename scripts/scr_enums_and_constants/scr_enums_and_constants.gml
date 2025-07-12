@@ -1,5 +1,10 @@
-/// @description Game state enumeration for managing different phases of the game
-enum GameState {
+/// @description Game enums and constants with expanded definitions
+
+// ============================================================================
+// SCENE STATES (formerly GameState)
+// ============================================================================
+/// @description Scene state enumeration for managing different UI states
+enum SceneState {
     INITIALIZING,   // Game is starting up and initializing systems
     MAIN_MENU,      // Main menu is displayed
     IN_GAME,        // Gameplay is active
@@ -9,6 +14,9 @@ enum GameState {
     TESTING         // Automated testing mode
 }
 
+// ============================================================================
+// LOGGING
+// ============================================================================
 /// @description Logging severity levels for the logging system
 enum LogLevel {
     DEBUG,      // Detailed debug information
@@ -18,16 +26,9 @@ enum LogLevel {
     CRITICAL    // Critical error messages
 }
 
-/// @description Menu button types for identification and behavior
-enum ButtonType {
-    CONTINUE,        // Continue from saved game
-    START_NEW_GAME,  // Start a new game
-    OPTIONS,         // Open options menu
-    MAP_EDITOR,      // Open map editor
-    RUN_TESTS,       // Run automated tests
-    EXIT             // Exit the game
-}
-
+// ============================================================================
+// INPUT & COMMANDS
+// ============================================================================
 /// @description Command types for the command pattern input system
 enum CommandType {
     // Movement commands
@@ -64,6 +65,35 @@ enum CommandType {
     QUIT_GAME           // Quit to menu/desktop
 }
 
+// ============================================================================
+// BUTTON TYPES
+// ============================================================================
+/// @description Menu button type identifiers
+enum ButtonID {
+    CONTINUE,           // Continue from saved game
+    NEW_GAME,           // Start a new game
+    OPTIONS,            // Open options menu
+    MAP_EDITOR,         // Open map editor
+    INPUT_BINDINGS,     // Open input bindings
+    EXIT,               // Exit the game
+    RUN_TESTS           // Run automated tests
+}
+
+// ============================================================================
+// OBSERVER EVENTS
+// ============================================================================
+/// @description Observer event names as constants
+#macro EVENT_BUTTON_CLICKED "button_clicked"
+#macro EVENT_UNIT_CLICKED "unit_clicked"
+#macro EVENT_UNIT_ORDER_ISSUED "unit_order_issued"
+#macro EVENT_HEX_CLICKED "hex_clicked"
+#macro EVENT_CITY_CLICKED "city_clicked"
+#macro EVENT_TURN_ENDED "turn_ended"
+#macro EVENT_SCENE_CHANGED "scene_changed"
+
+// ============================================================================
+// NETWORK
+// ============================================================================
 /// @description Network command types
 enum NetworkCommand {
     CONNECT,            // Client connecting
@@ -72,6 +102,9 @@ enum NetworkCommand {
     COMMAND             // Player command
 }
 
+// ============================================================================
+// GAME ENTITIES
+// ============================================================================
 /// @description Faction enumeration for different playable and NPC factions
 enum Faction {
     NEUTRAL,            // Neutral/unaligned
@@ -113,43 +146,72 @@ enum TerrainType {
     INDUSTRIAL          // Industrial terrain
 }
 
-// Display constants - used as fallbacks when config system fails
+// ============================================================================
+// KEYBOARD CONSTANTS
+// ============================================================================
+#macro KEY_DEV_CONSOLE 192          // Tilde key (~)
+#macro KEY_QUICK_SAVE vk_f5        // Quick save
+#macro KEY_QUICK_LOAD vk_f9        // Quick load
+#macro KEY_TOGGLE_DEBUG vk_f3      // Toggle debug display
+
+// ============================================================================
+// DISPLAY CONSTANTS
+// ============================================================================
 #macro DEFAULT_GAME_WIDTH 1920      // Default window width in pixels
 #macro DEFAULT_GAME_HEIGHT 1080     // Default window height in pixels  
 #macro DEFAULT_FULLSCREEN false     // Default fullscreen setting
 
-// Define GAME_WIDTH and GAME_HEIGHT for backwards compatibility
+// For backwards compatibility
 #macro GAME_WIDTH 1920
 #macro GAME_HEIGHT 1080
 
-// Hex grid constants
+// ============================================================================
+// HEX GRID
+// ============================================================================
 #macro DEFAULT_HEX_SIZE 32          // Default hex tile size in pixels
 #macro HEX_SQRT3 1.732050807568877  // Square root of 3 constant
 
-// UI constants
+// ============================================================================
+// UI CONSTANTS
+// ============================================================================
 #macro DEFAULT_BUTTON_WIDTH 300     // Default button width
 #macro DEFAULT_BUTTON_HEIGHT 60     // Default button height
 #macro DEFAULT_BUTTON_SPACING 80    // Default spacing between buttons
 
-// Game balance constants
+// ============================================================================
+// GAME BALANCE
+// ============================================================================
 #macro MAX_PLAYERS 8                // Maximum number of players
 #macro DEFAULT_TURN_TIMER 300       // Default turn timer in seconds
 #macro MAX_UNITS_PER_STACK 12       // Maximum units in one hex
 
-// File path constants
-#macro CONFIG_FILE "game_config.ini"
-#macro LOG_FILE "game_log.txt"
+// ============================================================================
+// FILE PATHS
+// ============================================================================
+#macro CONFIG_FILE "config/game_config.json"
+#macro INPUT_MAPPING_FILE "config/input_mapping.json"
+#macro ASSET_MANIFEST_FILE "data/asset_manifest.json"
+#macro LOG_FILE "logs/game_log.txt"
 #macro SAVE_FILE_EXTENSION ".sav"
-#macro DATA_PATH "assets/data/"
+
+// Directory structure
+#macro DATA_PATH "data/"
+#macro CONFIG_PATH "config/"
 #macro IMAGES_PATH "assets/images/"
 #macro SOUNDS_PATH "assets/sounds/"
+#macro SAVES_PATH "saves/"
+#macro LOGS_PATH "logs/"
 
-// Network constants
+// ============================================================================
+// NETWORK
+// ============================================================================
 #macro DEFAULT_PORT 7777            // Default network port
 #macro MAX_PACKET_SIZE 1024         // Maximum network packet size
 #macro NETWORK_TIMEOUT 30000        // Network timeout in milliseconds
 
-// Debug constants
+// ============================================================================
+// DEBUG
+// ============================================================================
 #macro DEBUG_SHOW_HEX_COORDS false  // Show hex coordinates on screen
 #macro DEBUG_SHOW_UNIT_IDS false    // Show unit IDs on screen
 #macro DEBUG_ENABLE_CHEATS false    // Enable debug cheats

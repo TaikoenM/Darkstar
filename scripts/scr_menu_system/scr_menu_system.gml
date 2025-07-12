@@ -133,62 +133,9 @@ function menu_get_main_menu_buttons() {
     return buttons;
 }
 
-// Menu button callback functions
-
-/// @description Handle Continue button press - load saved game
-function menu_callback_continue() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Continue button pressed", "Not implemented yet");
-    }
-    // TODO: Implement continue functionality
-}
-
-/// @description Handle New Game button press - start fresh game
-function menu_callback_new_game() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "New Game button pressed", "Not implemented yet");
-    }
-    // TODO: Implement new game functionality
-}
-
-/// @description Handle Options button press - open settings menu
-function menu_callback_options() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Options button pressed", "Not implemented yet");
-    }
-    // TODO: Implement options functionality
-}
-
-/// @description Handle Map Editor button press - open level editor
-function menu_callback_map_editor() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Map Editor button pressed", "Not implemented yet");
-    }
-    // TODO: Implement map editor functionality
-}
-
-/// @description Handle Run Tests button press - start automated testing
-function menu_callback_run_tests() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Run Tests button pressed", "Not implemented yet");
-    }
-    // TODO: Implement test runner functionality
-}
-
-/// @description Handle Exit button press - save and quit game with proper cleanup
-function menu_callback_exit() {
-    if (variable_global_exists("log_enabled") && global.log_enabled) {
-        logger_write(LogLevel.INFO, "MenuSystem", "Exit button pressed", "Starting graceful shutdown");
-    }
-    
-    // Instead of calling individual cleanup functions that might log to dev console,
-    // just call game_end() - GameMaker will trigger CleanUp events automatically
-    // which will handle the cleanup in the proper order
-    game_end();
-}
 
 /// @function main_menu_handle_button_click(event_data)
-/// @description Handle button click events from menu with enhanced exit handling
+/// @description Handle button click events from menu
 /// @param {struct} event_data Event data containing button_id
 function main_menu_handle_button_click(event_data) {
     var button_id = event_data.button_id;
@@ -197,13 +144,13 @@ function main_menu_handle_button_click(event_data) {
                 string("Button clicked: {0}", button_id), "User interaction");
     
     switch (button_id) {
-        case "NEW_GAME":
+        case ButtonID.NEW_GAME:
             // Create command to start new game
             var new_game_cmd = input_create_command(CommandType.START_NEW_GAME, {});
             input_queue_command(new_game_cmd);
             break;
             
-        case "CONTINUE":
+        case ButtonID.CONTINUE:
             // Create command to load save
             var load_cmd = input_create_command(CommandType.LOAD_GAME, {
                 save_slot: "quicksave"
@@ -211,26 +158,26 @@ function main_menu_handle_button_click(event_data) {
             input_queue_command(load_cmd);
             break;
             
-        case "OPTIONS":
+        case ButtonID.OPTIONS:
             // Open options panel
             if (variable_global_exists("log_enabled") && global.log_enabled) {
                 logger_write(LogLevel.INFO, "MainMenuManager", "Options not implemented", "Feature pending");
             }
             break;
             
-        case "INPUT_BINDINGS":
+        case ButtonID.INPUT_BINDINGS:
             // Open input bindings panel
             if (variable_global_exists("log_enabled") && global.log_enabled) {
                 logger_write(LogLevel.INFO, "MainMenuManager", "Input bindings not implemented", "Feature pending");
             }
             break;
             
-        case "MAP_EDITOR":
+        case ButtonID.MAP_EDITOR:
             // Change to map editor state
-            gamestate_change(GameState.MAP_EDITOR, "Opening map editor");
+            scenestate_change(SceneState.MAP_EDITOR, "Opening map editor");
             break;
             
-        case "EXIT":
+        case ButtonID.EXIT:
             // Enhanced exit handling
             logger_write(LogLevel.INFO, "MainMenuManager", "Exit requested", "Initiating shutdown");
             

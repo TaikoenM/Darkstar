@@ -53,62 +53,60 @@ function input_cleanup() {
 }
 
 /// @function input_load_mapping()
-/// @description Load input mapping configuration from file
+/// @description Load input mapping configuration from JSON file
 /// @return {struct} Input mapping configuration
 function input_load_mapping() {
-    var mapping_file = "";
+    var mapping_file = working_directory + INPUT_MAPPING_FILE;
     
-    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
-    } else {
-        mapping_file = working_directory + "assets/data/input_mapping.ini";
-    }
-    
+    // Default mappings
     var mapping = {
-        // Default keyboard mappings
-        move_up: ord("W"),
-        move_down: ord("S"),
-        move_left: ord("A"),
-        move_right: ord("D"),
-        action_primary: mb_left,
-        action_secondary: mb_right,
-        pause: vk_escape,
-        
-        // UI navigation
-        ui_up: vk_up,
-        ui_down: vk_down,
-        ui_left: vk_left,
-        ui_right: vk_right,
-        ui_confirm: vk_enter,
-        ui_cancel: vk_escape
+        keyboard: {
+            move_up: ord("W"),
+            move_down: ord("S"),
+            move_left: ord("A"),
+            move_right: ord("D"),
+            pause: vk_escape,
+            quick_save: KEY_QUICK_SAVE,
+            quick_load: KEY_QUICK_LOAD,
+            toggle_debug: KEY_TOGGLE_DEBUG,
+            dev_console: KEY_DEV_CONSOLE
+        },
+        mouse: {
+            action_primary: mb_left,
+            action_secondary: mb_right,
+            action_middle: mb_middle
+        },
+        ui: {
+            up: vk_up,
+            down: vk_down,
+            left: vk_left,
+            right: vk_right,
+            confirm: vk_enter,
+            cancel: vk_escape
+        }
     };
+    
+    // Ensure config directory exists
+    var config_dir = working_directory + CONFIG_PATH;
+    if (!directory_exists(config_dir)) {
+        directory_create(config_dir);
+    }
     
     // Load from file if exists
     if (file_exists(mapping_file)) {
         try {
-            ini_open(mapping_file);
-            
-            // Load keyboard mappings
-            mapping.move_up = ini_read_real("Keyboard", "move_up", mapping.move_up);
-            mapping.move_down = ini_read_real("Keyboard", "move_down", mapping.move_down);
-            mapping.move_left = ini_read_real("Keyboard", "move_left", mapping.move_left);
-            mapping.move_right = ini_read_real("Keyboard", "move_right", mapping.move_right);
-            mapping.pause = ini_read_real("Keyboard", "pause", mapping.pause);
-            
-            // Load UI mappings
-            mapping.ui_up = ini_read_real("UI", "up", mapping.ui_up);
-            mapping.ui_down = ini_read_real("UI", "down", mapping.ui_down);
-            mapping.ui_left = ini_read_real("UI", "left", mapping.ui_left);
-            mapping.ui_right = ini_read_real("UI", "right", mapping.ui_right);
-            mapping.ui_confirm = ini_read_real("UI", "confirm", mapping.ui_confirm);
-            mapping.ui_cancel = ini_read_real("UI", "cancel", mapping.ui_cancel);
-            
-            ini_close();
+            var loaded_mapping = json_load_file(mapping_file);
+            if (!is_undefined(loaded_mapping)) {
+                mapping = json_merge_structures(mapping, loaded_mapping);
+            }
         } catch (error) {
             if (variable_global_exists("log_enabled") && global.log_enabled) {
                 logger_write(LogLevel.WARNING, "InputManager", "Error loading input mapping", string(error));
             }
         }
+    } else {
+        // Save default mappings
+        input_save_mapping_data(mapping);
     }
     
     return mapping;
