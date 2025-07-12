@@ -5,8 +5,6 @@ if (!visible) exit;
 var current_color = button_color;
 if (!enabled) {
     current_color = c_dkgray;
-} else if (is_pressed) {
-    current_color = button_color_pressed;
 } else if (is_hovered) {
     current_color = button_color_hover;
 }

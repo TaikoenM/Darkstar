@@ -33,6 +33,11 @@ function gamestate_add_observer(event_name, callback) {
 /// @param {string} event_name Name of the event
 /// @param {function} callback Function to remove
 function gamestate_remove_observer(event_name, callback) {
+    // Simple safety check - only change from original
+    if (!variable_global_exists("gamestate_observers") || global.gamestate_observers == -1) {
+        return;
+    }
+    
     if (!ds_map_exists(global.gamestate_observers, event_name)) {
         return;
     }

@@ -15,6 +15,8 @@ text_color = c_white;
 
 // State
 is_hovered = false;
-is_pressed = false;
 enabled = true;
 visible = true;
+
+image_xscale = width / 100;   // Scale to match button width (300/100 = 3.0)
+image_yscale = height / 100;  // Scale to match button height (60/100 = 0.6)
