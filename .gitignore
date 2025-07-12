@@ -1,0 +1,6 @@
+*.yy
+**/*.yy
+**/*.ini
+*.yyp
+*.resource_order
+**/*.png
