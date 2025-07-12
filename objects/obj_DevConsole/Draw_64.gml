@@ -1,4 +1,4 @@
-/// @description Render the developer console with text wrapping
+/// @description Render the developer console with improved text wrapping and display
 if (!global.dev_console.enabled) exit;
 
 var gui_width = display_get_gui_width();
@@ -22,30 +22,60 @@ draw_set_valign(fa_top);
 
 var line_height = 16;
 var margin = 10;
-var usable_width = gui_width - margin * 2;
-var y_pos = margin;
+var usable_width = gui_width - margin * 2 - 20; // Extra space for scrollbar
+var max_lines = floor((console_height - margin * 3 - line_height) / line_height); // Reserve space for input
 
-// Function to wrap text
+// Enhanced text wrapping with character-level splitting
 function wrap_text(text, max_width) {
+    if (string_width(text) <= max_width) {
+        return [text]; // No wrapping needed
+    }
+    
     var words = string_split(text, " ");
     var lines = [];
     var current_line = "";
     
     for (var i = 0; i < array_length(words); i++) {
+        var word = words[i];
         var test_line = current_line;
-        if (current_line != "") test_line += " ";
-        test_line += words[i];
+        
+        if (current_line != "") {
+            test_line += " ";
+        }
+        test_line += word;
         
         if (string_width(test_line) <= max_width) {
             current_line = test_line;
         } else {
+            // Current line is full, start new line
             if (current_line != "") {
                 array_push(lines, current_line);
-                current_line = words[i];
+            }
+            
+            // Check if single word is too long
+            if (string_width(word) > max_width) {
+                // Split the word character by character
+                var char_line = "";
+                for (var j = 1; j <= string_length(word); j++) {
+                    var char = string_char_at(word, j);
+                    var test_char_line = char_line + char;
+                    
+                    if (string_width(test_char_line) <= max_width) {
+                        char_line = test_char_line;
+                    } else {
+                        if (char_line != "") {
+                            array_push(lines, char_line);
+                        }
+                        char_line = char;
+                    }
+                }
+                if (char_line != "") {
+                    current_line = char_line;
+                } else {
+                    current_line = "";
+                }
             } else {
-                // Single word is too long, force break
-                array_push(lines, words[i]);
-                current_line = "";
+                current_line = word;
             }
         }
     }
@@ -57,62 +87,102 @@ function wrap_text(text, max_width) {
     return lines;
 }
 
-// Draw history with wrapping
+// Process all history entries into display lines
+var display_lines = [];
 var history_size = ds_list_size(global.dev_console.history);
-var start_index = global.dev_console.scroll_offset;
-var end_index = min(history_size, start_index + global.dev_console.visible_lines);
-var lines_drawn = 0;
 
-for (var i = start_index; i < end_index && y_pos < console_height - line_height * 2; i++) {
+for (var i = 0; i < history_size; i++) {
     var entry = global.dev_console.history[| i];
     var wrapped_lines = wrap_text(entry.text, usable_width);
     
-    draw_set_color(entry.color);
     for (var j = 0; j < array_length(wrapped_lines); j++) {
-        if (y_pos >= console_height - line_height * 2) break;
-        draw_text(margin, y_pos, wrapped_lines[j]);
-        y_pos += line_height;
-        lines_drawn++;
+        array_push(display_lines, {
+            text: wrapped_lines[j],
+            color: entry.color,
+            is_continuation: j > 0 // Mark continuation lines
+        });
     }
+}
+
+// Calculate scroll limits
+var total_display_lines = array_length(display_lines);
+var max_scroll = max(0, total_display_lines - max_lines);
+
+// Adjust scroll offset to stay within bounds
+global.dev_console.scroll_offset = clamp(global.dev_console.scroll_offset, 0, max_scroll);
+
+// Draw visible lines
+var y_pos = margin;
+var start_line = global.dev_console.scroll_offset;
+var end_line = min(total_display_lines, start_line + max_lines);
+
+for (var i = start_line; i < end_line; i++) {
+    var display_line = display_lines[i];
     
-    // Prevent drawing too many lines
-    if (lines_drawn >= global.dev_console.visible_lines) break;
+    draw_set_color(display_line.color);
+    
+    // Add slight indent for continuation lines
+    var x_offset = display_line.is_continuation ? margin + 10 : margin;
+    
+    draw_text(x_offset, y_pos, display_line.text);
+    y_pos += line_height;
 }
 
-// Draw input line
-y_pos = console_height - line_height - margin;
+// Draw input area
+var input_y = console_height - line_height * 2 - margin;
+
+// Draw input background
+draw_set_alpha(0.3);
+draw_set_color(c_dkgray);
+draw_rectangle(margin, input_y - 2, gui_width - margin - 20, console_height - margin, false);
+
+// Draw input text
+draw_set_alpha(1);
 draw_set_color(global.dev_console.text_color);
-var input_text = "> " + global.dev_console.input_string;
-var input_lines = wrap_text(input_text, usable_width);
+var input_prompt = "> ";
+var input_display = input_prompt + global.dev_console.input_string;
 
-// Draw all input lines (in case input is very long)
-var input_start_y = y_pos - (array_length(input_lines) - 1) * line_height;
-for (var i = 0; i < array_length(input_lines); i++) {
-    draw_text(margin, input_start_y + i * line_height, input_lines[i]);
+// Handle input wrapping if it's too long
+var input_lines = wrap_text(input_display, usable_width);
+var input_start_y = input_y;
+
+// Always show at least the last line of input
+var visible_input_lines = min(array_length(input_lines), 2); // Show max 2 lines of input
+var start_input_line = max(0, array_length(input_lines) - visible_input_lines);
+
+for (var i = start_input_line; i < array_length(input_lines); i++) {
+    draw_text(margin, input_start_y, input_lines[i]);
+    input_start_y += line_height;
 }
 
-// Draw cursor on the last line
+// Draw cursor on the last visible line
 if (global.dev_console.cursor_blink) {
-    var last_line = input_lines[array_length(input_lines) - 1];
-    var cursor_x = margin + string_width(last_line);
-    var cursor_y = input_start_y + (array_length(input_lines) - 1) * line_height;
+    var last_visible_line = input_lines[array_length(input_lines) - 1];
+    var cursor_x = margin + string_width(last_visible_line);
+    var cursor_y = input_y + (visible_input_lines - 1) * line_height;
     draw_line(cursor_x, cursor_y, cursor_x, cursor_y + line_height);
 }
 
 // Draw scroll indicator if needed
-if (history_size > global.dev_console.visible_lines) {
-    var scroll_percent = global.dev_console.scroll_offset / max(1, history_size - global.dev_console.visible_lines);
-    var scroll_bar_height = console_height - margin * 2;
-    var scroll_thumb_height = max(20, scroll_bar_height * (global.dev_console.visible_lines / history_size));
-    var scroll_thumb_y = margin + (scroll_bar_height - scroll_thumb_height) * scroll_percent;
+if (total_display_lines > max_lines) {
+    var scroll_bar_x = gui_width - 15;
+    var scroll_bar_width = 10;
+    var scroll_bar_height = console_height - input_y - margin;
+    var scroll_bar_y = margin;
     
-    draw_set_alpha(0.5);
+    // Background
+    draw_set_alpha(0.3);
     draw_set_color(c_gray);
-    draw_rectangle(gui_width - 10, margin, gui_width - 5, console_height - margin, false);
+    draw_rectangle(scroll_bar_x, scroll_bar_y, scroll_bar_x + scroll_bar_width, scroll_bar_y + scroll_bar_height, false);
     
-    draw_set_alpha(1);
+    // Thumb
+    var scroll_percent = total_display_lines > max_lines ? global.dev_console.scroll_offset / max_scroll : 0;
+    var thumb_height = max(10, scroll_bar_height * (max_lines / total_display_lines));
+    var thumb_y = scroll_bar_y + (scroll_bar_height - thumb_height) * scroll_percent;
+    
+    draw_set_alpha(0.8);
     draw_set_color(c_white);
-    draw_rectangle(gui_width - 10, scroll_thumb_y, gui_width - 5, scroll_thumb_y + scroll_thumb_height, false);
+    draw_rectangle(scroll_bar_x, thumb_y, scroll_bar_x + scroll_bar_width, thumb_y + thumb_height, false);
 }
 
 // Reset drawing settings

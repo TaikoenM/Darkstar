@@ -338,17 +338,18 @@ function test_run_observer_tests() {
     total++;
     if (test_assert(!test_called, "Observer removed successfully")) passed++;
     
-    // Test 5: Multiple observers - Fix variable scoping
-    var test_counter = {count: 0}; // Use struct to maintain reference
+    // Test 5: Multiple observers - Use global variable to avoid scoping issues
+    // Create a global test counter to avoid scoping issues
+    global.test_observer_counter = 0;
     
     var func1 = function(data) { 
-        test_counter.count++; 
+        global.test_observer_counter++; 
     };
     var func2 = function(data) { 
-        test_counter.count++; 
+        global.test_observer_counter++; 
     };
     var func3 = function(data) { 
-        test_counter.count++; 
+        global.test_observer_counter++; 
     };
     
     gamestate_add_observer("multi_test", func1);
@@ -357,12 +358,15 @@ function test_run_observer_tests() {
     
     gamestate_notify_observers("multi_test", {});
     total++;
-    if (test_assert_equals(test_counter.count, 3, "Multiple observers called")) passed++;
+    if (test_assert_equals(global.test_observer_counter, 3, "Multiple observers called")) passed++;
     
     // Cleanup
     gamestate_remove_observer("multi_test", func1);
     gamestate_remove_observer("multi_test", func2);
     gamestate_remove_observer("multi_test", func3);
+    
+    // Clean up global test variable
+    global.test_observer_counter = undefined;
     
     // Test 6: Error handling in observer
     var error_test_called = false;
@@ -384,6 +388,17 @@ function test_run_observer_tests() {
     }
     
     gamestate_remove_observer("error_test", error_func);
+    
+    // Test 7: Safe cleanup behavior
+    total++;
+    try {
+        // Test that cleanup functions don't crash with invalid state
+        gamestate_remove_observer("nonexistent_event", function() {});
+        passed++;
+        dev_console_log("  ✓ Safe cleanup handling", global.dev_console.success_color);
+    } catch (error) {
+        dev_console_log("  ✗ Safe cleanup failed: " + string(error), global.dev_console.error_color);
+    }
     
     dev_console_log(string("Observer tests: {0}/{1} passed", passed, total), 
                    passed == total ? global.dev_console.success_color : global.dev_console.error_color);

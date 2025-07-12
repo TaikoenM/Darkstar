@@ -47,6 +47,9 @@ function assets_load_manifest() {
         }
         assets_create_default_manifest();
         // After creating the file, continue and load it
+    } else {
+        // Fix any wrong paths in existing manifest
+        assets_fix_manifest_paths();
     }
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
@@ -128,10 +131,10 @@ function assets_create_default_manifest() {
         // Open INI file for writing
         ini_open(manifest_file);
         
-        // Create default manifest entries - use the correct path from file system debug
+        // Create default manifest entries - use the CORRECT path that works
         ini_write_real("Images", "count", 1);
         ini_write_string("Images", "asset_0_key", "mainmenu_background");
-        ini_write_string("Images", "asset_0_file", "assets/images/mainmenu_background.png"); // Fixed path!
+        ini_write_string("Images", "asset_0_file", "assets/images/mainmenu_background.png"); // This is the correct path!
         
         // Close INI file
         ini_close();
@@ -145,6 +148,52 @@ function assets_create_default_manifest() {
     } catch (error) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", "Failed to create default manifest", string(error));
+        }
+    }
+}
+
+/// @description Load and update existing manifest to correct wrong paths
+function assets_fix_manifest_paths() {
+    var manifest_file = "";
+    
+    // Use correct property path with proper type checking
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        if (variable_struct_exists(global.game_options, "assets") && 
+            variable_struct_exists(global.game_options.assets, "data_path")) {
+            manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
+        } else {
+            manifest_file = working_directory + "assets/data/asset_manifest.ini";
+        }
+    } else {
+        manifest_file = working_directory + "assets/data/asset_manifest.ini";
+    }
+    
+    if (!file_exists(manifest_file)) {
+        return; // No manifest to fix
+    }
+    
+    var needs_update = false;
+    
+    try {
+        ini_open(manifest_file);
+        
+        // Check if mainmenu_background has wrong path
+        var bg_file = ini_read_string("Images", "asset_0_file", "");
+        if (bg_file == "mainmenu_background.png") {
+            // Wrong path, fix it
+            ini_write_string("Images", "asset_0_file", "assets/images/mainmenu_background.png");
+            needs_update = true;
+        }
+        
+        ini_close();
+        
+        if (needs_update && variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.INFO, "AssetManager", "Fixed manifest paths", 
+                        "Updated mainmenu_background path");
+        }
+    } catch (error) {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "AssetManager", "Failed to fix manifest paths", string(error));
         }
     }
 }

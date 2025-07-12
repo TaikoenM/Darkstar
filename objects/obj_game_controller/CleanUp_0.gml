@@ -1,8 +1,16 @@
-/// @description Clean up all systems on game exit with proper order
+/// @description Clean up all systems on game exit with proper safety and order
+
+// Important: Mark observer system as shutting down FIRST
+// This prevents objects from trying to unregister during cleanup
+if (variable_global_exists("observer_system_active")) {
+    global.observer_system_active = false;
+}
+
 logger_write(LogLevel.INFO, "GameController", "Starting game shutdown sequence", "CleanUp event triggered");
 
-// Step 1: Unregister observers first to prevent new events
+// Step 1: Unregister observers first to prevent new events during cleanup
 try {
+    // These calls will be safe because observer system is marked as inactive
     gamestate_remove_observer("unit_clicked", game_controller_handle_unit_click);
     gamestate_remove_observer("unit_order_issued", game_controller_handle_unit_order);
     gamestate_remove_observer("hex_clicked", game_controller_handle_hex_click);
@@ -19,17 +27,12 @@ try {
     show_debug_message("[ERROR] Config save failed: " + string(error));
 }
 
-// Step 3: Clean up UI first (but don't log after dev console is destroyed)
+// Step 3: Clean up UI system using improved cleanup
 try {
     if (instance_exists(obj_UIManager)) {
-        with (obj_UIManager) {
-            // Call ui_cleanup directly without logging
-            ui_close_all_panels();
-            if (variable_instance_exists(id, "panel_instances")) {
-                ds_map_destroy(panel_instances);
-            }
-        }
-        show_debug_message("[INFO] UI cleanup completed");
+        // Use the improved ui_cleanup function
+        ui_cleanup();
+        show_debug_message("[INFO] UI cleanup completed safely");
     }
 } catch (error) {
     show_debug_message("[ERROR] UI cleanup failed: " + string(error));
@@ -51,7 +54,7 @@ try {
     show_debug_message("[ERROR] Asset cleanup failed: " + string(error));
 }
 
-// Step 6: Clean up game state
+// Step 6: Clean up game state (includes observer system)
 try {
     gamestate_cleanup();
     logger_write(LogLevel.INFO, "GameController", "Game state cleaned up", "Cleanup step 6");
@@ -61,6 +64,7 @@ try {
 
 // Step 7: Clean up dev console LAST (since other systems may try to log during cleanup)
 try {
+    // Clean up dev console manually without logging to avoid recursion
     if (instance_exists(obj_DevConsole)) {
         with (obj_DevConsole) {
             // Clean up manually to avoid recursive logging

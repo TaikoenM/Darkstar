@@ -90,6 +90,13 @@ function ui_close_panel(panel_instance) {
         return;
     }
     
+    // Safety check for panel_instances map
+    if (!variable_instance_exists(obj_UIManager, "panel_instances") ||
+        is_undefined(obj_UIManager.panel_instances) ||
+        !ds_exists(obj_UIManager.panel_instances, ds_type_map)) {
+        return; // Map doesn't exist or was destroyed
+    }
+    
     // Remove from mapping
     var key = ds_map_find_first(obj_UIManager.panel_instances);
     while (!is_undefined(key)) {
@@ -101,7 +108,8 @@ function ui_close_panel(panel_instance) {
     }
     
     // Update focus if this was the focused panel
-    if (obj_UIManager.focused_panel == panel_instance) {
+    if (variable_instance_exists(obj_UIManager, "focused_panel") &&
+        obj_UIManager.focused_panel == panel_instance) {
         obj_UIManager.focused_panel = noone;
         input_set_ui_focus(false);
     }
@@ -120,7 +128,8 @@ function ui_focus_panel(panel_instance) {
     }
     
     // Unfocus previous panel
-    if (instance_exists(obj_UIManager.focused_panel)) {
+    if (variable_instance_exists(obj_UIManager, "focused_panel") &&
+        instance_exists(obj_UIManager.focused_panel)) {
         with (obj_UIManager.focused_panel) {
             if (variable_instance_exists(id, "has_focus")) {
                 has_focus = false;
@@ -129,7 +138,10 @@ function ui_focus_panel(panel_instance) {
     }
     
     // Set new focus
-    obj_UIManager.focused_panel = panel_instance;
+    if (variable_instance_exists(obj_UIManager, "focused_panel")) {
+        obj_UIManager.focused_panel = panel_instance;
+    }
+    
     with (panel_instance) {
         if (variable_instance_exists(id, "has_focus")) {
             has_focus = true;
@@ -143,6 +155,13 @@ function ui_focus_panel(panel_instance) {
 function ui_close_all_panels() {
     if (!instance_exists(obj_UIManager)) {
         return;
+    }
+    
+    // Safety check for panel_instances map
+    if (!variable_instance_exists(obj_UIManager, "panel_instances") ||
+        is_undefined(obj_UIManager.panel_instances) ||
+        !ds_exists(obj_UIManager.panel_instances, ds_type_map)) {
+        return; // Map doesn't exist or was destroyed
     }
     
     // Get all panel instances
@@ -169,20 +188,20 @@ function ui_close_all_panels() {
 
 /// @description Safe cleanup function that doesn't log to avoid dev console conflicts
 function ui_cleanup() {
-    // Close all panels first
-    ui_close_all_panels();
+    // Don't log here to avoid dev console conflicts during shutdown
     
-    // Clean up the panel instances map if it exists
+    // Close all panels first if UIManager still exists and has valid data
     if (instance_exists(obj_UIManager)) {
+        ui_close_all_panels();
+        
+        // Clean up the panel instances map if it exists and is valid
         with (obj_UIManager) {
             if (variable_instance_exists(id, "panel_instances") && 
                 !is_undefined(panel_instances) && 
                 ds_exists(panel_instances, ds_type_map)) {
                 ds_map_destroy(panel_instances);
+                panel_instances = undefined; // Mark as destroyed
             }
         }
     }
-    
-    // Don't log here to avoid dev console conflicts during shutdown
-    // The calling code will handle logging if needed
 }
