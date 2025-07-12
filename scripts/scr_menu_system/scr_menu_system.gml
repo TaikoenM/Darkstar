@@ -50,7 +50,7 @@ function menu_create_buttons(button_configs) {
         }
         
         try {
-            var button_instance = instance_create_layer(config.x, config.y, "UI", obj_menu_button);
+            var button_instance = instance_create_layer(config.x, config.y, "UI", obj_MenuButton);
             
             // Initialize button properties
             button_instance.button_data = config;

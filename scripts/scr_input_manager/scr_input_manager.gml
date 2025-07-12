@@ -1,12 +1,67 @@
+/// @function input_init()
+/// @description Initialize the input management system
+/// @description Creates command queue and loads input mappings
+function input_init() {
+    // Command queue for processing
+    global.command_queue = ds_queue_create();
+    
+    // Frame counter for command timestamps
+    global.game_frame = 0;
+    
+    // Load input mappings
+    global.input_mapping = input_load_mapping();
+    
+    // Input state tracking
+    global.input_state = {
+        // Keyboard state
+        keys_pressed: ds_map_create(),
+        keys_held: ds_map_create(),
+        keys_released: ds_map_create(),
+        
+        // Mouse state
+        mouse_pos_x: 0,
+        mouse_pos_y: 0,
+        mouse_gui_pos_x: 0,
+        mouse_gui_pos_y: 0,
+        mouse_buttons_pressed: ds_map_create(),
+        mouse_buttons_held: ds_map_create(),
+        mouse_buttons_released: ds_map_create(),
+        
+        // UI blocking flag
+        ui_has_focus: false
+    };
+    
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.INFO, "InputManager", "Input system initialized", "System startup");
+    }
+}
+
+/// @function input_cleanup()
+/// @description Cleanup input system resources
+function input_cleanup() {
+    ds_queue_destroy(global.command_queue);
+    ds_map_destroy(global.input_state.keys_pressed);
+    ds_map_destroy(global.input_state.keys_held);
+    ds_map_destroy(global.input_state.keys_released);
+    ds_map_destroy(global.input_state.mouse_buttons_pressed);
+    ds_map_destroy(global.input_state.mouse_buttons_held);
+    ds_map_destroy(global.input_state.mouse_buttons_released);
+    
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.INFO, "InputManager", "Input system cleaned up", "System shutdown");
+    }
+}
+
+/// @function input_load_mapping()
 /// @description Load input mapping configuration from file
 /// @return {struct} Input mapping configuration
 function input_load_mapping() {
     var mapping_file = "";
     
     if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        mapping_file = string(global.game_options.assets.data_path) + "input_mapping.ini";
+        mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
     } else {
-        mapping_file = "datafiles/assets/data/input_mapping.ini";
+        mapping_file = working_directory + "datafiles/assets/data/input_mapping.ini";
     }
     
     var mapping = {
@@ -58,7 +113,49 @@ function input_load_mapping() {
     
     return mapping;
 }
-	
+
+/// @function input_save_mapping()
+/// @description Save current input mapping to file
+function input_save_mapping() {
+    var mapping_file = "";
+    
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
+    } else {
+        mapping_file = working_directory + "datafiles/assets/data/input_mapping.ini";
+    }
+    
+    try {
+        ini_open(mapping_file);
+        
+        // Save keyboard mappings
+        ini_write_real("Keyboard", "move_up", global.input_mapping.move_up);
+        ini_write_real("Keyboard", "move_down", global.input_mapping.move_down);
+        ini_write_real("Keyboard", "move_left", global.input_mapping.move_left);
+        ini_write_real("Keyboard", "move_right", global.input_mapping.move_right);
+        ini_write_real("Keyboard", "pause", global.input_mapping.pause);
+        
+        // Save UI mappings
+        ini_write_real("UI", "up", global.input_mapping.ui_up);
+        ini_write_real("UI", "down", global.input_mapping.ui_down);
+        ini_write_real("UI", "left", global.input_mapping.ui_left);
+        ini_write_real("UI", "right", global.input_mapping.ui_right);
+        ini_write_real("UI", "confirm", global.input_mapping.ui_confirm);
+        ini_write_real("UI", "cancel", global.input_mapping.ui_cancel);
+        
+        ini_close();
+        
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.INFO, "InputManager", "Input mapping saved", mapping_file);
+        }
+    } catch (error) {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "InputManager", "Failed to save input mapping", string(error));
+        }
+    }
+}
+
+/// @function input_create_command(type, data, player_id)
 /// @description Input command structure for command pattern implementation
 /// @param {Constant.CommandType} type Type of command from CommandType enum
 /// @param {struct} data Command-specific data payload
@@ -74,48 +171,79 @@ function input_create_command(type, data, player_id = 0) {
     };
 }
 
-/// @description Initializes global.input_state structure
-function input_init() {
-    // Input state tracking
-    global.input_state = {
-        // Keyboard state
-        keys_pressed: ds_map_create(),
-        keys_held: ds_map_create(),
-        keys_released: ds_map_create(),
-        
-        // Mouse state
-        mouse_pos_x: 0,
-        mouse_pos_y: 0,
-        mouse_gui_pos_x: 0,
-        mouse_gui_pos_y: 0,
-        mouse_buttons_pressed: ds_map_create(),
-        mouse_buttons_held: ds_map_create(),
-        mouse_buttons_released: ds_map_create(),
-        
-        // Gamepad state (for player 0)
-        gamepad_buttons_pressed: ds_map_create(),
-        gamepad_buttons_held: ds_map_create(),
-        gamepad_buttons_released: ds_map_create(),
-        gamepad_axes: ds_map_create()
-    };	
+/// @function input_queue_command(command)
+/// @description Add a command to the processing queue
+/// @param {struct} command Command struct to queue
+function input_queue_command(command) {
+    ds_queue_enqueue(global.command_queue, command);
+    
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.DEBUG, "InputManager", 
+                    string("Queued command: {0}", command.type), 
+                    string("Frame: {0}", command.frame));
+    }
 }
 
-/// @description updates input values to global.input_state and calls input_queue_command(action_command)
-function input_step_update() {
+/// @function input_dequeue_command()
+/// @description Get next command from queue for processing
+/// @return {struct|undefined} Next command or undefined if queue empty
+function input_dequeue_command() {
+    if (ds_queue_empty(global.command_queue)) {
+        return undefined;
+    }
+    return ds_queue_dequeue(global.command_queue);
+}
 
-	
-	    // Update mouse position
+/// @function input_update()
+/// @description Update input state and generate commands based on input
+/// @description Should be called once per frame by obj_InputManager
+function input_update() {
+    // Update frame counter
+    global.game_frame++;
+    
+    // Update mouse position
     global.input_state.mouse_pos_x = mouse_x;
     global.input_state.mouse_pos_y = mouse_y;
     global.input_state.mouse_gui_pos_x = device_mouse_x_to_gui(0);
     global.input_state.mouse_gui_pos_y = device_mouse_y_to_gui(0);
-
-	    // Action commands
-    if (input_check_pressed(global.input_mapping.action_primary)) {
+    
+    // Don't process game input if UI has focus
+    if (global.input_state.ui_has_focus) {
+        return;
+    }
+    
+    // Check for pause
+    if (keyboard_check_pressed(global.input_mapping.pause)) {
+        var pause_command = input_create_command(CommandType.PAUSE, {});
+        input_queue_command(pause_command);
+    }
+    
+    // Check for primary action (left click)
+    if (mouse_check_button_pressed(global.input_mapping.action_primary)) {
         var action_command = input_create_command(CommandType.ACTION_PRIMARY, {
             x: global.input_state.mouse_pos_x,
-            y: global.input_state.mouse_pos_y
+            y: global.input_state.mouse_pos_y,
+            gui_x: global.input_state.mouse_gui_pos_x,
+            gui_y: global.input_state.mouse_gui_pos_y
         });
         input_queue_command(action_command);
-    }	
+    }
+    
+    // Check for secondary action (right click)
+    if (mouse_check_button_pressed(global.input_mapping.action_secondary)) {
+        var action_command = input_create_command(CommandType.ACTION_SECONDARY, {
+            x: global.input_state.mouse_pos_x,
+            y: global.input_state.mouse_pos_y,
+            gui_x: global.input_state.mouse_gui_pos_x,
+            gui_y: global.input_state.mouse_gui_pos_y
+        });
+        input_queue_command(action_command);
+    }
+}
+
+/// @function input_set_ui_focus(has_focus)
+/// @description Set whether UI currently has input focus
+/// @param {bool} has_focus True if UI should block game input
+function input_set_ui_focus(has_focus) {
+    global.input_state.ui_has_focus = has_focus;
 }

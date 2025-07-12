@@ -18,9 +18,9 @@ function assets_init() {
 function assets_load_manifest() {
     var manifest_file = "";
     
-    // Safe access to config
-    if (variable_global_exists("config") && !is_undefined(global.config)) {
-        manifest_file = working_directory + global.config.asset_path_data + "asset_manifest.ini";
+    // Fixed: Use correct property path
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
     } else {
         manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
@@ -49,7 +49,7 @@ function assets_load_manifest() {
             
             if (asset_key != "" && asset_file != "") {
                 // For included files, just use the filename
-                global.asset_manifest[? asset_key] = asset_file;
+                ds_map_add(global.asset_manifest, asset_key, asset_file);
             }
         }
         
@@ -72,8 +72,9 @@ function assets_load_manifest() {
 function assets_create_default_manifest() {
     var manifest_file = "";
     
-    if (variable_global_exists("config") && !is_undefined(global.config)) {
-        manifest_file = working_directory + global.config.asset_path_data + "asset_manifest.ini";
+    // Fixed: Use correct property path
+    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
+        manifest_file = working_directory + global.game_options.assets.data_path + "asset_manifest.ini";
     } else {
         manifest_file = working_directory + "datafiles/assets/data/asset_manifest.ini";
     }
@@ -114,7 +115,7 @@ function assets_load_sprite(asset_key) {
     
     // Check if already loaded
     if (ds_map_exists(global.loaded_sprites, asset_key)) {
-        var cached_sprite = global.loaded_sprites[? asset_key];
+        var cached_sprite = ds_map_find_value(global.loaded_sprites, asset_key);
         if (!is_undefined(cached_sprite)) {
             // Check for special error values
             if (cached_sprite == -1) {
@@ -130,57 +131,49 @@ function assets_load_sprite(asset_key) {
     }
     
     // Get file path from manifest
-    var file_path = global.asset_manifest[? asset_key];
+    var file_path = ds_map_find_value(global.asset_manifest, asset_key);
     if (is_undefined(file_path)) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", 
                         string("Asset key not found in manifest: {0}", asset_key), "Missing asset definition");
         }
         // Cache the failure to prevent spam
-        global.loaded_sprites[? asset_key] = -1;
+        ds_map_add(global.loaded_sprites, asset_key, -1);
         return -1;
     }
     
-    // In GameMaker, files in datafiles are included with the game
-    // Try different path variations
-    var paths_to_try = [
-        file_path,
-        working_directory + file_path,
-        filename_name(file_path)  // Just the filename
-    ];
-    
+    // For included files in GameMaker, they are accessible directly by filename
     var loaded_sprite = -1;
     var path_found = "";
     
-    for (var i = 0; i < array_length(paths_to_try); i++) {
-        var try_path = paths_to_try[i];
+    try {
+        // For included files, just use the filename directly
+        loaded_sprite = sprite_add(file_path, 0, false, false, 0, 0);
         
-        try {
-            // Try to load the sprite
-            loaded_sprite = sprite_add(try_path, 0, false, false, 0, 0);
-            
-            if (loaded_sprite != -1) {
-                path_found = try_path;
-                break;
-            }
-        } catch (error) {
-            // Continue trying other paths
+        if (loaded_sprite != -1) {
+            path_found = file_path;
+        }
+    } catch (error) {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "AssetManager", 
+                        string("Failed to load sprite: {0}", file_path), 
+                        string("Error: {0}", error));
         }
     }
     
     if (loaded_sprite == -1) {
         if (variable_global_exists("log_enabled") && global.log_enabled) {
             logger_write(LogLevel.ERROR, "AssetManager", 
-                        string("Failed to load sprite from any path variant: {0}", file_path), 
-                        "Tried multiple path formats");
+                        string("Failed to load sprite: {0}", file_path), 
+                        "sprite_add returned -1");
         }
         // Cache the failure to prevent spam
-        global.loaded_sprites[? asset_key] = -1;
+        ds_map_add(global.loaded_sprites, asset_key, -1);
         return -1;
     }
     
     // Cache the loaded sprite
-    global.loaded_sprites[? asset_key] = loaded_sprite;
+    ds_map_add(global.loaded_sprites, asset_key, loaded_sprite);
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "AssetManager", 
@@ -193,7 +186,7 @@ function assets_load_sprite(asset_key) {
 /// @param {string} asset_key Key identifier for the asset
 /// @return {Asset.GMSprite} Sprite resource ID or -1 if failed
 function assets_get_sprite(asset_key) {
-    var sprite_id = global.loaded_sprites[? asset_key];
+    var sprite_id = ds_map_find_value(global.loaded_sprites, asset_key);
     if (is_undefined(sprite_id) || !sprite_exists(sprite_id)) {
         return assets_load_sprite(asset_key);
     }
@@ -202,16 +195,15 @@ function assets_get_sprite(asset_key) {
 
 /// @description Get a sprite resource that's safe to use in drawing functions
 /// @param {string} asset_key Key identifier for the asset
-/// @return {Asset.GMSprite} Valid sprite resource ID or sprite_get("spr_missing") as fallback
+/// @return {Asset.GMSprite} Valid sprite resource ID or -1 as fallback
 function assets_get_sprite_safe(asset_key) {
     var sprite_id = assets_get_sprite(asset_key);
     
-    // Return a valid sprite or a default missing sprite
+    // Return a valid sprite or -1
     if (sprite_id != -1 && sprite_exists(sprite_id)) {
         return sprite_id;
     }
     
-    // Try to return a built-in sprite as fallback
     // In a real project, you'd have a default "missing texture" sprite
     return -1;
 }
@@ -222,7 +214,7 @@ function assets_cleanup() {
     // Free all loaded sprites
     var key = ds_map_find_first(global.loaded_sprites);
     while (!is_undefined(key)) {
-        var sprite_id = global.loaded_sprites[? key];
+        var sprite_id = ds_map_find_value(global.loaded_sprites, key);
         if (!is_undefined(sprite_id) && sprite_exists(sprite_id)) {
             sprite_delete(sprite_id);
         }
