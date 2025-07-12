@@ -1,12 +1,12 @@
 # Project Summary
-**Generated on:** 2025-07-12 18:04:32
+**Generated on:** 2025-07-12 18:50:18
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 68
+**Total Files:** 65
 
-### .GML Files (35 files)
+### .GML Files (33 files)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
 - `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
@@ -20,39 +20,37 @@
 - `objects\obj_UIManager\CleanUp_0.gml` (13 bytes)
 - `objects\obj_UIManager\Create_0.gml` (482 bytes)
 - `objects\obj_Unit\Create_0.gml` (349 bytes)
-- `objects\obj_Unit\Draw_0.gml` (1222 bytes)
+- `objects\obj_Unit\Draw_0.gml` (2597 bytes)
 - `objects\obj_Unit\Mouse_4.gml` (324 bytes)
 - `objects\obj_Unit\Mouse_5.gml` (399 bytes)
 - `objects\obj_Unit\Step_0.gml` (698 bytes)
 - `objects\obj_game_controller\CleanUp_0.gml` (541 bytes)
 - `objects\obj_game_controller\Create_0.gml` (1300 bytes)
 - `objects\obj_game_controller\Step_0.gml` (2612 bytes)
-- `objects\obj_main_menu_controller\Create_0.gml` (667 bytes)
-- `objects\obj_main_menu_controller\Draw_0.gml` (811 bytes)
-- `scripts\scr_asset_manager\scr_asset_manager.gml` (9542 bytes)
-- `scripts\scr_config_manager\scr_config_manager.gml` (9914 bytes)
+- `scripts\scr_asset_manager\scr_asset_manager.gml` (10385 bytes)
+- `scripts\scr_config_manager\scr_config_manager.gml` (10254 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2221 bytes)
-- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (2883 bytes)
-- `scripts\scr_game_control\scr_game_control.gml` (2400 bytes)
+- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (5871 bytes)
+- `scripts\scr_game_control\scr_game_control.gml` (2224 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4890 bytes)
 - `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (4446 bytes)
-- `scripts\scr_hex_utils\scr_hex_utils.gml` (28 bytes)
+- `scripts\scr_hex_utils\scr_hex_utils.gml` (7424 bytes)
 - `scripts\scr_input_manager\scr_input_manager.gml` (9809 bytes)
-- `scripts\scr_json_utils\scr_json_utils.gml` (29 bytes)
+- `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
 - `scripts\scr_logger\scr_logger.gml` (2665 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (8551 bytes)
-- `scripts\scr_ui_manager\scr_ui_manager.gml` (6570 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (10277 bytes)
+- `scripts\scr_ui_manager\scr_ui_manager.gml` (6975 bytes)
 
 ### .MD Files (1 files)
-- `project_summary.md` (16358 bytes)
+- `project_summary.md` (17859 bytes)
 
 ### .PNG Files (1 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3336 bytes)
+- `DarkStar.resource_order` (3214 bytes)
 
-### .YY Files (29 files)
+### .YY Files (28 files)
 - `objects\obj_DataManager\obj_DataManager.yy` (726 bytes)
 - `objects\obj_GameState\obj_GameState.yy` (722 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
@@ -62,12 +60,11 @@
 - `objects\obj_UIManager\obj_UIManager.yy` (1046 bytes)
 - `objects\obj_Unit\obj_Unit.yy` (1515 bytes)
 - `objects\obj_game_controller\obj_game_controller.yy` (1218 bytes)
-- `objects\obj_main_menu_controller\obj_main_menu_controller.yy` (1067 bytes)
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1619 bytes)
 - `rooms\room_game_init\room_game_init.yy` (4470 bytes)
-- `rooms\room_main_menu\room_main_menu.yy` (4061 bytes)
+- `rooms\room_main_menu\room_main_menu.yy` (3454 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (257 bytes)
 - `scripts\scr_config_manager\scr_config_manager.yy` (259 bytes)
@@ -84,12 +81,12 @@
 - `scripts\scr_ui_manager\scr_ui_manager.yy` (251 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (6083 bytes)
+- `DarkStar.yyp` (5963 bytes)
 
 
 ---
 ## Part B: GameMaker Objects and Events
-**Total Objects:** 10
+**Total Objects:** 9
 
 ### Object: obj_DataManager
 **Description:** No description available
@@ -215,19 +212,6 @@
   - *Path:* `objects\obj_game_controller\Step_0.gml`
 
 
-### Object: obj_main_menu_controller
-**Description:** Initialize the main menu controller when room is entered Sets up menu state and creates all menu buttons Called automatically when main menu room is entered
-**Path:** `objects\obj_main_menu_controller`
-**Events (2):**
-- **Create_0** (Create Event)
-  - *Description:* Initialize the main menu controller when room is entered Sets up menu state and creates all menu buttons Called automatically when main menu room is entered
-  - *Path:* `objects\obj_main_menu_controller\Create_0.gml`
-
-- **Draw_0** (Draw Event)
-  - *Description:* Draw the main menu background image Renders background sprite stretched to fill entire screen Called every frame while in main menu room
-  - *Path:* `objects\obj_main_menu_controller\Draw_0.gml`
-
-
 
 ---
 ## Part C: Script Files and Functions
@@ -289,7 +273,7 @@
 ### Script: scr_game_control
 **Description:** Handle unit selection events @param {struct} event_data Contains unit_id, modifiers
 **Path:** `scripts\scr_game_control\scr_game_control.gml`
-**Functions (8):**
+**Functions (6):**
 - **`game_controller_handle_hex_click(event_data)`**
   - *Arguments:* event_data
 
@@ -307,12 +291,6 @@
 
 - **`game_controller_handle_unit_order(event_data)`**
   - *Arguments:* event_data
-
-- **`hex_pixel_to_axial(px, py)`**
-  - *Arguments:* px, py
-
-- **`hex_pixel_to_axial(px, py)`**
-  - *Arguments:* px, py
 
 
 ### Script: scr_game_state_manager
@@ -359,9 +337,68 @@
 
 
 ### Script: scr_hex_utils
+**Description:** Hex utility functions for axial coordinate system Provides conversion, distance, and pathfinding functions for hexagonal grids @function hex_pixel_to_axial(px, py) Convert pixel coordinates to axial hex coordinates @param {real} px X position in pixels @param {real} py Y position in pixels @return {struct} Struct with q and r axial coordinates
 **Path:** `scripts\scr_hex_utils\scr_hex_utils.gml`
-**Functions (1):**
-- **`scr_hex_utils()`**
+**Functions (20):**
+- **`hex_axial_to_pixel(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_axial_to_pixel(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_distance(q1, r1, q2, r2)`**
+  - *Arguments:* q1, r1, q2, r2
+
+- **`hex_distance(q1, r1, q2, r2)`**
+  - *Arguments:* q1, r1, q2, r2
+
+- **`hex_from_string(hex_string)`**
+  - *Arguments:* hex_string
+
+- **`hex_from_string(hex_string)`**
+  - *Arguments:* hex_string
+
+- **`hex_line(q1, r1, q2, r2)`**
+  - *Arguments:* q1, r1, q2, r2
+
+- **`hex_line(q1, r1, q2, r2)`**
+  - *Arguments:* q1, r1, q2, r2
+
+- **`hex_neighbors(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_neighbors(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
+
+- **`hex_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
+
+- **`hex_ring(center_q, center_r, radius)`**
+  - *Arguments:* center_q, center_r, radius
+
+- **`hex_ring(center_q, center_r, radius)`**
+  - *Arguments:* center_q, center_r, radius
+
+- **`hex_round(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_round(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_spiral(center_q, center_r, radius)`**
+  - *Arguments:* center_q, center_r, radius
+
+- **`hex_spiral(center_q, center_r, radius)`**
+  - *Arguments:* center_q, center_r, radius
+
+- **`hex_to_string(q, r)`**
+  - *Arguments:* q, r
+
+- **`hex_to_string(q, r)`**
+  - *Arguments:* q, r
 
 
 ### Script: scr_input_manager
@@ -412,9 +449,50 @@
 
 
 ### Script: scr_json_utils
+**Description:** Load and parse a JSON file @param {string} filename Path to the JSON file @return {struct|undefined} Parsed JSON data or undefined on error
 **Path:** `scripts\scr_json_utils\scr_json_utils.gml`
-**Functions (1):**
-- **`scr_json_utils()`**
+**Functions (14):**
+- **`json_deep_copy(data)`**
+  - *Arguments:* data
+
+- **`json_deep_copy(data)`**
+  - *Arguments:* data
+
+- **`json_get_nested_value(data, path, default_value)`**
+  - *Arguments:* data, path, default_value
+
+- **`json_get_nested_value(data, path, default_value = undefined)`**
+  - *Arguments:* data, path, default_value = undefined
+
+- **`json_load_file(filename)`**
+  - *Arguments:* filename
+
+- **`json_load_file(filename)`**
+  - *Arguments:* filename
+
+- **`json_merge_structures(base, overlay)`**
+  - *Arguments:* base, overlay
+
+- **`json_merge_structures(base, overlay)`**
+  - *Arguments:* base, overlay
+
+- **`json_save_file(filename, data)`**
+  - *Arguments:* filename, data
+
+- **`json_save_file(filename, data)`**
+  - *Arguments:* filename, data
+
+- **`json_set_nested_value(data, path, value)`**
+  - *Arguments:* data, path, value
+
+- **`json_set_nested_value(data, path, value)`**
+  - *Arguments:* data, path, value
+
+- **`json_validate_structure(data, required_fields)`**
+  - *Arguments:* data, required_fields
+
+- **`json_validate_structure(data, required_fields)`**
+  - *Arguments:* data, required_fields
 
 
 ### Script: scr_logger
@@ -459,7 +537,7 @@
 
 
 ### Script: scr_ui_manager
-**Description:** Create and open a UI panel @param {string} panel_type Type of panel to open @param {struct} data Data to pass to the panel @return {id} Instance ID of created panel
+**Description:** Create and open a UI panel @param {string} panel_type Type of panel to open @param {struct} data Data to pass to the panel @return {Id.Instance} Instance ID of created panel
 **Path:** `scripts\scr_ui_manager\scr_ui_manager.gml`
 **Functions (10):**
 - **`ui_cleanup()`**
