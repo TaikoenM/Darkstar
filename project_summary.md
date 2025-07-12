@@ -1,17 +1,17 @@
 # Project Summary
-**Generated on:** 2025-07-12 18:50:18
+**Generated on:** 2025-07-12 19:04:05
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 65
+**Total Files:** 67
 
-### .GML Files (33 files)
+### .GML Files (35 files)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
 - `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
 - `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
-- `objects\obj_MainMenuManager\Create_0.gml` (1096 bytes)
+- `objects\obj_MainMenuManager\Create_0.gml` (2154 bytes)
 - `objects\obj_MenuButton\Create_0.gml` (499 bytes)
 - `objects\obj_MenuButton\Draw_0.gml` (826 bytes)
 - `objects\obj_MenuButton\Mouse_11.gml` (73 bytes)
@@ -25,7 +25,9 @@
 - `objects\obj_Unit\Mouse_5.gml` (399 bytes)
 - `objects\obj_Unit\Step_0.gml` (698 bytes)
 - `objects\obj_game_controller\CleanUp_0.gml` (541 bytes)
-- `objects\obj_game_controller\Create_0.gml` (1300 bytes)
+- `objects\obj_game_controller\Create_0.gml` (1668 bytes)
+- `objects\obj_game_controller\Draw_64.gml` (1960 bytes)
+- `objects\obj_game_controller\Other_4.gml` (1681 bytes)
 - `objects\obj_game_controller\Step_0.gml` (2612 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.gml` (10385 bytes)
 - `scripts\scr_config_manager\scr_config_manager.gml` (10254 bytes)
@@ -42,7 +44,7 @@
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (6975 bytes)
 
 ### .MD Files (1 files)
-- `project_summary.md` (17859 bytes)
+- `project_summary.md` (19726 bytes)
 
 ### .PNG Files (1 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
@@ -59,11 +61,11 @@
 - `objects\obj_MenuButton\obj_MenuButton.yy` (1528 bytes)
 - `objects\obj_UIManager\obj_UIManager.yy` (1046 bytes)
 - `objects\obj_Unit\obj_Unit.yy` (1515 bytes)
-- `objects\obj_game_controller\obj_game_controller.yy` (1218 bytes)
+- `objects\obj_game_controller\obj_game_controller.yy` (1539 bytes)
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1619 bytes)
-- `rooms\room_game_init\room_game_init.yy` (4470 bytes)
+- `rooms\room_game_init\room_game_init.yy` (4463 bytes)
 - `rooms\room_main_menu\room_main_menu.yy` (3454 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (257 bytes)
@@ -198,7 +200,7 @@
 ### Object: obj_game_controller
 **Description:** Clean up all systems on game exit
 **Path:** `objects\obj_game_controller`
-**Events (3):**
+**Events (5):**
 - **CleanUp_0** (Clean Up Event)
   - *Description:* Clean up all systems on game exit
   - *Path:* `objects\obj_game_controller\CleanUp_0.gml`
@@ -206,6 +208,14 @@
 - **Create_0** (Create Event)
   - *Description:* Initialize the game during startup phase Sets up all core systems in proper order and transitions to main menu This is the main entry point for the entire game
   - *Path:* `objects\obj_game_controller\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Description:* Draw debug information
+  - *Path:* `objects\obj_game_controller\Draw_64.gml`
+
+- **Other_4** (Other Event)
+  - *Description:* Handle room transitions
+  - *Path:* `objects\obj_game_controller\Other_4.gml`
 
 - **Step_0** (Step Event)
   - *Description:* Update core game systems each frame Processes input, executes commands, and updates game state

@@ -29,7 +29,13 @@ gamestate_add_observer("unit_clicked", game_controller_handle_unit_click);
 gamestate_add_observer("unit_order_issued", game_controller_handle_unit_order);
 gamestate_add_observer("hex_clicked", game_controller_handle_hex_click);
 
-// Transition to main menu
-room_goto(room_main_menu);
 
 logger_write(LogLevel.INFO, "GameController", "Game initialization complete", "All systems ready");
+
+// Change game state before room transition
+gamestate_change(GameState.MAIN_MENU, "Transitioning to main menu");
+
+// Transition to main menu
+logger_write(LogLevel.INFO, "GameController", "Attempting room transition", string("Current room: {0}, Target: room_main_menu", room_get_name(room)));
+room_goto(room_main_menu);
+logger_write(LogLevel.INFO, "GameController", "Room transition initiated", "room_goto called");
