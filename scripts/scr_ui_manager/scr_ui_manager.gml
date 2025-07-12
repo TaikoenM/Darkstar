@@ -4,6 +4,14 @@
 /// @param {struct} data Data to pass to the panel
 /// @return {id} Instance ID of created panel
 function ui_open_panel(panel_type, data = {}) {
+    // Check if UIManager exists
+    if (!instance_exists(obj_UIManager)) {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "UIManager", "UIManager object not found", "Panel creation failed");
+        }
+        return noone;
+    }
+    
     // Check if panel of this type already exists
     if (ds_map_exists(obj_UIManager.panel_instances, panel_type)) {
         var existing = obj_UIManager.panel_instances[? panel_type];
@@ -21,39 +29,53 @@ function ui_open_panel(panel_type, data = {}) {
     
     switch (panel_type) {
         case "main_menu":
-            panel_instance = instance_create_layer(center_x, center_y, "UI", obj_UI_MainMenuPanel);
+            // For native observer pattern, we don't use UI panels for main menu
+            // Instead, create the main menu manager
+            if (!instance_exists(obj_MainMenuManager)) {
+                panel_instance = instance_create_layer(0, 0, "Managers", obj_MainMenuManager);
+            }
             break;
             
         case "options":
-            panel_instance = instance_create_layer(center_x, center_y, "UI", obj_UI_OptionsPanel);
+            // TODO: Create options panel when implemented
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.WARNING, "UIManager", "Options panel not implemented", "Panel creation skipped");
+            }
             break;
             
         case "input_bindings":
-            panel_instance = instance_create_layer(center_x, center_y, "UI", obj_UI_InputBindingsPanel);
+            // TODO: Create input bindings panel when implemented
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.WARNING, "UIManager", "Input bindings panel not implemented", "Panel creation skipped");
+            }
             break;
             
         default:
-            logger_write(LogLevel.ERROR, "UIManager", 
-                        string("Unknown panel type: {0}", panel_type), "Panel creation failed");
+            if (variable_global_exists("log_enabled") && global.log_enabled) {
+                logger_write(LogLevel.ERROR, "UIManager", 
+                            string("Unknown panel type: {0}", panel_type), "Panel creation failed");
+            }
             return noone;
     }
     
     if (panel_instance != noone) {
         // Initialize panel with data
         with (panel_instance) {
-            panel_data = data;
-            panel_type = panel_type;
+            if (variable_instance_exists(id, "panel_data")) {
+                panel_data = data;
+            }
+            if (variable_instance_exists(id, "panel_type")) {
+                panel_type = other.panel_type;
+            }
         }
         
-        // Add to stack and mapping
-        ds_list_add(obj_UIManager.ui_panel_stack, panel_instance);
+        // Add to mapping
         obj_UIManager.panel_instances[? panel_type] = panel_instance;
         
-        // Focus the new panel
-        ui_focus_panel(panel_instance);
-        
-        logger_write(LogLevel.INFO, "UIManager", 
-                    string("Opened panel: {0}", panel_type), "UI interaction");
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.INFO, "UIManager", 
+                        string("Opened panel: {0}", panel_type), "UI interaction");
+        }
     }
     
     return panel_instance;
@@ -63,38 +85,29 @@ function ui_open_panel(panel_type, data = {}) {
 /// @description Close a UI panel
 /// @param {id} panel_instance Instance ID of panel to close
 function ui_close_panel(panel_instance) {
-    if (!instance_exists(panel_instance)) {
+    if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
     }
     
-    // Remove from stack
-    var stack_pos = ds_list_find_index(obj_UIManager.ui_panel_stack, panel_instance);
-    if (stack_pos != -1) {
-        ds_list_delete(obj_UIManager.ui_panel_stack, stack_pos);
-    }
-    
     // Remove from mapping
-    var panel_type = panel_instance.panel_type;
-    if (ds_map_exists(obj_UIManager.panel_instances, panel_type)) {
-        ds_map_delete(obj_UIManager.panel_instances, panel_type);
+    var key = ds_map_find_first(obj_UIManager.panel_instances);
+    while (!is_undefined(key)) {
+        if (obj_UIManager.panel_instances[? key] == panel_instance) {
+            ds_map_delete(obj_UIManager.panel_instances, key);
+            break;
+        }
+        key = ds_map_find_next(obj_UIManager.panel_instances, key);
     }
     
     // Update focus if this was the focused panel
     if (obj_UIManager.focused_panel == panel_instance) {
         obj_UIManager.focused_panel = noone;
-        
-        // Focus next panel in stack if any
-        if (!ds_list_empty(obj_UIManager.ui_panel_stack)) {
-            var top_panel = obj_UIManager.ui_panel_stack[| ds_list_size(obj_UIManager.ui_panel_stack) - 1];
-            ui_focus_panel(top_panel);
-        } else {
-            // No panels left, release input focus
-            input_set_ui_focus(false);
-        }
+        input_set_ui_focus(false);
     }
     
-    logger_write(LogLevel.INFO, "UIManager", 
-                string("Closed panel: {0}", panel_type), "UI interaction");
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.INFO, "UIManager", "Closed panel", "UI interaction");
+    }
     
     // Destroy the instance
     instance_destroy(panel_instance);
@@ -104,28 +117,25 @@ function ui_close_panel(panel_instance) {
 /// @description Give input focus to a panel
 /// @param {id} panel_instance Panel to focus
 function ui_focus_panel(panel_instance) {
-    if (!instance_exists(panel_instance)) {
+    if (!instance_exists(panel_instance) || !instance_exists(obj_UIManager)) {
         return;
     }
     
     // Unfocus previous panel
     if (instance_exists(obj_UIManager.focused_panel)) {
         with (obj_UIManager.focused_panel) {
-            has_focus = false;
+            if (variable_instance_exists(id, "has_focus")) {
+                has_focus = false;
+            }
         }
     }
     
     // Set new focus
     obj_UIManager.focused_panel = panel_instance;
     with (panel_instance) {
-        has_focus = true;
-    }
-    
-    // Move to top of stack
-    var stack_pos = ds_list_find_index(obj_UIManager.ui_panel_stack, panel_instance);
-    if (stack_pos != -1) {
-        ds_list_delete(obj_UIManager.ui_panel_stack, stack_pos);
-        ds_list_add(obj_UIManager.ui_panel_stack, panel_instance);
+        if (variable_instance_exists(id, "has_focus")) {
+            has_focus = true;
+        }
     }
     
     // Tell input system that UI has focus
@@ -135,9 +145,20 @@ function ui_focus_panel(panel_instance) {
 /// @function ui_close_all_panels()
 /// @description Close all open UI panels
 function ui_close_all_panels() {
-    // Copy list to avoid modification during iteration
+    if (!instance_exists(obj_UIManager)) {
+        return;
+    }
+    
+    // Get all panel instances
     var panels_to_close = ds_list_create();
-    ds_list_copy(panels_to_close, obj_UIManager.ui_panel_stack);
+    var key = ds_map_find_first(obj_UIManager.panel_instances);
+    while (!is_undefined(key)) {
+        var panel = obj_UIManager.panel_instances[? key];
+        if (instance_exists(panel)) {
+            ds_list_add(panels_to_close, panel);
+        }
+        key = ds_map_find_next(obj_UIManager.panel_instances, key);
+    }
     
     // Close each panel
     for (var i = 0; i < ds_list_size(panels_to_close); i++) {
@@ -154,8 +175,12 @@ function ui_close_all_panels() {
 /// @description Cleanup UI manager resources
 function ui_cleanup() {
     ui_close_all_panels();
-    ds_list_destroy(obj_UIManager.ui_panel_stack);
-    ds_map_destroy(obj_UIManager.panel_instances);
     
-    logger_write(LogLevel.INFO, "UIManager", "UI Manager cleaned up", "System shutdown");
+    if (instance_exists(obj_UIManager)) {
+        ds_map_destroy(obj_UIManager.panel_instances);
+    }
+    
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        logger_write(LogLevel.INFO, "UIManager", "UI Manager cleaned up", "System shutdown");
+    }
 }

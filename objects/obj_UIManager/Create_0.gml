@@ -1,17 +1,14 @@
-/// @description Initialize the UI Manager
-/// @description Manages UI panels, focus, and layering
-/// @description Works with ViewManager to display UI elements
+// @description Initialize the UI Manager
+/// @description Manages UI elements and input focus
+/// @description Simplified for native observer pattern
 
 // Make this manager persistent
 persistent = true;
 
-// Stack of active UI panels (for layering and focus management)
-ui_panel_stack = ds_list_create();
-
-// Currently focused panel (receives input)
+// Currently focused element (receives input)
 focused_panel = noone;
 
-// Mapping of panel types to instances
+// Mapping of panel types to instances (for singleton panels)
 panel_instances = ds_map_create();
 
 logger_write(LogLevel.INFO, "UIManager", "UI Manager created and initialized", "System startup");

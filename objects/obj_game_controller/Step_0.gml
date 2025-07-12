@@ -11,8 +11,36 @@ while (!is_undefined(command)) {
     var current_state = gamestate_get();
     
     switch (current_state) {
+        case GameState.MAIN_MENU:
+            // Process menu commands
+            switch (command.type) {
+                case CommandType.START_NEW_GAME:
+                    // TODO: Initialize new game
+                    gamestate_change(GameState.IN_GAME, "Starting new game");
+                    // TODO: Create game world
+                    break;
+                    
+                case CommandType.LOAD_GAME:
+                    // TODO: Load save game
+                    logger_write(LogLevel.INFO, "GameController", "Load game not implemented", "Command processing");
+                    break;
+            }
+            break;
+            
         case GameState.IN_GAME:
-            // TODO: Process game commands
+            // Process game commands
+            switch (command.type) {
+                case CommandType.PAUSE:
+                    gamestate_change(GameState.PAUSED, "Game paused");
+                    break;
+                    
+                case CommandType.SELECT_UNIT:
+                case CommandType.ADD_TO_SELECTION:
+                case CommandType.TOGGLE_SELECTION:
+                case CommandType.UNIT_ORDER:
+                    // TODO: Process unit commands
+                    break;
+            }
             break;
             
         case GameState.PAUSED:
@@ -23,7 +51,14 @@ while (!is_undefined(command)) {
             break;
             
         case GameState.MAP_EDITOR:
-            // TODO: Process editor commands
+            // Process editor commands
+            switch (command.type) {
+                case CommandType.EDITOR_PLACE:
+                case CommandType.EDITOR_DELETE:
+                case CommandType.EDITOR_SELECT:
+                    // TODO: Process editor commands
+                    break;
+            }
             break;
     }
     

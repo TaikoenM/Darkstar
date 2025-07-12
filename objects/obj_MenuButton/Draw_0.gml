@@ -1,3 +1,4 @@
+/// @description Draw button with current visual state
 if (!visible) exit;
 
 // Determine current color

@@ -39,10 +39,19 @@ enum CommandType {
     ACTION_SECONDARY,   // Secondary action (e.g., special ability)
     ACTION_CANCEL,      // Cancel current action
     
+    // Selection commands
+    SELECT_UNIT,        // Select a single unit
+    ADD_TO_SELECTION,   // Add unit to current selection
+    TOGGLE_SELECTION,   // Toggle unit selection
+    UNIT_ORDER,         // Issue order to unit(s)
+    
     // UI commands
     PAUSE,              // Pause/unpause game
     OPEN_MENU,          // Open a specific menu
     CLOSE_MENU,         // Close current menu
+    
+    // Game flow commands
+    START_NEW_GAME,     // Start a new game
     
     // Editor commands
     EDITOR_PLACE,       // Place object in editor

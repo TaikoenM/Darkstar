@@ -51,3 +51,14 @@ function game_controller_handle_hex_click(event_data) {
         input_queue_command(cmd);
     }
 }
+
+/// @function hex_pixel_to_axial(px, py)
+/// @description Convert pixel coordinates to axial hex coordinates
+/// @param {real} px X position in pixels
+/// @param {real} py Y position in pixels
+/// @return {struct} Struct with q and r axial coordinates
+function hex_pixel_to_axial(px, py) {
+    // TODO: Implement hex coordinate conversion
+    // This is a placeholder - will be implemented in scr_hex_utils
+    return { q: 0, r: 0 };
+}

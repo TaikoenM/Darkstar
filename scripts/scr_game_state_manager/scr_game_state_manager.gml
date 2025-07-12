@@ -6,6 +6,9 @@ function gamestate_init() {
     global.previous_game_state = GameState.INITIALIZING;
     global.state_change_callbacks = ds_map_create();
     
+    // Initialize observer system
+    gamestate_observer_init();
+    
     // Safe logging - check if logger is initialized
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "GameStateManager", "Game state manager initialized", "System startup");
@@ -81,6 +84,15 @@ function gamestate_execute_callbacks(state) {
     }
 }
 
+/// @description Get unit data from the game state
+/// @param {string} unit_id Unit identifier
+/// @return {struct|undefined} Unit data struct or undefined if not found
+function gamestate_get_unit(unit_id) {
+    // TODO: Implement when GameState object is created
+    // This will return unit data from global.game_state.units[unit_id]
+    return undefined;
+}
+
 /// @description Cleanup the game state manager and free memory
 /// @description Should be called during game shutdown
 function gamestate_cleanup() {
@@ -95,6 +107,9 @@ function gamestate_cleanup() {
     }
     
     ds_map_destroy(global.state_change_callbacks);
+    
+    // Clean up observer system
+    gamestate_observer_cleanup();
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "GameStateManager", "Game state manager cleaned up", "System shutdown");
