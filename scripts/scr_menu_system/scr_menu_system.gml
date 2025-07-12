@@ -152,20 +152,13 @@ function menu_callback_exit() {
         logger_write(LogLevel.INFO, "MenuSystem", "Exit button pressed", "Shutting down game");
     }
     
-    // Save configuration if possible
-    if (variable_global_exists("config") && function_exists("config_save")) {
-        config_save();
-    }
+    // Save configuration
+    config_save();
     
-    // Clean up assets if possible
-    if (function_exists("assets_cleanup")) {
-        assets_cleanup();
-    }
-    
-    // Clean up game state if possible
-    if (function_exists("gamestate_cleanup")) {
-        gamestate_cleanup();
-    }
+    // Clean up systems
+    input_cleanup();
+    assets_cleanup();
+    gamestate_cleanup();
     
     game_end();
 }

@@ -11,6 +11,7 @@ logger_init();
 // Initialize other core systems
 gamestate_init();
 assets_init();
+input_init();
 
 logger_write(LogLevel.INFO, "GameController", "Game initialization started", "System startup");
 

@@ -28,6 +28,33 @@ enum ButtonType {
     EXIT             // Exit the game
 }
 
+/// @description Command types for the command pattern input system
+enum CommandType {
+    // Movement commands
+    MOVE,               // Move unit/player
+    STOP,               // Stop movement
+    
+    // Action commands
+    ACTION_PRIMARY,     // Primary action (e.g., select, attack)
+    ACTION_SECONDARY,   // Secondary action (e.g., special ability)
+    ACTION_CANCEL,      // Cancel current action
+    
+    // UI commands
+    PAUSE,              // Pause/unpause game
+    OPEN_MENU,          // Open a specific menu
+    CLOSE_MENU,         // Close current menu
+    
+    // Editor commands
+    EDITOR_PLACE,       // Place object in editor
+    EDITOR_DELETE,      // Delete object in editor
+    EDITOR_SELECT,      // Select object in editor
+    
+    // System commands
+    SAVE_GAME,          // Save game state
+    LOAD_GAME,          // Load game state
+    QUIT_GAME           // Quit to menu/desktop
+}
+
 // Display constants - used as fallbacks when config system fails
 #macro DEFAULT_GAME_WIDTH 1920      // Default window width in pixels
 #macro DEFAULT_GAME_HEIGHT 1080     // Default window height in pixels  
