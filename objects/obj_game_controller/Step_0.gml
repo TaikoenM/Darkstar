@@ -66,6 +66,28 @@ while (!is_undefined(command)) {
     command = input_dequeue_command();
 }
 
+    if (!instance_exists(obj_MainMenuManager)) {
+        logger_write(LogLevel.INFO, "GameController", "Creating MainMenuManager", "Main menu setup");
+        var manager = instance_create_layer(0, 0, "Managers", obj_MainMenuManager);
+        if (instance_exists(manager)) {
+            logger_write(LogLevel.INFO, "GameController", "MainMenuManager created successfully", string("Instance ID: {0}", manager));
+        } else {
+            logger_write(LogLevel.ERROR, "GameController", "Failed to create MainMenuManager", "Instance creation failed");
+        }
+    } else {
+        logger_write(LogLevel.WARNING, "GameController", "MainMenuManager already exists", "Duplicate creation prevented");
+    }
+    
+    // Debug: List all instances in the room
+    logger_write(LogLevel.DEBUG, "GameController", "Listing all instances in room:", "Room debug");
+    with (all) {
+        logger_write(LogLevel.DEBUG, "GameController", 
+                    string("Instance: {0} on layer {1} at ({2}, {3})", 
+                           object_get_name(object_index), 
+                           layer_get_name(layer), x, y), 
+                    "Instance listing");
+    }
+
 // Update fixed timestep if enabled
 if (variable_global_exists("game_options") && global.game_options.performance.fixed_timestep) {
     // TODO: Implement fixed timestep logic

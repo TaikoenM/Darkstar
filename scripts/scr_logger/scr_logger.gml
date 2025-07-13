@@ -2,9 +2,12 @@
 /// @description Sets up global logging variables and creates initial log file
 /// @description Requires config system to be initialized first
 function logger_init() {
+    show_debug_message("[DEBUG] logger_init called - Logging system initialization started");
+    
     // Check if config system is available and logging is enabled
     if (!variable_global_exists("game_options") || !global.game_options.logging.enabled) {
         global.log_enabled = false;
+        show_debug_message("[DEBUG] logger_init - Logging disabled in config or no config available");
         return;
     }
     
@@ -13,22 +16,39 @@ function logger_init() {
     global.log_level = global.game_options.logging.level;
     global.log_session_start = date_current_datetime();
     
+    show_debug_message("[DEBUG] logger_init - Global variables set:");
+    show_debug_message("[DEBUG]   log_enabled: " + string(global.log_enabled));
+    show_debug_message("[DEBUG]   log_file: " + string(global.log_file));
+    show_debug_message("[DEBUG]   log_level: " + string(global.log_level));
+    show_debug_message("[DEBUG]   session_start: " + string(global.log_session_start));
+    
     // Ensure logs directory exists
     var logs_dir = working_directory + LOGS_PATH;
+    show_debug_message("[DEBUG] logger_init - Checking logs directory: " + logs_dir);
+    
     if (!directory_exists(logs_dir)) {
         try {
+            show_debug_message("[DEBUG] logger_init - Creating logs directory");
             directory_create(logs_dir);
+            show_debug_message("[DEBUG] logger_init - Logs directory created successfully");
         } catch (error) {
-            show_debug_message("Failed to create logs directory: " + string(error));
+            show_debug_message("[ERROR] logger_init - Failed to create logs directory: " + string(error));
         }
+    } else {
+        show_debug_message("[DEBUG] logger_init - Logs directory already exists");
     }
     
     // Clear previous log file
     if (file_exists(global.log_file)) {
+        show_debug_message("[DEBUG] logger_init - Deleting previous log file: " + global.log_file);
         file_delete(global.log_file);
+    } else {
+        show_debug_message("[DEBUG] logger_init - No previous log file to delete");
     }
     
+    show_debug_message("[DEBUG] logger_init - About to write first log entry");
     logger_write(LogLevel.INFO, "Logger", "Logging system initialized", "System startup");
+    show_debug_message("[DEBUG] logger_init completed successfully");
 }
 
 /// @description Write a log entry with specified level, source, message and reason
@@ -40,6 +60,11 @@ function logger_write(level, source, message, reason = "") {
     // Early exit if logging disabled or level too low
     if (!variable_global_exists("log_enabled") || !global.log_enabled || level < global.log_level) {
         return;
+    }
+    
+    // Debug trace for logger_write calls
+    if (level == LogLevel.DEBUG) {
+        show_debug_message(string("[TRACE] logger_write called - Level: {0}, Source: {1}, Message: {2}", level, source, message));
     }
     
     var level_text = "";
@@ -71,10 +96,16 @@ function logger_write(level, source, message, reason = "") {
             file_text_write_string(file, log_entry);
             file_text_writeln(file);
             file_text_close(file);
+            
+            // Trace successful file write for DEBUG level
+            if (level == LogLevel.DEBUG) {
+                show_debug_message("[TRACE] Log entry written to file successfully");
+            }
         }
     } catch (error) {
         // If file writing fails, at least output to debug console
         show_debug_message("LOG FILE ERROR: " + string(error));
+        show_debug_message("FAILED LOG ENTRY: " + log_entry);
     }
     
     // Always output to console for debugging
@@ -98,13 +129,27 @@ function logger_write(level, source, message, reason = "") {
         
         // Use safe dev console logging
         dev_console_log(string("[{0}] {1}: {2}", level_text, source, message), console_color);
+        
+        // Trace dev console write for DEBUG level
+        if (level == LogLevel.DEBUG) {
+            show_debug_message("[TRACE] Log entry sent to dev console successfully");
+        }
+    } else {
+        // Trace when dev console is not available
+        if (level == LogLevel.DEBUG) {
+            show_debug_message("[TRACE] Dev console not available for log entry");
+        }
     }
 }
 
 /// @description Safe cleanup function that avoids logging during destruction
 function safe_cleanup_with_logging(system_name, cleanup_function) {
+    show_debug_message("[DEBUG] safe_cleanup_with_logging called for: " + system_name);
+    
     try {
+        show_debug_message("[DEBUG] Executing cleanup function for: " + system_name);
         cleanup_function();
+        
         // Only log if dev console is still available
         if (variable_global_exists("dev_console") && 
             !is_undefined(global.dev_console) &&
@@ -113,6 +158,7 @@ function safe_cleanup_with_logging(system_name, cleanup_function) {
             ds_exists(global.dev_console.history, ds_type_list)) {
             
             logger_write(LogLevel.INFO, system_name, system_name + " cleaned up successfully", "System shutdown");
+            show_debug_message("[DEBUG] Cleanup logged successfully for: " + system_name);
         } else {
             // Fallback to debug message if dev console unavailable
             show_debug_message("[INFO] " + system_name + ": " + system_name + " cleaned up successfully");
@@ -120,4 +166,6 @@ function safe_cleanup_with_logging(system_name, cleanup_function) {
     } catch (error) {
         show_debug_message("[ERROR] " + system_name + ": Cleanup failed - " + string(error));
     }
+    
+    show_debug_message("[DEBUG] safe_cleanup_with_logging completed for: " + system_name);
 }
