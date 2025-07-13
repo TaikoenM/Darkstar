@@ -1,12 +1,13 @@
 # Project Summary
-**Generated on:** 2025-07-13 01:14:50
+**Generated on:** 2025-07-13 12:02:40
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 88
+**Total Files:** 92
 
-### .GML Files (46 files)
+### .GML Files (47 files)
+- `objects\oTest\Create_0.gml` (1768 bytes)
 - `objects\obj_DataManager\Create_0.gml` (3492 bytes)
 - `objects\obj_DevConsole\CleanUp_0.gml` (995 bytes)
 - `objects\obj_DevConsole\Create_0.gml` (168 bytes)
@@ -15,9 +16,9 @@
 - `objects\obj_GameState\Create_0.gml` (737 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
-- `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
+- `objects\obj_MainMenuBackground\Draw_0.gml` (1064 bytes)
 - `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
-- `objects\obj_MainMenuManager\Create_0.gml` (706 bytes)
+- `objects\obj_MainMenuManager\Create_0.gml` (553 bytes)
 - `objects\obj_MenuButton\Create_0.gml` (636 bytes)
 - `objects\obj_MenuButton\Draw_0.gml` (757 bytes)
 - `objects\obj_MenuButton\Mouse_10.gml` (18 bytes)
@@ -32,31 +33,31 @@
 - `objects\obj_Unit\Step_0.gml` (1183 bytes)
 - `objects\obj_game_controller\CleanUp_0.gml` (2740 bytes)
 - `objects\obj_game_controller\Create_0.gml` (1962 bytes)
-- `objects\obj_game_controller\Draw_64.gml` (2198 bytes)
+- `objects\obj_game_controller\Draw_64.gml` (2196 bytes)
 - `objects\obj_game_controller\Other_4.gml` (1642 bytes)
-- `objects\obj_game_controller\Step_0.gml` (2624 bytes)
-- `scripts\scr_asset_manager\scr_asset_manager.gml` (15095 bytes)
-- `scripts\scr_config_manager\scr_config_manager.gml` (5959 bytes)
+- `objects\obj_game_controller\Step_0.gml` (2628 bytes)
+- `scripts\scr_asset_manager\scr_asset_manager.gml` (11832 bytes)
+- `scripts\scr_config_manager\scr_config_manager.gml` (12343 bytes)
 - `scripts\scr_data_manager\scr_data_manager.gml` (11225 bytes)
-- `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2161 bytes)
-- `scripts\scr_dev_console\scr_dev_console.gml` (18815 bytes)
+- `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2290 bytes)
+- `scripts\scr_dev_console\scr_dev_console.gml` (23221 bytes)
 - `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (9201 bytes)
 - `scripts\scr_game_control\scr_game_control.gml` (6190 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.gml` (9942 bytes)
-- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (6629 bytes)
+- `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (12106 bytes)
 - `scripts\scr_hex_utils\scr_hex_utils.gml` (7424 bytes)
-- `scripts\scr_input_manager\scr_input_manager.gml` (9999 bytes)
+- `scripts\scr_input_manager\scr_input_manager.gml` (8867 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
-- `scripts\scr_logger\scr_logger.gml` (5295 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (9036 bytes)
+- `scripts\scr_logger\scr_logger.gml` (7086 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (21160 bytes)
 - `scripts\scr_scene_state_manager\scr_scene_state_manager.gml` (4951 bytes)
 - `scripts\scr_test_suites\scr_test_suites.gml` (24250 bytes)
 - `scripts\scr_text_util\scr_text_util.gml` (2184 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (7590 bytes)
 
 ### .MD Files (2 files)
-- `project_full_report.md` (207891 bytes)
-- `project_summary.md` (26756 bytes)
+- `project_full_report.md` (262399 bytes)
+- `project_summary.md` (30893 bytes)
 
 ### .PNG Files (3 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
@@ -64,9 +65,10 @@
 - `sprites\spr_button\layers\38752966-343f-47bb-a30f-4897623cb5d6\4c04fe41-176e-4945-844b-e2ec1689ccad.png` (403 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3779 bytes)
+- `DarkStar.resource_order` (3845 bytes)
 
-### .YY Files (35 files)
+### .YY Files (36 files)
+- `objects\oTest\oTest.yy` (869 bytes)
 - `objects\obj_DataManager\obj_DataManager.yy` (889 bytes)
 - `objects\obj_DevConsole\obj_DevConsole.yy` (1369 bytes)
 - `objects\obj_GameState\obj_GameState.yy` (885 bytes)
@@ -81,7 +83,7 @@
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1618 bytes)
 - `rooms\room_game_init\room_game_init.yy` (4463 bytes)
-- `rooms\room_main_menu\room_main_menu.yy` (3454 bytes)
+- `rooms\room_main_menu\room_main_menu.yy` (4005 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (267 bytes)
 - `scripts\scr_config_manager\scr_config_manager.yy` (269 bytes)
@@ -104,12 +106,26 @@
 - `sprites\spr_button\spr_button.yy` (3193 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (6770 bytes)
+- `DarkStar.yyp` (6833 bytes)
+
+### NO_EXTENSION Files (2 files)
+- `GML` (4246 bytes)
+- `GML_arrays` (4246 bytes)
 
 
 ---
 ## Part B: GameMaker Objects and Events
-**Total Objects:** 10
+**Total Objects:** 11
+
+### Object: oTest
+**Description:** No description available
+**Path:** `objects\oTest`
+**Events (1):**
+- **Create_0** (Create Event)
+  - *Path:* `objects\oTest\Create_0.gml`
+  - *Functions:*
+    - `load_all_sprites_from_directory(directory_name)`
+
 
 ### Object: obj_DataManager
 **Description:** Load all game data from JSON files
@@ -799,7 +815,7 @@
 ### Script: scr_menu_system
 **Description:** Create a menu button data structure with all necessary properties @param {Constant.ButtonType} type ButtonType enum value for the button type @param {string} text Display text for the button @param {real} x X position in GUI coordinates @param {real} y Y position in GUI coordinates @param {function} callback Function to call when button is clicked @return {struct} Button data structure with all properties set
 **Path:** `scripts\scr_menu_system\scr_menu_system.gml`
-**Functions (5):**
+**Functions (7):**
 - **`main_menu_handle_button_click(event_data)`**
   - *Arguments:* event_data
 
@@ -811,6 +827,10 @@
 
 - **`menu_create_buttons(button_configs)`**
   - *Arguments:* button_configs
+
+- **`menu_factory_create_background()`**
+
+- **`menu_factory_create_main_menu()`**
 
 - **`menu_get_main_menu_buttons()`**
 

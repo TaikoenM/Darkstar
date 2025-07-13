@@ -10,5 +10,10 @@ menu_factory_create_main_menu();
 
 // Create background using factory
 menu_factory_create_background();
+logger_write(LogLevel.INFO, "MainMenuManager", "Setting up background layer via code", "Background Setup");
+
+
+
+layer_background_sprite(layer_background_get_id("Background"), assets_get_sprite_safe("mainmenu_background"))
 
 logger_write(LogLevel.INFO, "MainMenuManager", "Main menu initialized", "Menu setup complete");

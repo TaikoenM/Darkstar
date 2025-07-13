@@ -261,33 +261,7 @@ function menu_factory_create_background() {
         logger_write(LogLevel.WARNING, "MenuSystem", "Background layer does not exist", "Creating layer");
         layer_create(1000, "Background");
     }
-    
-    logger_write(LogLevel.DEBUG, "MenuSystem", "Creating background instance", "Layer: Background, Object: obj_MainMenuBackground");
-    
-    // Create background instance
-    var background_instance = instance_create_layer(0, 0, "Background", obj_MainMenuBackground);
-    
-    logger_write(LogLevel.DEBUG, "MenuSystem", "Background instance creation result", 
-                string("Instance: {0}, Exists: {1}", background_instance, instance_exists(background_instance)));
-    
-    if (instance_exists(background_instance)) {
-        logger_write(LogLevel.DEBUG, "MenuSystem", "Background instance created successfully", 
-                    string("ID: {0}, Position: ({1}, {2}), Layer: {3}", 
-                           background_instance, background_instance.x, background_instance.y, 
-                           layer_get_name(background_instance.layer)));
-        
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.INFO, "MenuSystem", "Main menu background created successfully", "Factory complete");
-        }
-    } else {
-        logger_write(LogLevel.ERROR, "MenuSystem", "Background instance creation failed", "Instance does not exist");
-        
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.ERROR, "MenuSystem", "Failed to create main menu background", "Factory error");
-        }
-    }
-    
-    logger_write(LogLevel.DEBUG, "MenuSystem", "menu_factory_create_background completed", "Background factory finished");
+
 }
 
 /// @function main_menu_handle_button_click(event_data)
