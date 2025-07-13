@@ -28,7 +28,7 @@ function config_init() {
         logging: {
             enabled: true,
             level: LogLevel.INFO,
-            file: LOG_FILE
+            file: LOGS_PATH + LOG_FILE
         },
         menu: {
             center_x_offset: 0,
@@ -56,7 +56,11 @@ function config_load() {
     // Ensure config directory exists
     var config_dir = working_directory + CONFIG_PATH;
     if (!directory_exists(config_dir)) {
-        directory_create(config_dir);
+        try {
+            directory_create(config_dir);
+        } catch (error) {
+            show_debug_message("Failed to create config directory: " + string(error));
+        }
     }
     
     var config_path = working_directory + global.config_file;

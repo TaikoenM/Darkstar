@@ -1,3 +1,4 @@
+// Create_0 Event
 /// @description Load all game data from JSON files
 
 // Make persistent
@@ -15,8 +16,12 @@ global.terrain_definitions = {};
 // Ensure data directory exists
 var data_dir = working_directory + DATA_PATH;
 if (!directory_exists(data_dir)) {
-    directory_create(data_dir);
-    logger_write(LogLevel.WARNING, "DataManager", "Data directory created", data_dir);
+    try {
+        directory_create(data_dir);
+        logger_write(LogLevel.WARNING, "DataManager", "Data directory created", data_dir);
+    } catch (error) {
+        logger_write(LogLevel.ERROR, "DataManager", "Failed to create data directory", string(error));
+    }
 }
 
 // Load unit definitions
@@ -26,7 +31,7 @@ if (file_exists(units_file)) {
     if (!is_undefined(units_data)) {
         global.unit_definitions = units_data;
         logger_write(LogLevel.INFO, "DataManager", "Unit definitions loaded", 
-                    string("Count: {0}", variable_struct_names_count(units_data)));
+                    string("Count: {0}", array_length(variable_struct_get_names(units_data))));
     }
 } else {
     // Create default unit definitions
@@ -40,7 +45,7 @@ if (file_exists(buildings_file)) {
     if (!is_undefined(buildings_data)) {
         global.building_definitions = buildings_data;
         logger_write(LogLevel.INFO, "DataManager", "Building definitions loaded", 
-                    string("Count: {0}", variable_struct_names_count(buildings_data)));
+                    string("Count: {0}", array_length(variable_struct_get_names(buildings_data))));
     }
 } else {
     data_manager_create_default_buildings();
@@ -53,7 +58,7 @@ if (file_exists(tech_file)) {
     if (!is_undefined(tech_data)) {
         global.technology_definitions = tech_data;
         logger_write(LogLevel.INFO, "DataManager", "Technology definitions loaded", 
-                    string("Count: {0}", variable_struct_names_count(tech_data)));
+                    string("Count: {0}", array_length(variable_struct_get_names(tech_data))));
     }
 } else {
     data_manager_create_default_technologies();
@@ -66,7 +71,7 @@ if (file_exists(factions_file)) {
     if (!is_undefined(factions_data)) {
         global.faction_definitions = factions_data;
         logger_write(LogLevel.INFO, "DataManager", "Faction definitions loaded", 
-                    string("Count: {0}", variable_struct_names_count(factions_data)));
+                    string("Count: {0}", array_length(variable_struct_get_names(factions_data))));
     }
 } else {
     data_manager_create_default_factions();
@@ -79,7 +84,7 @@ if (file_exists(terrain_file)) {
     if (!is_undefined(terrain_data)) {
         global.terrain_definitions = terrain_data;
         logger_write(LogLevel.INFO, "DataManager", "Terrain definitions loaded", 
-                    string("Count: {0}", variable_struct_names_count(terrain_data)));
+                    string("Count: {0}", array_length(variable_struct_get_names(terrain_data))));
     }
 } else {
     data_manager_create_default_terrain();

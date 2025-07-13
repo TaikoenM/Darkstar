@@ -15,19 +15,31 @@ function unit_factory_create(unit_type, faction, hex_q, hex_r) {
     
     // Get faction definition for color
     var faction_color = c_white;
-    var faction_names = variable_struct_get_names(global.faction_definitions);
-    for (var i = 0; i < array_length(faction_names); i++) {
-        var faction_def = global.faction_definitions[$ faction_names[i]];
-        if (variable_struct_exists(faction_def, "faction_id") && faction_def.faction_id == faction) {
-            if (variable_struct_exists(faction_def, "color")) {
-                faction_color = faction_def.color;
-            }
+    var faction_def = undefined;
+    
+    // Find faction definition that matches the enum
+    switch (faction) {
+        case Faction.PLAYER_1:
+            faction_def = data_manager_get_faction_definition("hawkwood");
             break;
-        }
+        case Faction.PLAYER_2:
+            faction_def = data_manager_get_faction_definition("decados");
+            break;
+        case Faction.PLAYER_3:
+            faction_def = data_manager_get_faction_definition("li_halan");
+            break;
+        case Faction.IMPERIAL:
+            faction_def = data_manager_get_faction_definition("church");
+            break;
+        case Faction.MERCANTILE:
+            faction_def = data_manager_get_faction_definition("merchants");
+            break;
     }
     
-    // If no faction definition found, use default colors
-    if (faction_color == c_white) {
+    if (!is_undefined(faction_def) && variable_struct_exists(faction_def, "color")) {
+        faction_color = faction_def.color;
+    } else {
+        // Use default colors
         switch (faction) {
             case Faction.PLAYER_1: faction_color = c_blue; break;
             case Faction.PLAYER_2: faction_color = c_red; break;
@@ -35,6 +47,7 @@ function unit_factory_create(unit_type, faction, hex_q, hex_r) {
             case Faction.PLAYER_4: faction_color = c_yellow; break;
             case Faction.IMPERIAL: faction_color = c_purple; break;
             case Faction.REBEL: faction_color = c_orange; break;
+            default: faction_color = c_white; break;
         }
     }
     

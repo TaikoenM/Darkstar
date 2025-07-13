@@ -190,8 +190,8 @@ enum TerrainType {
 // ============================================================================
 #macro CONFIG_FILE "config/game_config.json"
 #macro INPUT_MAPPING_FILE "config/input_mapping.json"
-#macro ASSET_MANIFEST_FILE "data/asset_manifest.json"
-#macro LOG_FILE "logs/game_log.txt"
+#macro ASSET_MANIFEST_FILE "asset_manifest.json"
+#macro LOG_FILE "game_log.txt"
 #macro SAVE_FILE_EXTENSION ".sav"
 
 // Directory structure

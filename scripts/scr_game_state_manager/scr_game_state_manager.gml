@@ -79,13 +79,33 @@ function gamestate_add_unit(unit_data) {
 function gamestate_remove_unit(unit_id) {
     if (variable_struct_exists(global.game_state.units, unit_id)) {
         var unit_data = global.game_state.units[$ unit_id];
-        variable_struct_remove(global.game_state.units, unit_id);
+        // Remove unit from game state by creating new struct without it
+        var new_units = {};
+        var unit_names = variable_struct_get_names(global.game_state.units);
+        for (var i = 0; i < array_length(unit_names); i++) {
+            if (unit_names[i] != unit_id) {
+                new_units[$ unit_names[i]] = global.game_state.units[$ unit_names[i]];
+            }
+        }
+        global.game_state.units = new_units;
         
         // Remove from selection if selected
-        var selection_index = array_find_index(global.game_state.selected_units, 
-            function(element, index) { return element == unit_id; });
+        var selection_index = -1;
+        for (var i = 0; i < array_length(global.game_state.selected_units); i++) {
+            if (global.game_state.selected_units[i] == unit_id) {
+                selection_index = i;
+                break;
+            }
+        }
         if (selection_index >= 0) {
-            array_delete(global.game_state.selected_units, selection_index, 1);
+            // Manually remove element by creating new array
+            var new_selection = [];
+            for (var i = 0; i < array_length(global.game_state.selected_units); i++) {
+                if (i != selection_index) {
+                    new_selection[array_length(new_selection)] = global.game_state.selected_units[i];
+                }
+            }
+            global.game_state.selected_units = new_selection;
         }
         
         // Notify observers
@@ -143,11 +163,16 @@ function gamestate_select_unit(unit_id, add_to_selection = false) {
     
     // Check if unit exists and isn't already selected
     if (variable_struct_exists(global.game_state.units, unit_id)) {
-        var already_selected = array_find_index(global.game_state.selected_units,
-            function(element, index) { return element == unit_id; }) >= 0;
+        var already_selected = false;
+        for (var i = 0; i < array_length(global.game_state.selected_units); i++) {
+            if (global.game_state.selected_units[i] == unit_id) {
+                already_selected = true;
+                break;
+            }
+        }
             
         if (!already_selected) {
-            array_push(global.game_state.selected_units, unit_id);
+            global.game_state.selected_units[array_length(global.game_state.selected_units)] = unit_id;
             
             // Notify observers
             gamestate_notify_observers("unit_selected", {

@@ -52,6 +52,31 @@ function input_cleanup() {
     }
 }
 
+/// @function input_save_mapping_data(mapping)
+/// @description Save input mapping data to JSON file
+/// @param {struct} mapping The mapping data to save
+function input_save_mapping_data(mapping) {
+    var mapping_file = working_directory + INPUT_MAPPING_FILE;
+    
+    try {
+        json_save_file(mapping_file, mapping);
+        
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.INFO, "InputManager", "Input mapping saved", mapping_file);
+        }
+    } catch (error) {
+        if (variable_global_exists("log_enabled") && global.log_enabled) {
+            logger_write(LogLevel.ERROR, "InputManager", "Failed to save input mapping", string(error));
+        }
+    }
+}
+
+/// @function input_save_mapping()
+/// @description Save current input mapping to file
+function input_save_mapping() {
+    input_save_mapping_data(global.input_mapping);
+}
+
 /// @function input_load_mapping()
 /// @description Load input mapping configuration from JSON file
 /// @return {struct} Input mapping configuration
@@ -89,7 +114,11 @@ function input_load_mapping() {
     // Ensure config directory exists
     var config_dir = working_directory + CONFIG_PATH;
     if (!directory_exists(config_dir)) {
-        directory_create(config_dir);
+        try {
+            directory_create(config_dir);
+        } catch (error) {
+            show_debug_message("Failed to create config directory: " + string(error));
+        }
     }
     
     // Load from file if exists
@@ -110,47 +139,6 @@ function input_load_mapping() {
     }
     
     return mapping;
-}
-
-/// @function input_save_mapping()
-/// @description Save current input mapping to file
-function input_save_mapping() {
-    var mapping_file = "";
-    
-    if (variable_global_exists("game_options") && !is_undefined(global.game_options)) {
-        mapping_file = working_directory + global.game_options.assets.data_path + "input_mapping.ini";
-    } else {
-        mapping_file = working_directory + "assets/data/input_mapping.ini";
-    }
-    
-    try {
-        ini_open(mapping_file);
-        
-        // Save keyboard mappings
-        ini_write_real("Keyboard", "move_up", global.input_mapping.move_up);
-        ini_write_real("Keyboard", "move_down", global.input_mapping.move_down);
-        ini_write_real("Keyboard", "move_left", global.input_mapping.move_left);
-        ini_write_real("Keyboard", "move_right", global.input_mapping.move_right);
-        ini_write_real("Keyboard", "pause", global.input_mapping.pause);
-        
-        // Save UI mappings
-        ini_write_real("UI", "up", global.input_mapping.ui_up);
-        ini_write_real("UI", "down", global.input_mapping.ui_down);
-        ini_write_real("UI", "left", global.input_mapping.ui_left);
-        ini_write_real("UI", "right", global.input_mapping.ui_right);
-        ini_write_real("UI", "confirm", global.input_mapping.ui_confirm);
-        ini_write_real("UI", "cancel", global.input_mapping.ui_cancel);
-        
-        ini_close();
-        
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.INFO, "InputManager", "Input mapping saved", mapping_file);
-        }
-    } catch (error) {
-        if (variable_global_exists("log_enabled") && global.log_enabled) {
-            logger_write(LogLevel.ERROR, "InputManager", "Failed to save input mapping", string(error));
-        }
-    }
 }
 
 /// @function input_create_command(type, data, player_id)
@@ -223,17 +211,17 @@ function input_update() {
     }
     
     // Check for pause
-    if (keyboard_check_pressed(global.input_mapping.pause)) {
-        logger_write(LogLevel.DEBUG, "InputManager", "Pause key pressed", "Key: " + string(global.input_mapping.pause));
+    if (keyboard_check_pressed(global.input_mapping.keyboard.pause)) {
+        logger_write(LogLevel.DEBUG, "InputManager", "Pause key pressed", "Key: " + string(global.input_mapping.keyboard.pause));
         var pause_command = input_create_command(CommandType.PAUSE, {});
         input_queue_command(pause_command);
     }
     
     // Check for primary action (left click)
-    if (mouse_check_button_pressed(global.input_mapping.action_primary)) {
+    if (mouse_check_button_pressed(global.input_mapping.mouse.action_primary)) {
         logger_write(LogLevel.DEBUG, "InputManager", 
                     string("Primary action at ({0}, {1})", global.input_state.mouse_pos_x, global.input_state.mouse_pos_y), 
-                    "Mouse button: " + string(global.input_mapping.action_primary));
+                    "Mouse button: " + string(global.input_mapping.mouse.action_primary));
         var action_command = input_create_command(CommandType.ACTION_PRIMARY, {
             x: global.input_state.mouse_pos_x,
             y: global.input_state.mouse_pos_y,
@@ -244,10 +232,10 @@ function input_update() {
     }
     
     // Check for secondary action (right click)
-    if (mouse_check_button_pressed(global.input_mapping.action_secondary)) {
+    if (mouse_check_button_pressed(global.input_mapping.mouse.action_secondary)) {
         logger_write(LogLevel.DEBUG, "InputManager", 
                     string("Secondary action at ({0}, {1})", global.input_state.mouse_pos_x, global.input_state.mouse_pos_y), 
-                    "Mouse button: " + string(global.input_mapping.action_secondary));
+                    "Mouse button: " + string(global.input_mapping.mouse.action_secondary));
         var action_command = input_create_command(CommandType.ACTION_SECONDARY, {
             x: global.input_state.mouse_pos_x,
             y: global.input_state.mouse_pos_y,

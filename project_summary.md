@@ -1,57 +1,62 @@
 # Project Summary
-**Generated on:** 2025-07-12 22:54:11
+**Generated on:** 2025-07-13 01:14:50
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 80
+**Total Files:** 88
 
-### .GML Files (41 files)
+### .GML Files (46 files)
+- `objects\obj_DataManager\Create_0.gml` (3492 bytes)
 - `objects\obj_DevConsole\CleanUp_0.gml` (995 bytes)
 - `objects\obj_DevConsole\Create_0.gml` (168 bytes)
 - `objects\obj_DevConsole\Draw_64.gml` (6665 bytes)
-- `objects\obj_DevConsole\Step_0.gml` (2822 bytes)
+- `objects\obj_DevConsole\Step_0.gml` (2817 bytes)
+- `objects\obj_GameState\Create_0.gml` (737 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
 - `objects\obj_MainMenuBackground\Draw_0.gml` (712 bytes)
 - `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
-- `objects\obj_MainMenuManager\Create_0.gml` (2154 bytes)
+- `objects\obj_MainMenuManager\Create_0.gml` (706 bytes)
 - `objects\obj_MenuButton\Create_0.gml` (636 bytes)
 - `objects\obj_MenuButton\Draw_0.gml` (757 bytes)
 - `objects\obj_MenuButton\Mouse_10.gml` (18 bytes)
 - `objects\obj_MenuButton\Mouse_11.gml` (71 bytes)
-- `objects\obj_MenuButton\Mouse_4.gml` (458 bytes)
+- `objects\obj_MenuButton\Mouse_4.gml` (474 bytes)
 - `objects\obj_UIManager\CleanUp_0.gml` (13 bytes)
 - `objects\obj_UIManager\Create_0.gml` (482 bytes)
-- `objects\obj_Unit\Create_0.gml` (349 bytes)
-- `objects\obj_Unit\Draw_0.gml` (2597 bytes)
-- `objects\obj_Unit\Mouse_4.gml` (324 bytes)
-- `objects\obj_Unit\Mouse_5.gml` (399 bytes)
-- `objects\obj_Unit\Step_0.gml` (698 bytes)
-- `objects\obj_game_controller\CleanUp_0.gml` (4098 bytes)
-- `objects\obj_game_controller\Create_0.gml` (1749 bytes)
-- `objects\obj_game_controller\Draw_64.gml` (1960 bytes)
-- `objects\obj_game_controller\Other_4.gml` (1681 bytes)
-- `objects\obj_game_controller\Step_0.gml` (2612 bytes)
-- `scripts\scr_asset_manager\scr_asset_manager.gml` (18347 bytes)
-- `scripts\scr_config_manager\scr_config_manager.gml` (10224 bytes)
+- `objects\obj_Unit\Create_0.gml` (343 bytes)
+- `objects\obj_Unit\Draw_0.gml` (2350 bytes)
+- `objects\obj_Unit\Mouse_4.gml` (326 bytes)
+- `objects\obj_Unit\Mouse_5.gml` (401 bytes)
+- `objects\obj_Unit\Step_0.gml` (1183 bytes)
+- `objects\obj_game_controller\CleanUp_0.gml` (2740 bytes)
+- `objects\obj_game_controller\Create_0.gml` (1962 bytes)
+- `objects\obj_game_controller\Draw_64.gml` (2198 bytes)
+- `objects\obj_game_controller\Other_4.gml` (1642 bytes)
+- `objects\obj_game_controller\Step_0.gml` (2624 bytes)
+- `scripts\scr_asset_manager\scr_asset_manager.gml` (15095 bytes)
+- `scripts\scr_config_manager\scr_config_manager.gml` (5959 bytes)
+- `scripts\scr_data_manager\scr_data_manager.gml` (11225 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2161 bytes)
-- `scripts\scr_dev_console\scr_dev_console.gml` (19125 bytes)
-- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (5841 bytes)
-- `scripts\scr_game_control\scr_game_control.gml` (2224 bytes)
-- `scripts\scr_game_state_manager\scr_game_state_manager.gml` (4890 bytes)
+- `scripts\scr_dev_console\scr_dev_console.gml` (18815 bytes)
+- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (9201 bytes)
+- `scripts\scr_game_control\scr_game_control.gml` (6190 bytes)
+- `scripts\scr_game_state_manager\scr_game_state_manager.gml` (9942 bytes)
 - `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (6629 bytes)
 - `scripts\scr_hex_utils\scr_hex_utils.gml` (7424 bytes)
-- `scripts\scr_input_manager\scr_input_manager.gml` (11325 bytes)
+- `scripts\scr_input_manager\scr_input_manager.gml` (9999 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
-- `scripts\scr_logger\scr_logger.gml` (4968 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (11311 bytes)
-- `scripts\scr_test_suites\scr_test_suites.gml` (24648 bytes)
+- `scripts\scr_logger\scr_logger.gml` (5295 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (9036 bytes)
+- `scripts\scr_scene_state_manager\scr_scene_state_manager.gml` (4951 bytes)
+- `scripts\scr_test_suites\scr_test_suites.gml` (24250 bytes)
+- `scripts\scr_text_util\scr_text_util.gml` (2184 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (7590 bytes)
 
 ### .MD Files (2 files)
 - `project_full_report.md` (207891 bytes)
-- `project_summary.md` (26821 bytes)
+- `project_summary.md` (26756 bytes)
 
 ### .PNG Files (3 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
@@ -59,12 +64,12 @@
 - `sprites\spr_button\layers\38752966-343f-47bb-a30f-4897623cb5d6\4c04fe41-176e-4945-844b-e2ec1689ccad.png` (403 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3499 bytes)
+- `DarkStar.resource_order` (3779 bytes)
 
-### .YY Files (32 files)
-- `objects\obj_DataManager\obj_DataManager.yy` (726 bytes)
+### .YY Files (35 files)
+- `objects\obj_DataManager\obj_DataManager.yy` (889 bytes)
 - `objects\obj_DevConsole\obj_DevConsole.yy` (1369 bytes)
-- `objects\obj_GameState\obj_GameState.yy` (722 bytes)
+- `objects\obj_GameState\obj_GameState.yy` (885 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
 - `objects\obj_MainMenuBackground\obj_MainMenuBackground.yy` (903 bytes)
 - `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (1058 bytes)
@@ -78,25 +83,28 @@
 - `rooms\room_game_init\room_game_init.yy` (4463 bytes)
 - `rooms\room_main_menu\room_main_menu.yy` (3454 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
-- `scripts\scr_asset_manager\scr_asset_manager.yy` (257 bytes)
-- `scripts\scr_config_manager\scr_config_manager.yy` (259 bytes)
+- `scripts\scr_asset_manager\scr_asset_manager.yy` (267 bytes)
+- `scripts\scr_config_manager\scr_config_manager.yy` (269 bytes)
+- `scripts\scr_data_manager\scr_data_manager.yy` (265 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.yy` (265 bytes)
 - `scripts\scr_dev_console\scr_dev_console.yy` (253 bytes)
 - `scripts\scr_enums_and_constants\scr_enums_and_constants.yy` (269 bytes)
 - `scripts\scr_game_control\scr_game_control.yy` (255 bytes)
-- `scripts\scr_game_state_manager\scr_game_state_manager.yy` (267 bytes)
+- `scripts\scr_game_state_manager\scr_game_state_manager.yy` (277 bytes)
 - `scripts\scr_gamestate_observer\scr_gamestate_observer.yy` (267 bytes)
 - `scripts\scr_hex_utils\scr_hex_utils.yy` (249 bytes)
-- `scripts\scr_input_manager\scr_input_manager.yy` (257 bytes)
+- `scripts\scr_input_manager\scr_input_manager.yy` (267 bytes)
 - `scripts\scr_json_utils\scr_json_utils.yy` (251 bytes)
 - `scripts\scr_logger\scr_logger.yy` (243 bytes)
 - `scripts\scr_menu_system\scr_menu_system.yy` (253 bytes)
+- `scripts\scr_scene_state_manager\scr_scene_state_manager.yy` (279 bytes)
 - `scripts\scr_test_suites\scr_test_suites.yy` (253 bytes)
-- `scripts\scr_ui_manager\scr_ui_manager.yy` (251 bytes)
+- `scripts\scr_text_util\scr_text_util.yy` (249 bytes)
+- `scripts\scr_ui_manager\scr_ui_manager.yy` (261 bytes)
 - `sprites\spr_button\spr_button.yy` (3193 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (6317 bytes)
+- `DarkStar.yyp` (6770 bytes)
 
 
 ---
@@ -104,9 +112,13 @@
 **Total Objects:** 10
 
 ### Object: obj_DataManager
-**Description:** No description available
+**Description:** Load all game data from JSON files
 **Path:** `objects\obj_DataManager`
-**Events:** No events found
+**Events (1):**
+- **Create_0** (Create Event)
+  - *Description:* Load all game data from JSON files
+  - *Path:* `objects\obj_DataManager\Create_0.gml`
+
 
 ### Object: obj_DevConsole
 **Description:** Clean up console resources with better error handling
@@ -132,9 +144,13 @@
 
 
 ### Object: obj_GameState
-**Description:** No description available
+**Description:** Initialize game state data container This object contains NO logic, only data
 **Path:** `objects\obj_GameState`
-**Events:** No events found
+**Events (1):**
+- **Create_0** (Create Event)
+  - *Description:* Initialize game state data container This object contains NO logic, only data
+  - *Path:* `objects\obj_GameState\Create_0.gml`
+
 
 ### Object: obj_InputManager
 **Description:** Initialize the Input Manager Translates raw hardware input into abstract game commands Part of the Controller layer in MVC architecture
@@ -167,7 +183,7 @@
   - *Path:* `objects\obj_MainMenuManager\CleanUp_0.gml`
 
 - **Create_0** (Create Event)
-  - *Description:* Initialize main menu manager with observer pattern
+  - *Description:* Initialize main menu manager with factory pattern
   - *Path:* `objects\obj_MainMenuManager\Create_0.gml`
 
 
@@ -208,15 +224,14 @@
 
 
 ### Object: obj_Unit
-**Description:** Initialize unit instance as view of GameState data
+**Description:** Initialize unit view instance
 **Path:** `objects\obj_Unit`
 **Events (5):**
 - **Create_0** (Create Event)
-  - *Description:* Initialize unit instance as view of GameState data
+  - *Description:* Initialize unit view instance
   - *Path:* `objects\obj_Unit\Create_0.gml`
 
 - **Draw_0** (Draw Event)
-  - *Description:* Draw unit based on data
   - *Path:* `objects\obj_Unit\Draw_0.gml`
 
 - **Mouse_4** (Mouse Event)
@@ -228,30 +243,26 @@
   - *Path:* `objects\obj_Unit\Mouse_5.gml`
 
 - **Step_0** (Step Event)
-  - *Description:* Update visual state and animations
+  - *Description:* Update visual state based on game data
   - *Path:* `objects\obj_Unit\Step_0.gml`
 
 
 ### Object: obj_game_controller
-**Description:** Clean up all systems on game exit with proper safety and order
+**Description:** Clean up all systems on game exit with proper order
 **Path:** `objects\obj_game_controller`
 **Events (5):**
 - **CleanUp_0** (Clean Up Event)
-  - *Description:* Clean up all systems on game exit with proper safety and order
+  - *Description:* Clean up all systems on game exit with proper order
   - *Path:* `objects\obj_game_controller\CleanUp_0.gml`
-  - *Functions:*
-    - `ui_cleanup()`
 
 - **Create_0** (Create Event)
   - *Description:* Initialize the game during startup phase Sets up all core systems in proper order and transitions to main menu This is the main entry point for the entire game
   - *Path:* `objects\obj_game_controller\Create_0.gml`
 
 - **Draw_64** (Draw GUI Event)
-  - *Description:* Draw debug information
   - *Path:* `objects\obj_game_controller\Draw_64.gml`
 
 - **Other_4** (Other Event)
-  - *Description:* Handle room transitions
   - *Path:* `objects\obj_game_controller\Other_4.gml`
 
 - **Step_0** (Step Event)
@@ -262,17 +273,15 @@
 
 ---
 ## Part C: Script Files and Functions
-**Total Scripts:** 15
+**Total Scripts:** 18
 
 ### Script: scr_asset_manager
 **Description:** Enhanced asset management system with detailed logging and proper paths
 **Path:** `scripts\scr_asset_manager\scr_asset_manager.gml`
-**Functions (8):**
+**Functions (7):**
 - **`assets_cleanup()`**
 
 - **`assets_create_default_manifest()`**
-
-- **`assets_fix_manifest_paths()`**
 
 - **`assets_get_sprite(asset_key)`**
   - *Arguments:* asset_key
@@ -289,13 +298,13 @@
 
 
 ### Script: scr_config_manager
-**Description:** Initialize the configuration manager and load settings from file Sets up default configuration values and loads user settings from config file Must be called before any other systems that depend on configuration
+**Description:** Configuration manager using JSON format Loads and saves user settings from/to JSON file Initialize the configuration manager and load settings
 **Path:** `scripts\scr_config_manager\scr_config_manager.gml`
 **Functions (6):**
 - **`config_apply_display_settings()`**
 
-- **`config_get(section, key, default_value = undefined)`**
-  - *Arguments:* section, key, default_value = undefined
+- **`config_get(path, default_value = undefined)`**
+  - *Arguments:* path, default_value = undefined
 
 - **`config_init()`**
 
@@ -303,8 +312,63 @@
 
 - **`config_save()`**
 
-- **`config_set(section, key, value)`**
-  - *Arguments:* section, key, value
+- **`config_set(path, value)`**
+  - *Arguments:* path, value
+
+
+### Script: scr_data_manager
+**Description:** Data manager functions for creating default game data @function data_manager_create_default_units() Create default unit definitions and save to JSON
+**Path:** `scripts\scr_data_manager\scr_data_manager.gml`
+**Functions (20):**
+- **`data_manager_create_default_buildings()`**
+
+- **`data_manager_create_default_buildings()`**
+
+- **`data_manager_create_default_factions()`**
+
+- **`data_manager_create_default_factions()`**
+
+- **`data_manager_create_default_technologies()`**
+
+- **`data_manager_create_default_technologies()`**
+
+- **`data_manager_create_default_terrain()`**
+
+- **`data_manager_create_default_terrain()`**
+
+- **`data_manager_create_default_units()`**
+
+- **`data_manager_create_default_units()`**
+
+- **`data_manager_get_building_definition(building_type)`**
+  - *Arguments:* building_type
+
+- **`data_manager_get_building_definition(building_type)`**
+  - *Arguments:* building_type
+
+- **`data_manager_get_faction_definition(faction_id)`**
+  - *Arguments:* faction_id
+
+- **`data_manager_get_faction_definition(faction_id)`**
+  - *Arguments:* faction_id
+
+- **`data_manager_get_technology_definition(tech_id)`**
+  - *Arguments:* tech_id
+
+- **`data_manager_get_technology_definition(tech_id)`**
+  - *Arguments:* tech_id
+
+- **`data_manager_get_terrain_definition(terrain_type)`**
+  - *Arguments:* terrain_type
+
+- **`data_manager_get_terrain_definition(terrain_type)`**
+  - *Arguments:* terrain_type
+
+- **`data_manager_get_unit_definition(unit_type)`**
+  - *Arguments:* unit_type
+
+- **`data_manager_get_unit_definition(unit_type)`**
+  - *Arguments:* unit_type
 
 
 ### Script: scr_debug_file_system
@@ -342,12 +406,6 @@
 - **`dev_cmd_echo(args)`**
   - *Arguments:* args
 
-- **`dev_cmd_gamestate(args)`**
-  - *Arguments:* args
-
-- **`dev_cmd_gamestate(args)`**
-  - *Arguments:* args
-
 - **`dev_cmd_help(args)`**
   - *Arguments:* args
 
@@ -382,6 +440,12 @@
   - *Arguments:* args
 
 - **`dev_cmd_room_info(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_scenestate(args)`**
+  - *Arguments:* args
+
+- **`dev_cmd_scenestate(args)`**
   - *Arguments:* args
 
 - **`dev_cmd_show_debug(args)`**
@@ -466,14 +530,14 @@
 
 
 ### Script: scr_enums_and_constants
-**Description:** Game state enumeration for managing different phases of the game
+**Description:** Game enums and constants with expanded definitions Scene state enumeration for managing different UI states
 **Path:** `scripts\scr_enums_and_constants\scr_enums_and_constants.gml`
 **Functions:** No functions found
 
 ### Script: scr_game_control
-**Description:** Handle unit selection events @param {struct} event_data Contains unit_id, modifiers
+**Description:** Create a new unit and add it to the game state @param {string} unit_type Unit type from data definitions @param {Constant.Faction} faction Faction that owns the unit @param {real} hex_q Hex coordinate Q @param {real} hex_r Hex coordinate R @return {string} Unit ID or empty string on failure
 **Path:** `scripts\scr_game_control\scr_game_control.gml`
-**Functions (6):**
+**Functions (8):**
 - **`game_controller_handle_hex_click(event_data)`**
   - *Arguments:* event_data
 
@@ -491,31 +555,49 @@
 
 - **`game_controller_handle_unit_order(event_data)`**
   - *Arguments:* event_data
+
+- **`unit_factory_create(unit_type, faction, hex_q, hex_r)`**
+  - *Arguments:* unit_type, faction, hex_q, hex_r
+
+- **`unit_factory_create(unit_type, faction, hex_q, hex_r)`**
+  - *Arguments:* unit_type, faction, hex_q, hex_r
 
 
 ### Script: scr_game_state_manager
-**Description:** Initialize the game state management system Sets up global state variables and callback system Must be called during game initialization before any state changes
+**Description:** Game state management system for actual game data Holds all game data: units, planets, factions, resources, etc. This is the single source of truth for all game data Initialize the game state management system
 **Path:** `scripts\scr_game_state_manager\scr_game_state_manager.gml`
-**Functions (8):**
-- **`gamestate_change(new_state, reason = "")`**
-  - *Arguments:* new_state, reason = ""
+**Functions (12):**
+- **`gamestate_add_planet(planet_data)`**
+  - *Arguments:* planet_data
+
+- **`gamestate_add_unit(unit_data)`**
+  - *Arguments:* unit_data
 
 - **`gamestate_cleanup()`**
 
-- **`gamestate_execute_callbacks(state)`**
-  - *Arguments:* state
+- **`gamestate_clear_selection()`**
 
-- **`gamestate_get()`**
+- **`gamestate_deserialize(json_string)`**
+  - *Arguments:* json_string
 
-- **`gamestate_get_previous()`**
+- **`gamestate_get_faction(faction_id)`**
+  - *Arguments:* faction_id
+
+- **`gamestate_get_planet(planet_id)`**
+  - *Arguments:* planet_id
 
 - **`gamestate_get_unit(unit_id)`**
   - *Arguments:* unit_id
 
 - **`gamestate_init()`**
 
-- **`gamestate_register_callback(state, callback)`**
-  - *Arguments:* state, callback
+- **`gamestate_remove_unit(unit_id)`**
+  - *Arguments:* unit_id
+
+- **`gamestate_select_unit(unit_id, add_to_selection = false)`**
+  - *Arguments:* unit_id, add_to_selection = false
+
+- **`gamestate_serialize()`**
 
 
 ### Script: scr_gamestate_observer
@@ -604,7 +686,7 @@
 ### Script: scr_input_manager
 **Description:** Initialize the input management system Creates command queue and loads input mappings
 **Path:** `scripts\scr_input_manager\scr_input_manager.gml`
-**Functions (18):**
+**Functions (20):**
 - **`input_cleanup()`**
 
 - **`input_cleanup()`**
@@ -636,6 +718,12 @@
 - **`input_save_mapping()`**
 
 - **`input_save_mapping()`**
+
+- **`input_save_mapping_data(mapping)`**
+  - *Arguments:* mapping
+
+- **`input_save_mapping_data(mapping)`**
+  - *Arguments:* mapping
 
 - **`input_set_ui_focus(has_focus)`**
   - *Arguments:* has_focus
@@ -711,24 +799,12 @@
 ### Script: scr_menu_system
 **Description:** Create a menu button data structure with all necessary properties @param {Constant.ButtonType} type ButtonType enum value for the button type @param {string} text Display text for the button @param {real} x X position in GUI coordinates @param {real} y Y position in GUI coordinates @param {function} callback Function to call when button is clicked @return {struct} Button data structure with all properties set
 **Path:** `scripts\scr_menu_system\scr_menu_system.gml`
-**Functions (11):**
+**Functions (5):**
 - **`main_menu_handle_button_click(event_data)`**
   - *Arguments:* event_data
 
 - **`main_menu_handle_button_click(event_data)`**
   - *Arguments:* event_data
-
-- **`menu_callback_continue()`**
-
-- **`menu_callback_exit()`**
-
-- **`menu_callback_map_editor()`**
-
-- **`menu_callback_new_game()`**
-
-- **`menu_callback_options()`**
-
-- **`menu_callback_run_tests()`**
 
 - **`menu_create_button_data(type, text, x, y, callback)`**
   - *Arguments:* type, text, x, y, callback
@@ -737,6 +813,30 @@
   - *Arguments:* button_configs
 
 - **`menu_get_main_menu_buttons()`**
+
+
+### Script: scr_scene_state_manager
+**Description:** Scene state management system for UI states Manages transitions between main menu, gameplay, options, etc. This is NOT the game state data - that's handled by obj_GameState Initialize the scene state management system
+**Path:** `scripts\scr_scene_state_manager\scr_scene_state_manager.gml`
+**Functions (8):**
+- **`scenestate_change(new_state, reason = "")`**
+  - *Arguments:* new_state, reason = ""
+
+- **`scenestate_cleanup()`**
+
+- **`scenestate_execute_callbacks(state)`**
+  - *Arguments:* state
+
+- **`scenestate_get()`**
+
+- **`scenestate_get_previous()`**
+
+- **`scenestate_init()`**
+
+- **`scenestate_observer_init()`**
+
+- **`scenestate_register_callback(state, callback)`**
+  - *Arguments:* state, callback
 
 
 ### Script: scr_test_suites
@@ -804,6 +904,17 @@
 - **`test_run_observer_tests()`**
 
 - **`test_run_observer_tests()`**
+
+
+### Script: scr_text_util
+**Description:** Wrap text to fit within max width @param {string} text Text to wrap @param {real} max_width Maximum width in pixels @return {Array<string>} Array of wrapped lines
+**Path:** `scripts\scr_text_util\scr_text_util.gml`
+**Functions (2):**
+- **`wrap_text(text, max_width)`**
+  - *Arguments:* text, max_width
+
+- **`wrap_text(text, max_width)`**
+  - *Arguments:* text, max_width
 
 
 ### Script: scr_ui_manager

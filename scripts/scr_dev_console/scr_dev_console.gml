@@ -14,7 +14,7 @@ function string_split(str, delimiter) {
         var char = string_char_at(str, i);
         if (char == delimiter) {
             if (string_length(current) > 0) {
-                array_push(result, current);
+                result[array_length(result)] = current;
                 current = "";
             }
         } else {
@@ -23,7 +23,7 @@ function string_split(str, delimiter) {
     }
     
     if (string_length(current) > 0) {
-        array_push(result, current);
+        result[array_length(result)] = current;
     }
     
     return result;
@@ -162,7 +162,7 @@ function dev_console_execute(command_string) {
     var args = [];
     
     for (var i = 1; i < array_length(parts); i++) {
-        array_push(args, parts[i]);
+        args[array_length(args)] = parts[i];
     }
     
     // Execute command

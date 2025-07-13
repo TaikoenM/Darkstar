@@ -1,4 +1,3 @@
-
 /// @description Initialize the logging system with configuration settings
 /// @description Sets up global logging variables and creates initial log file
 /// @description Requires config system to be initialized first
@@ -10,9 +9,19 @@ function logger_init() {
     }
     
     global.log_enabled = true;
-    global.log_file = global.game_options.logging.file;
+    global.log_file = working_directory + LOGS_PATH + LOG_FILE;
     global.log_level = global.game_options.logging.level;
     global.log_session_start = date_current_datetime();
+    
+    // Ensure logs directory exists
+    var logs_dir = working_directory + LOGS_PATH;
+    if (!directory_exists(logs_dir)) {
+        try {
+            directory_create(logs_dir);
+        } catch (error) {
+            show_debug_message("Failed to create logs directory: " + string(error));
+        }
+    }
     
     // Clear previous log file
     if (file_exists(global.log_file)) {

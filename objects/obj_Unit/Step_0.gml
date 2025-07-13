@@ -8,8 +8,13 @@ if (unit_data == undefined && unit_id != "") {
 if (unit_data == undefined) exit;
 
 // Check if we're selected
-selected = array_find_index(global.game_state.selected_units, 
-    function(element, index) { return element == unit_id; }) >= 0;
+selected = false;
+for (var i = 0; i < array_length(global.game_state.selected_units); i++) {
+    if (global.game_state.selected_units[i] == unit_id) {
+        selected = true;
+        break;
+    }
+}
 
 // Update hover state
 hover = position_meeting(mouse_x, mouse_y, id);

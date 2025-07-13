@@ -52,7 +52,7 @@ function data_manager_create_default_units() {
     global.unit_definitions = units;
     
     logger_write(LogLevel.INFO, "DataManager", "Created default unit definitions", 
-                string("Count: {0}", variable_struct_names_count(units)));
+                string("Count: {0}", array_length(variable_struct_get_names(units))));
 }
 
 /// @function data_manager_create_default_buildings()
@@ -107,7 +107,7 @@ function data_manager_create_default_buildings() {
     global.building_definitions = buildings;
     
     logger_write(LogLevel.INFO, "DataManager", "Created default building definitions", 
-                string("Count: {0}", variable_struct_names_count(buildings)));
+                string("Count: {0}", array_length(variable_struct_get_names(buildings))));
 }
 
 /// @function data_manager_create_default_technologies()
@@ -152,7 +152,7 @@ function data_manager_create_default_technologies() {
     global.technology_definitions = technologies;
     
     logger_write(LogLevel.INFO, "DataManager", "Created default technology definitions", 
-                string("Count: {0}", variable_struct_names_count(technologies)));
+                string("Count: {0}", array_length(variable_struct_get_names(technologies))));
 }
 
 /// @function data_manager_create_default_factions()
@@ -218,7 +218,7 @@ function data_manager_create_default_factions() {
     global.faction_definitions = factions;
     
     logger_write(LogLevel.INFO, "DataManager", "Created default faction definitions", 
-                string("Count: {0}", variable_struct_names_count(factions)));
+                string("Count: {0}", array_length(variable_struct_get_names(factions))));
 }
 
 /// @function data_manager_create_default_terrain()
@@ -271,7 +271,7 @@ function data_manager_create_default_terrain() {
     global.terrain_definitions = terrain;
     
     logger_write(LogLevel.INFO, "DataManager", "Created default terrain definitions", 
-                string("Count: {0}", variable_struct_names_count(terrain)));
+                string("Count: {0}", array_length(variable_struct_get_names(terrain))));
 }
 
 /// @function data_manager_get_unit_definition(unit_type)
