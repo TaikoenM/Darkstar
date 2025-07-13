@@ -31,9 +31,10 @@ function debug_file_system() {
     for (var i = 0; i < array_length(test_paths); i++) {
         var path = test_paths[i];
         try {
-            var spr = sprite_add(path, 0, false, false, 0, 0);
+            var spr = sprite_add(path, 1, false, false, 0, 0);  // Load 1 frame, not 0
             if (spr != -1) {
-                show_debug_message(string("SUCCESS: sprite_add(\"{0}\") = {1}", path, spr));
+                show_debug_message(string("SUCCESS: sprite_add(\"{0}\") = {1}, Size: {2}x{3}", 
+                                         path, spr, sprite_get_width(spr), sprite_get_height(spr)));
                 sprite_delete(spr); // Clean up
                 break; // Found working path
             } else {

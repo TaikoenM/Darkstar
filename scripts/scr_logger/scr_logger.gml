@@ -62,11 +62,6 @@ function logger_write(level, source, message, reason = "") {
         return;
     }
     
-    // Debug trace for logger_write calls
-    if (level == LogLevel.DEBUG) {
-        show_debug_message(string("[TRACE] logger_write called - Level: {0}, Source: {1}, Message: {2}", level, source, message));
-    }
-    
     var level_text = "";
     switch(level) {
         case LogLevel.DEBUG:    level_text = "DEBUG"; break;
@@ -96,11 +91,6 @@ function logger_write(level, source, message, reason = "") {
             file_text_write_string(file, log_entry);
             file_text_writeln(file);
             file_text_close(file);
-            
-            // Trace successful file write for DEBUG level
-            if (level == LogLevel.DEBUG) {
-                show_debug_message("[TRACE] Log entry written to file successfully");
-            }
         }
     } catch (error) {
         // If file writing fails, at least output to debug console
@@ -129,16 +119,6 @@ function logger_write(level, source, message, reason = "") {
         
         // Use safe dev console logging
         dev_console_log(string("[{0}] {1}: {2}", level_text, source, message), console_color);
-        
-        // Trace dev console write for DEBUG level
-        if (level == LogLevel.DEBUG) {
-            show_debug_message("[TRACE] Log entry sent to dev console successfully");
-        }
-    } else {
-        // Trace when dev console is not available
-        if (level == LogLevel.DEBUG) {
-            show_debug_message("[TRACE] Dev console not available for log entry");
-        }
     }
 }
 
