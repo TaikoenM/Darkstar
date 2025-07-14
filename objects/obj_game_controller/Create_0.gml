@@ -25,7 +25,6 @@ instance_create_layer(0, 0, "Managers", obj_InputManager);
 instance_create_layer(0, 0, "Managers", obj_UIManager);
 instance_create_layer(0, 0, "Managers", obj_DevConsole);
 
-debug_file_system();
 
 // Pre-load critical assets
 assets_load_sprite("mainmenu_background");

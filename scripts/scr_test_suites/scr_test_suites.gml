@@ -314,16 +314,23 @@ function test_run_observer_tests() {
     total++;
     if (test_assert(variable_global_exists("gamestate_observers"), "Observer map exists")) passed++;
     
+
     // Test 2: Add observer
-    var test_called = false;
+    // Use a struct to work around closure limitations
+    var test_state = { called: false };
     var test_func = function(data) { 
-        test_called = true; 
+        test_state.called = true; 
     };
     gamestate_add_observer("test_event", test_func);
     
     total++;
     if (test_assert(ds_map_exists(global.gamestate_observers, "test_event"), 
                    "Event registered")) passed++;
+    
+    // Test 3: Notify observers
+    gamestate_notify_observers("test_event", {test: "data"});
+    total++;
+    if (test_assert(test_state.called, "Observer callback executed")) passed++;
     
     // Test 3: Notify observers
     gamestate_notify_observers("test_event", {test: "data"});
@@ -893,7 +900,7 @@ function test_run_input_tests_captured() {
 /// @return {struct} Test results summary
 function test_run_observer_tests_captured() {
     var results = { name: "Observer", total: 0, passed: 0, failed: 0, failed_names: [] };
-    
+
     // Test 1: Observer system initialization
     results.total++;
     if (variable_global_exists("gamestate_observers")) {
@@ -902,11 +909,17 @@ function test_run_observer_tests_captured() {
         results.failed++;
         array_push(results.failed_names, "Observer map exists");
     }
-    
+
     // Test 2-4: Add, notify, remove observer
-    var test_called = false;
-    var test_func = function(data) { test_called = true; };
-    
+    // Use an instance variable on the test runner object to share state with the callback.
+    // This variable will be accessible when the callback is executed later.
+    test_state = { called: false };
+    var test_func = function(data) {
+        // This function will execute in the scope of the obj_AutoTest instance,
+        // so it can access its instance variables.
+        test_state.called = true;
+    };
+
     gamestate_add_observer("test_event", test_func);
     results.total++;
     if (ds_map_exists(global.gamestate_observers, "test_event")) {
@@ -915,27 +928,32 @@ function test_run_observer_tests_captured() {
         results.failed++;
         array_push(results.failed_names, "Event registered");
     }
-    
+
+    // Now, trigger the event. This will cause the anonymous function to run.
     gamestate_notify_observers("test_event", {test: "data"});
     results.total++;
-    if (test_called) {
+    // Check the instance variable's property, which should have been modified by the callback.
+    if (test_state.called) {
         results.passed++;
     } else {
         results.failed++;
+        // This failure indicates the callback either didn't run or couldn't access the state.
         array_push(results.failed_names, "Observer callback executed");
     }
-    
+
+    // Cleanup and test removal
     gamestate_remove_observer("test_event", test_func);
-    test_called = false;
-    gamestate_notify_observers("test_event", {test: "data"});
+    test_state.called = false; // Reset the state
+    gamestate_notify_observers("test_event", {test: "data"}); // Notify again
     results.total++;
-    if (!test_called) {
+    // The callback should not have run this time.
+    if (!test_state.called) {
         results.passed++;
     } else {
         results.failed++;
         array_push(results.failed_names, "Observer removed successfully");
     }
-    
+
     return results;
 }
 
