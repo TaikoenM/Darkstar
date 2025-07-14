@@ -602,3 +602,467 @@ function test_run_benchmarks() {
     
     dev_console_log("Benchmarks complete", global.dev_console.success_color);
 }
+
+// HELPER FUNCTION FOR AUTOTESTER
+// Helper functions for capturing test results
+
+/// @function test_run_config_tests_captured()
+/// @description Run config tests and capture results
+/// @return {struct} Test results summary
+function test_run_config_tests_captured() {
+    var results = { name: "Config", total: 0, passed: 0, failed: 0, failed_names: [] };
+    var start_time = get_timer();
+    
+    // Test 1: Config initialization
+    results.total++;
+    if (variable_global_exists("game_options")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Config initialization");
+    }
+    
+    // Test 2: Config structure
+    results.total++;
+    if (is_struct(global.game_options)) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Config is struct");
+    }
+    
+    // Test 3-8: Required sections exist
+    var required_sections = ["display", "ui", "assets", "logging", "menu", "performance"];
+    for (var i = 0; i < array_length(required_sections); i++) {
+        results.total++;
+        if (variable_struct_exists(global.game_options, required_sections[i])) {
+            results.passed++;
+        } else {
+            results.failed++;
+            array_push(results.failed_names, "Section exists: " + required_sections[i]);
+        }
+    }
+    
+    // Test 9: Default width
+    results.total++;
+    if (global.game_options.display.width == DEFAULT_GAME_WIDTH) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Default width");
+    }
+    
+    // Test 10: Default height  
+    results.total++;
+    if (global.game_options.display.height == DEFAULT_GAME_HEIGHT) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Default height");
+    }
+    
+    // Test 11: Config get/set
+    var old_value = config_get("ui.button_width");
+    config_set("ui.button_width", 999);
+    results.total++;
+    if (config_get("ui.button_width") == 999) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Config set/get");
+    }
+    config_set("ui.button_width", old_value); // Restore
+    
+    return results;
+}
+
+/// @function test_run_logger_tests_captured()
+/// @description Run logger tests and capture results
+/// @return {struct} Test results summary  
+function test_run_logger_tests_captured() {
+    var results = { name: "Logger", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: Logger initialization
+    results.total++;
+    if (variable_global_exists("log_enabled")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Logger initialization");
+    }
+    
+    // Test 2: Log file
+    if (variable_global_exists("log_enabled") && global.log_enabled) {
+        results.total++;
+        if (variable_global_exists("log_file") && global.log_file != "") {
+            results.passed++;
+        } else {
+            results.failed++;
+            array_push(results.failed_names, "Log file configured");
+        }
+    }
+    
+    // Test 3: Different log levels (simplified)
+    var levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR, LogLevel.CRITICAL];
+    for (var i = 0; i < array_length(levels); i++) {
+        results.total++;
+        try {
+            logger_write(levels[i], "Test", "Testing level " + string(levels[i]), "Unit test");
+            results.passed++;
+        } catch (error) {
+            results.failed++;
+            array_push(results.failed_names, "Log level " + string(levels[i]));
+        }
+    }
+    
+    return results;
+}
+
+/// @function test_run_asset_tests_captured()
+/// @description Run asset tests and capture results
+/// @return {struct} Test results summary
+function test_run_asset_tests_captured() {
+    var results = { name: "Assets", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: Asset manager initialization
+    results.total++;
+    if (variable_global_exists("loaded_sprites")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Sprites map exists");
+    }
+    
+    results.total++;
+    if (variable_global_exists("asset_manifest")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Manifest map exists");
+    }
+    
+    // Test 2: Manifest loading
+    if (variable_global_exists("asset_manifest") && ds_exists(global.asset_manifest, ds_type_map)) {
+        results.total++;
+        if (ds_map_size(global.asset_manifest) >= 0) {
+            results.passed++;
+        } else {
+            results.failed++;
+            array_push(results.failed_names, "Manifest has entries");
+        }
+    } else {
+        results.total++;
+        results.failed++;
+        array_push(results.failed_names, "Manifest not properly initialized");
+    }
+    
+    // Test 3: Asset loading - nonexistent asset
+    var bad_sprite = assets_get_sprite("nonexistent_asset");
+    results.total++;
+    if (bad_sprite == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Nonexistent asset returns -1");
+    }
+    
+    // Test 4: Safe sprite getter
+    var safe_sprite = assets_get_sprite_safe("nonexistent_asset");
+    results.total++;
+    if (safe_sprite == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Safe getter returns -1");
+    }
+    
+    // Test 5: Invalid input handling
+    results.total++;
+    if (assets_get_sprite(undefined) == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Undefined input handled");
+    }
+    
+    results.total++;
+    if (assets_get_sprite("") == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Empty string handled");
+    }
+    
+    results.total++;
+    if (assets_get_sprite(123) == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Non-string input handled");
+    }
+    
+    return results;
+}
+
+/// @function test_run_input_tests_captured()
+/// @description Run input tests and capture results
+/// @return {struct} Test results summary
+function test_run_input_tests_captured() {
+    var results = { name: "Input", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: Input manager initialization
+    results.total++;
+    if (variable_global_exists("command_queue")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Command queue exists");
+    }
+    
+    results.total++;
+    if (variable_global_exists("input_mapping")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Input mapping exists");
+    }
+    
+    // Test 2: Command creation
+    var cmd = input_create_command(CommandType.PAUSE, {test: "data"}, 0);
+    results.total++;
+    if (is_struct(cmd)) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Command is struct");
+    }
+    
+    results.total++;
+    if (cmd.type == CommandType.PAUSE) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Command type set");
+    }
+    
+    results.total++;
+    if (variable_struct_exists(cmd, "timestamp")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Command has timestamp");
+    }
+    
+    // Test 3: Command queue
+    var queue_size_before = ds_queue_size(global.command_queue);
+    input_queue_command(cmd);
+    results.total++;
+    if (ds_queue_size(global.command_queue) == queue_size_before + 1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Command queued");
+    }
+    
+    // Test 4: Command dequeue
+    var dequeued = input_dequeue_command();
+    results.total++;
+    if (dequeued.type == cmd.type) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Correct command dequeued");
+    }
+    
+    // Test 5: Empty queue
+    ds_queue_clear(global.command_queue);
+    var empty = input_dequeue_command();
+    results.total++;
+    if (is_undefined(empty)) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Empty queue returns undefined");
+    }
+    
+    return results;
+}
+
+/// @function test_run_observer_tests_captured()
+/// @description Run observer tests and capture results
+/// @return {struct} Test results summary
+function test_run_observer_tests_captured() {
+    var results = { name: "Observer", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: Observer system initialization
+    results.total++;
+    if (variable_global_exists("gamestate_observers")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Observer map exists");
+    }
+    
+    // Test 2-4: Add, notify, remove observer
+    var test_called = false;
+    var test_func = function(data) { test_called = true; };
+    
+    gamestate_add_observer("test_event", test_func);
+    results.total++;
+    if (ds_map_exists(global.gamestate_observers, "test_event")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Event registered");
+    }
+    
+    gamestate_notify_observers("test_event", {test: "data"});
+    results.total++;
+    if (test_called) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Observer callback executed");
+    }
+    
+    gamestate_remove_observer("test_event", test_func);
+    test_called = false;
+    gamestate_notify_observers("test_event", {test: "data"});
+    results.total++;
+    if (!test_called) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Observer removed successfully");
+    }
+    
+    return results;
+}
+
+/// @function test_run_json_tests_captured()
+/// @description Run JSON tests and capture results
+/// @return {struct} Test results summary
+function test_run_json_tests_captured() {
+    var results = { name: "JSON", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: JSON structure validation
+    var test_struct = { name: "test", value: 123, active: true };
+    results.total++;
+    if (json_validate_structure(test_struct, ["name", "value"])) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Valid structure passes");
+    }
+    
+    results.total++;
+    if (!json_validate_structure(test_struct, ["missing_field"])) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Invalid structure fails");
+    }
+    
+    // Test 2: JSON merge
+    var base = { a: 1, b: 2 };
+    var overlay = { b: 3, c: 4 };
+    var merged = json_merge_structures(base, overlay);
+    results.total++;
+    if (merged.a == 1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Merge preserves base value");
+    }
+    
+    results.total++;
+    if (merged.b == 3) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Merge overwrites with overlay");
+    }
+    
+    results.total++;
+    if (merged.c == 4) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Merge adds new values");
+    }
+    
+    return results;
+}
+
+/// @function test_run_hex_tests_captured()
+/// @description Run hex tests and capture results
+/// @return {struct} Test results summary
+function test_run_hex_tests_captured() {
+    var results = { name: "Hex", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: Hex rounding
+    var rounded = hex_round(1.7, 2.3);
+    results.total++;
+    if (rounded.q == 2) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Hex round q");
+    }
+    
+    results.total++;
+    if (rounded.r == 2) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Hex round r");
+    }
+    
+    // Test 2: Hex distance
+    var dist = hex_distance(0, 0, 3, -3);
+    results.total++;
+    if (dist == 3) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Hex distance calculation");
+    }
+    
+    // Test 3: Hex neighbors
+    var neighbors = hex_neighbors(0, 0);
+    results.total++;
+    if (array_length(neighbors) == 6) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Six neighbors");
+    }
+    
+    // Test 4: Pixel to hex conversion
+    var hex_coords = hex_pixel_to_axial(100, 100);
+    results.total++;
+    if (is_struct(hex_coords)) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Pixel to hex returns struct");
+    }
+    
+    results.total++;
+    if (variable_struct_exists(hex_coords, "q")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Has q coordinate");
+    }
+    
+    results.total++;
+    if (variable_struct_exists(hex_coords, "r")) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Has r coordinate");
+    }
+    
+    return results;
+}

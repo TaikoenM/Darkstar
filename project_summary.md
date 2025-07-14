@@ -1,13 +1,17 @@
 # Project Summary
-**Generated on:** 2025-07-13 12:02:40
+**Generated on:** 2025-07-14 10:22:12
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 92
+**Total Files:** 95
 
-### .GML Files (47 files)
+### .GML Files (50 files)
 - `objects\oTest\Create_0.gml` (1768 bytes)
+- `objects\obj_AutoTest\Alarm_0.gml` (19 bytes)
+- `objects\obj_AutoTest\Create_0.gml` (3106 bytes)
+- `objects\obj_AutoTest\Draw_64.gml` (3809 bytes)
+- `objects\obj_AutoTest\Step_0.gml` (332 bytes)
 - `objects\obj_DataManager\Create_0.gml` (3492 bytes)
 - `objects\obj_DevConsole\CleanUp_0.gml` (995 bytes)
 - `objects\obj_DevConsole\Create_0.gml` (168 bytes)
@@ -16,9 +20,8 @@
 - `objects\obj_GameState\Create_0.gml` (737 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
-- `objects\obj_MainMenuBackground\Draw_0.gml` (1064 bytes)
 - `objects\obj_MainMenuManager\CleanUp_0.gml` (131 bytes)
-- `objects\obj_MainMenuManager\Create_0.gml` (553 bytes)
+- `objects\obj_MainMenuManager\Create_0.gml` (779 bytes)
 - `objects\obj_MenuButton\Create_0.gml` (636 bytes)
 - `objects\obj_MenuButton\Draw_0.gml` (757 bytes)
 - `objects\obj_MenuButton\Mouse_10.gml` (18 bytes)
@@ -49,15 +52,15 @@
 - `scripts\scr_input_manager\scr_input_manager.gml` (8867 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
 - `scripts\scr_logger\scr_logger.gml` (7086 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (21160 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (19579 bytes)
 - `scripts\scr_scene_state_manager\scr_scene_state_manager.gml` (4951 bytes)
-- `scripts\scr_test_suites\scr_test_suites.gml` (24250 bytes)
+- `scripts\scr_test_suites\scr_test_suites.gml` (38564 bytes)
 - `scripts\scr_text_util\scr_text_util.gml` (2184 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (7590 bytes)
 
 ### .MD Files (2 files)
-- `project_full_report.md` (262399 bytes)
-- `project_summary.md` (30893 bytes)
+- `project_full_report.md` (259342 bytes)
+- `project_summary.md` (30905 bytes)
 
 ### .PNG Files (3 files)
 - `datafiles\assets\images\mainmenu_background.png` (2393382 bytes)
@@ -65,15 +68,15 @@
 - `sprites\spr_button\layers\38752966-343f-47bb-a30f-4897623cb5d6\4c04fe41-176e-4945-844b-e2ec1689ccad.png` (403 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3845 bytes)
+- `DarkStar.resource_order` (3816 bytes)
 
 ### .YY Files (36 files)
 - `objects\oTest\oTest.yy` (869 bytes)
+- `objects\obj_AutoTest\obj_AutoTest.yy` (1364 bytes)
 - `objects\obj_DataManager\obj_DataManager.yy` (889 bytes)
 - `objects\obj_DevConsole\obj_DevConsole.yy` (1369 bytes)
 - `objects\obj_GameState\obj_GameState.yy` (885 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
-- `objects\obj_MainMenuBackground\obj_MainMenuBackground.yy` (903 bytes)
 - `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (1058 bytes)
 - `objects\obj_MenuButton\obj_MenuButton.yy` (1602 bytes)
 - `objects\obj_UIManager\obj_UIManager.yy` (1046 bytes)
@@ -83,7 +86,7 @@
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1618 bytes)
 - `rooms\room_game_init\room_game_init.yy` (4463 bytes)
-- `rooms\room_main_menu\room_main_menu.yy` (4005 bytes)
+- `rooms\room_main_menu\room_main_menu.yy` (5045 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (267 bytes)
 - `scripts\scr_config_manager\scr_config_manager.yy` (269 bytes)
@@ -106,7 +109,7 @@
 - `sprites\spr_button\spr_button.yy` (3193 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (6833 bytes)
+- `DarkStar.yyp` (6803 bytes)
 
 ### NO_EXTENSION Files (2 files)
 - `GML` (4246 bytes)
@@ -125,6 +128,26 @@
   - *Path:* `objects\oTest\Create_0.gml`
   - *Functions:*
     - `load_all_sprites_from_directory(directory_name)`
+
+
+### Object: obj_AutoTest
+**Description:** Initialize test runner and execute all test suites
+**Path:** `objects\obj_AutoTest`
+**Events (4):**
+- **Alarm_0** (Alarm Event)
+  - *Path:* `objects\obj_AutoTest\Alarm_0.gml`
+
+- **Create_0** (Create Event)
+  - *Description:* Initialize test runner and execute all test suites
+  - *Path:* `objects\obj_AutoTest\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Description:* Draw test results summary
+  - *Path:* `objects\obj_AutoTest\Draw_64.gml`
+
+- **Step_0** (Step Event)
+  - *Description:* Update display timer
+  - *Path:* `objects\obj_AutoTest\Step_0.gml`
 
 
 ### Object: obj_DataManager
@@ -179,15 +202,6 @@
 - **Step_0** (Step Event)
   - *Description:* Process input and convert to commands Called every frame to capture player input
   - *Path:* `objects\obj_InputManager\Step_0.gml`
-
-
-### Object: obj_MainMenuBackground
-**Description:** Draw the main menu background Pure view component - only renders background
-**Path:** `objects\obj_MainMenuBackground`
-**Events (1):**
-- **Draw_0** (Draw Event)
-  - *Description:* Draw the main menu background Pure view component - only renders background
-  - *Path:* `objects\obj_MainMenuBackground\Draw_0.gml`
 
 
 ### Object: obj_MainMenuManager
@@ -862,7 +876,7 @@
 ### Script: scr_test_suites
 **Description:** Comprehensive test suites for all game systems Run via developer console or automated testing @function test_assert(condition, test_name, message) Assert a condition is true @param {bool} condition Condition to test @param {string} test_name Name of the test @param {string} message Failure message @return {bool} True if passed
 **Path:** `scripts\scr_test_suites\scr_test_suites.gml`
-**Functions (26):**
+**Functions (40):**
 - **`test_assert(condition, test_name, message)`**
   - *Arguments:* condition, test_name, message
 
@@ -897,6 +911,10 @@
 
 - **`test_run_asset_tests()`**
 
+- **`test_run_asset_tests_captured()`**
+
+- **`test_run_asset_tests_captured()`**
+
 - **`test_run_benchmarks()`**
 
 - **`test_run_benchmarks()`**
@@ -905,25 +923,49 @@
 
 - **`test_run_config_tests()`**
 
+- **`test_run_config_tests_captured()`**
+
+- **`test_run_config_tests_captured()`**
+
 - **`test_run_hex_tests()`**
 
 - **`test_run_hex_tests()`**
+
+- **`test_run_hex_tests_captured()`**
+
+- **`test_run_hex_tests_captured()`**
 
 - **`test_run_input_tests()`**
 
 - **`test_run_input_tests()`**
 
+- **`test_run_input_tests_captured()`**
+
+- **`test_run_input_tests_captured()`**
+
 - **`test_run_json_tests()`**
 
 - **`test_run_json_tests()`**
+
+- **`test_run_json_tests_captured()`**
+
+- **`test_run_json_tests_captured()`**
 
 - **`test_run_logger_tests()`**
 
 - **`test_run_logger_tests()`**
 
+- **`test_run_logger_tests_captured()`**
+
+- **`test_run_logger_tests_captured()`**
+
 - **`test_run_observer_tests()`**
 
 - **`test_run_observer_tests()`**
+
+- **`test_run_observer_tests_captured()`**
+
+- **`test_run_observer_tests_captured()`**
 
 
 ### Script: scr_text_util
