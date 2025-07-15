@@ -1,0 +1,348 @@
+### **Game Description**
+
+This title is a turn-based, 4X (eXplore, eXpand, eXploit, eXterminate) grand strategy game set in a "science-fiction feudalism" universe. The player's ultimate objective is to ascend to the position of Galactic Emperor through a combination of military might, economic power, and political acumen.
+
+The game is structured around a deep, turn-based system where players make all their decisions before processing the turn, allowing for meticulous strategic planning.
+
+#### **Core Gameplay Structure**
+
+The gameplay is split across two primary views:
+
+*   **Galactic Starmap:** A strategic-level view showing star systems connected by a fixed network of interstellar travel routes. This map is used for directing fleets between planets, managing interstellar trade, and getting a high-level overview of faction territories.
+*   **Planetary View:** When focusing on a planet, the game shifts to a detailed tactical map built on a **hexagonal grid**. This is where the majority of the game's core mechanics play out. All unit movement, city construction, resource gathering, and combat on a planet's surface are managed on this hex-based map.
+
+#### **Factions and Politics**
+
+The galaxy is populated by numerous factions, creating a complex and dynamic political environment:
+
+*   **Player Factions:** Players choose to lead one of several playable noble houses. Each house has unique gameplay advantages, starting resources, and specialized units, offering distinct strategic paths and replayability.
+*   **Non-Player Factions:** The universe is also home to several powerful NPC-only factions that players cannot control directly but must constantly interact with. These include:
+    *   A powerful **religious institution** that holds significant political sway, capable of passing judgment on player actions and prohibiting the use of certain technologies it deems heretical.
+    *   An influential **mercantile guild** that dominates interstellar commerce and logistics. Maintaining good relations is key for a healthy economy, while angering them can lead to costly embargoes.
+    *   Multiple **non-human alien species**, including an enigmatic and technologically advanced race focused on trade and a hostile, monstrous hive-mind species that acts as a persistent threat to all factions.
+
+A central mechanic is the political system, which features regular elections for a galactic regent. Players must use diplomacy, trade votes, and form alliances to secure this powerful position, which grants control over imperial assets.
+
+#### **Key Game Systems**
+
+*   **Resource Management:** Players must explore and exploit planetary resources to build their empire. This involves establishing colonies, building specific facilities to extract raw materials, and managing production chains to supply food, wealth, and manufacturing capacity, units production. Logistics are critical, as resources and food must often be transported between planets.
+*   **Technology & Research:** A comprehensive technology tree allows players to unlock new buildings, unit types, and special abilities. The research path is non-linear, requiring players to make strategic choices about which technologies to prioritize. Researching certain techs can trigger negative reactions from the powerful religious NPC faction.
+*   **Units and Combat:** Players command a wide variety of military units, including land, sea, air, and space forces. Many powerful starting units are irreplaceable relics, making their preservation a strategic priority.
+    *   **Movement:** Units move a set number of hexes per turn, with terrain type affecting movement costs.
+    *   **Combat:** When opposing unit stacks meet on a hex, a turn-based tactical battle ensues. Combat is resolved in distinct phases (e.g., bombardment, direct fire, close assault), with different units excelling in different phases.
+    *   **Weapons:** Some units might have a weapons capable of bombarding planets from orbit, artilery bombardment from a few hex distances.
+    *   **Experience:** Units gain experience from combat, becoming more effective as they progress through veterancy levels.
+	
+#### **Map Editor**
+	* Galaxy editor, where users use GUI to place planets, edit wormhole connections, setup space fleets etc
+	* Planet editor, where player can edit conent of planets: their size, hex, units, cities, features etc
+	* Unit editor (set unit health, experience etc.)
+	* Autogenerate random planet based on selected parameters
+
+----------------------
+
+Follow these architectural principles:
+
+### **Core Architecture: The Foundation**
+
+The goal is a clean, scalable, and data-driven engine where the core logic is independent of Game Maker's room-based workflow.
+
+*   **Native Observer Pattern that differs from MVC Pattern by
+		* No ViewManager - Objects manage themselves
+		* No UI Panel Stack - Simple manager objects
+		* No complex mapping - Objects find their data by ID
+		* Native events - Use GameMaker's built-in system
+		* Observer pattern - Clean communication without coupling:**
+    *   **Model (The "Truth"):** Pure GML data structures (`ds_map`, `ds_list`, `structs`). This is the `GameState` manager. It contains all data: unit stats, planet resources, faction relationships, etc. It should have *no* drawing code or direct knowledge of sprites or objects. It only runs logic and updates its own data. This will be serialized and saved as save game file, it should contain everything needed to recreate the game state.
+
+Overview
+This architecture combines GameMaker's native instance events with an observer pattern to achieve clean separation of concerns while working WITH the engine rather than against it.
+Key Principles
+
+Instances handle their own input and rendering (native GameMaker way)
+Instances notify observers when events occur (no logic execution)
+Managers observe events and create commands (logic centralized)
+Commands processed deterministically (multiplayer safe)
+
+Architecture Flow
+User Input → Instance Detection → Observer Notification → Command Creation → Command Processing → GameState Update → Instance Update
+
+1. Player clicks unit
+   └── obj_Unit detects click in Mouse Event
+       └── Notifies observers: "unit_clicked"
+           └── obj_GameManager receives notification
+               └── Creates SELECT_UNIT command
+                   └── obj_GameController processes command
+                       └── Updates GameState.selected_units
+                           └── obj_Unit reads selection state
+                               └── Draws selection indicator
+Main Menu State:
+├── obj_GameController (persistent)
+├── obj_MainMenuManager
+├── obj_MainMenuBackground
+└── obj_MenuButton (multiple instances)
+
+Game State:
+├── obj_GameController (persistent)
+├── obj_GameManager
+├── obj_InstanceManager
+├── obj_Hex (multiple instances)
+├── obj_Unit (multiple instances)
+└── obj_City (multiple instances)
+
+objects/
+├── obj_Hex/                    # Hex tile
+│   ├── Create_0.gml           # Link to hex data
+│   ├── Mouse_7.gml            # Notify "hex_clicked"
+│   └── Draw_0.gml             # Draw terrain
+│
+├── obj_Unit/                   # Game unit
+│   ├── Create_0.gml           # Link to unit data
+│   ├── Step_0.gml             # Smooth animations
+│   ├── Mouse_4.gml            # Handle selection
+│   ├── Mouse_5.gml            # Handle orders
+│   └── Draw_0.gml             # Draw unit + health
+│
+└── obj_City/                   # City/structure
+    ├── Create_0.gml           # Link to city data
+    ├── Mouse_7.gml            # Notify "city_clicked"
+    └── Draw_0.gml             # Draw city
+	
+objects/
+├── obj_MenuButton/             # Generic menu button
+│   ├── Create_0.gml           # Set properties
+│   ├── Step_0.gml             # Update hover state
+│   ├── Mouse_4.gml            # Left pressed
+│   ├── Mouse_7.gml            # Left released - notify observers
+│   └── Draw_64.gml            # Draw self
+│
+├── obj_MainMenuManager/        # Main menu logic
+│   ├── Create_0.gml           # Create buttons, register observers
+│   └── CleanUp_0.gml          # Unregister observers
+│
+└── obj_MainMenuBackground/     # Background renderer
+    └── Draw_0.gml             # Draw background
+	
+objects/
+├── obj_GameController/         # Main game orchestrator
+│   ├── Create_0.gml           # Initialize systems, register observers
+│   ├── Step_0.gml             # Process command queue
+│   └── CleanUp_0.gml          # Cleanup systems
+│
+├── obj_GameState/              # Data container (no logic)
+│   └── Create_0.gml           # Initialize data structures
+│
+└── obj_DataManager/            # JSON data loader (TODO)
+    └── Create_0.gml           # Load unit stats, tech tree, etc.
+
+scripts/
+├── scr_config_manager/         # User settings
+├── scr_logger/                 # Logging system
+├── scr_asset_manager/          # Dynamic asset loading
+├── scr_enums_and_constants/    # Game enums
+├── scr_gamestate_manager/      # Game state management
+├── scr_gamestate_observer/     # Observer pattern (NEW)
+├── scr_input_manager/          # Command queue system
+└── scr_hex_utils/              # Hex grid utilities (TODO)
+
+*   **Centralized GameState Manager (`obj_GameState`):**
+    *   A single, persistent object that holds the entire game state in one master `ds_map` or `struct`. This includes planetary data, faction data, unit lists, and the state of the Imperial court.
+    *   This makes saving, loading, and state replication for multiplayer trivial, as you only need to serialize/deserialize this one master data structure.
+    *   All game logic functions will take a reference to this `GameState` as an argument to operate on.
+
+*   **Object-Oriented GML Practices:**
+    *   **Use single, generic object types:** Instead of `obj_Infantry` and `obj_Tank`, have one `obj_Unit`. The specific type, stats, and behavior are defined by data (`structs`) attached to the instance. An instance's `unit_data` struct would hold everything from health and attack power to its faction and sprite index.
+    *   **Avoid Room-Based Instance Placement:** The Game Maker Room should be functionally empty, containing only a few persistent "manager" objects (`obj_GameState`, `obj_InputController`, `obj_InstanceManager`). The game world (planets, units, cities) should be created dynamically at runtime by a `MapManager` or `InstanceManager` reading data from the `GameState`. This is essential for moving between the star map and different planets without needing hundreds of pre-made rooms. Once new map is displayed, the room should be populated dynamically with instances of hex, units, cities etc.
+
+---
+
+### **Modularity & Moddability Requirements**
+
+The game's complexity demands that systems be decoupled and its data be externalized.
+
+*   **Script-Based Modules:**
+    *   Organize code into logical script groups within the Asset Browser (e.g., `Scripts/Combat`, `Scripts/AI`, `Scripts/UI`).
+    *   Each script should represent a library of related functions (e.g., `scr_Combat.gml` contains `Combat_ResolveAttack()`, `Combat_CalculateDamage()`, etc.). Avoid scattering logic across many small, individual script assets.
+
+*   **Data-Driven Design:**
+    *   **Externalize ALL Game Data:** Absolutely no hard-coded stats. Unit stats, building costs, technology trees, faction traits, combat formulas, and even UI text must be loaded from external files (JSON is highly recommended due to its human-readability and easy parsing with `json_parse`). This is the single most important requirement for making the game moddable.
+    *   On game start, a `DataManager` loads all JSON files into global `structs` or `ds_maps` for easy access throughout the codebase (e.g., `global.unit_definitions`, `global.tech_tree`).
+
+*   **Decoupled Creation and Communication:**
+    *   **Factory Functions:** Instead of `instance_create_layer(x, y, "Instances", obj_Unit)`, use a factory function like `UnitFactory_Create(unit_type, owner_faction, x, y)`. This function will fetch the base unit data from the global definitions, create the instance, assign its specific data `struct`, and add it to the `GameState`'s list of units. This centralizes creation logic and makes it easier to modify.
+    *   **GameState Observer Pattern:** The GameState directly notifies specific observers about specific state changes.
+
+---
+
+### **Multiplayer & Determinism**
+
+For turn-based multiplayer (PBeM/Hotseat or network), determinism is key.
+
+*   **Command Pattern for Actions:** Every action a player can take (move unit, start research, cast vote) must be encapsulated in a `Command` struct. This `struct` contains everything needed to execute the action (e.g., `{command_type: "MoveUnit", unit_id: 12, target_hex: [5,10]}`). Player input is converted into these commands, which are then placed in a queue. The game logic processes one command at a time from the queue. This is perfect for multiplayer, as you only need to send the small `Command` struct over the network, not the entire game state.
+*   **Deterministic Logic:** The game state must be 100% deterministic. Given the same starting state and the same sequence of commands, the end state must always be identical.
+    *   **No Randomness:** Use a seeded pseudo-random number generator (`random_set_seed`). The seed for each turn should be shared among all players.
+    *   **Fixed Timestep:** Use Game Maker's `game_set_speed(60, gamespeed_fps)` and perform all logic updates within a fixed step. Avoid using `delta_time` for anything related to core game logic, as floating-point inaccuracies can lead to desyncs over time.
+*   **Visuals are Separate:** Visual effects (explosions, projectile animations, unit movement interpolation) must *never* influence the Model. The Model should instantly update the unit's position in the `GameState`. The `InstanceManager` then sees the change and can tell instance of a unit to start moving to a new position, and this effect should be tied to obj_Unit, other systems should not know about it (except perhaps when it is finished).
+
+---
+
+### **Testing & Automation**
+
+You can't manually test a 4X game. You need to automate.
+
+*   **Swappable Controllers:** The `InputController` should have a "player" implementation and an "AI" implementation. The `GameState` manager can be pointed to either one. This allows you to run AI vs. AI matches to test game balance and find bugs without any human players.
+*   **Command-Based Replay System:** Since all actions are `Command` structs, a replay system becomes simple. Just save the sequence of commands processed each turn to a file. To play back a replay, simply feed the saved commands into the processing queue in the same order.
+*   **Debug & Acceleration Flags:**
+    *   Create a global `debug_flags` struct.
+    *   `debug_flags.skip_animations`: When true, visual effects are skipped.
+    *   `debug_flags.fast_forward`: When true, the game runs at a much higher `game_set_speed` or processes multiple turns in a single frame.
+    *   `debug_flags.show_ai_thoughts`: Render debug text on screen showing what the AI is considering.
+*   **Automated Test Suites:** For each core system (e.g., Combat), create a test script (`scr_Test_Combat`) that can be run from a debug menu. This script would set up a specific scenario (e.g., 10 infantry vs 5 tanks in a forest), run the `Combat_ResolveAttack` function, and check if the outcome is within expected parameters.
+
+---
+
+### **Code Standards & Quality of Life**
+
+Maintainable code is happy code.
+
+*   **Clear Naming Conventions:**
+    *   Objects: `obj_GameState`, `obj_UnitView`, `obj_UI_Button`
+    *   Scripts/Functions: `scr_Combat_Utils`, `Combat_ResolveAttack()`
+    *   Enums: `E_Faction.Hawkwood`, `E_UnitState.Idle`
+    *   Variables: Use clear names (`local_garrison`, `planetary_unrest`)
+*   **JSDoc-style Commenting:** Comment every function with its purpose, parameters, and return value. This is invaluable for long-term development.
+```gml
+/// @function               UnitFactory_Create(unit_type, owner_faction, hex_q, hex_r)
+/// @description            Creates a new unit instance and adds it to the game state.
+/// @param {String}         unit_type       The key for the unit from global.unit_definitions.
+/// @param {E_Faction}      owner_faction   The faction enum that will own this unit.
+/// @param {Int}            hex_q           The axial coordinate q of the spawn hex.
+/// @param {Int}            hex_r           The axial coordinate r of the spawn hex.
+/// @return {Struct}        Returns the new unit's data struct from the GameState.
+```
+*   **Function Length:** Keep functions focused on a single task. If a function gets too long and complex, break it down into smaller helper functions.
+*   **Avoid Magic Numbers:** Use enums or constants (`#macro`) for anything that isn't self-explanatory. Instead of `if (unit_status == 2)`, use `if (unit.status == E_UnitStatus.Moving)`.
+*   **Robust Logging System:** Create a `scr_Log` script with a function like `Log(level, source, message)`.
+    *   `level`: An enum (`E_LogLevel.Info`, `.Warning`, `.Error`).
+    *   `source`: The name of the script/system logging the message (e.g., "Combat").
+    *   `message`: The log text.
+    *   The `Log` function can then write to the console and/or a file, and can be configured to only show logs of a certain severity.
+
+---
+
+### **Required Manager Systems**
+
+These are the high-level "manager" objects that should be persistent in your main room.
+
+These persistent objects form the core infrastructure of the game engine. They should be created once at the start of the game by a single `obj_Initializer` in the first room and then persist throughout the game's lifetime.
+
+**`obj_GameController` (The Orchestrator)**
+This is the highest-level manager. It directs the flow of the game but contains very little logic itself.
+*   **Responsibilities:**
+    *   Manages the main game state machine (e.g., `MainMenu`, `InGame`, `Paused`, `GameOver`).
+    *   Owns and operates the main turn-processing loop. When the "End Turn" button is pressed, it initiates the sequence:
+        1.  Process remaining player commands.
+        2.  Signal the `AIManager` to generate and queue commands for all AI factions.
+        3.  Process all queued AI commands.
+        4.  Run end-of-turn world events (resource collection, starvation checks, etc.).
+        5.  Signal the start of a new turn.
+
+**`obj_GameState` (The Source of Truth - Model)**
+This object contains no code except for initialization and cleanup. Its sole purpose is to hold the entire game state in pure GML data structures (`structs` and `ds_maps`).
+*   **Responsibilities:**
+    *   Holds the master data structure representing the entire game world: all planets, factions, unit lists, resources, political states, and research progress.
+    *   It is the single object that is passed to the `SaveManager` for serialization.
+    *   All other systems read from this object to get their information. They **never** write to it directly; they do so by processing commands through the `GameController`.
+
+**`obj_InputManager` (The Player's Intent - Controller)**
+Translates raw hardware input into abstract, gameplay-relevant commands.
+*   **Responsibilities:**
+    *   Listens for mouse clicks, key presses, and other inputs (but some are handled directly by native GMS click detection on instances).
+    *   Converts input into a `Command` struct (e.g., a left-click on hex becomes a command: `{ type: "SelectHex", payload: [10, 15] }`).
+    *   Places these commands into a queue for the `GameController` to process.
+    *   It does *not* know what "selecting a hex" does; it only knows how to create the command for it.
+
+**`obj_InstanceManager` (The Scene Coordinator)**
+ single object drawing everything is inefficient. Instead, the InstanceManager acts as a *factory* and *coordinator* for the visual instances that represent the game state.
+*   **Responsibilities:**
+    *   **Scene Population:** When loading a map (e.g., switching to a planet view), it reads the relevant data from `obj_GameState` and dynamically creates the necessary visual instances (`obj_Hex`, `obj_CitySprite`, `obj_UnitSprite`, etc.).
+    *   **Synchronization:** It acts as the bridge between the Model and the View instances. When a unit's data changes in `obj_GameState`, the `InstanceManager` informs the corresponding `obj_UnitSprite` instance (e.g., "Your data has been updated; your new position is X,Y. Please animate your movement.").
+    *   **Instance Management:** It keeps a mapping (`ds_map`) between data IDs in the `GameState` (e.g., `unit_id_123`) and the Game Maker instance IDs of their visual representation. This allows for quick lookups.
+
+**`obj_vfxManager`**
+    *   **Visual-Only Effects:** Manages screen shake, and other purely cosmetic effects that don't touch game logic and are not specific to instance (ie. global visual effects), screen shaders.
+
+---
+
+
+---
+### **Supporting Manager Systems**
+
+**`obj_NetworkManager` (The Communicator)**
+Essential for multiplayer, this manager handles all incoming and outgoing data.
+*   **Responsibilities:**
+    *   Manages the connection state (hosting a game, connecting to a host, connected/disconnected).
+    *   Serializes outgoing `Command` objects from the player and sends them over the network.
+    *   Receives data from the network, deserializes it into `Command` objects, and adds them to the command queue for processing.
+    *   Handles turn synchronization, ensuring all players have submitted their commands for a turn before the next turn begins.
+
+**`obj_AIManager` (The Strategic Thinker)**
+Replaces the `InputManager` for non-player factions.
+*   **Responsibilities:**
+    *   On its turn, it analyzes the `obj_GameState` from the perspective of the faction it controls.
+    *   Makes strategic decisions (what to build, where to move, who to attack).
+    *   Translates these decisions into the same `Command` structs that a human player would generate.
+    *   Adds these commands to the queue for the `GameController` to process.
+
+**The Data & Utility Managers:**
+*   **`obj_DataManager`:** Loads all external data files (JSON for units, tech, etc.) into global memory at game start.
+*   **`obj_SaveManager`:** Handles serializing `obj_GameState` to a file and deserializing it back.
+*   **`obj_ConfigManager`:** Manages user-specific settings (graphics, sound volume, keybinds).
+
+Additional considerations:
+	* Hex coordinates should use axial system (q,r)
+    * All hex logic in scr_hex_utils (hex_distance, hex_neighbors, hex_line_of_sight)
+    * Separate hex data (in GameState) from hex instance, which should hold reference to structure with hex data
+
+initialization order:
+obj_GameController (orchestrates everything)
+  ├─ obj_DataManager (loads first - all JSON data)
+  ├─ obj_ConfigManager (user settings)
+  ├─ obj_GameState (initialized with data)
+  ├─ obj_InputManager (needs gamestate reference)
+  └─ obj_AIManager (reads gamestate)
+  
+ Various game screens - I want a button that will show current input bindings with option to change (and save new to file) input bindings
+Game options, unit values, hex properties etc. should be kept as a structure data type
+Multiplayer: game will have three multiplayer types of play:
+	1) PBEM
+	2) P2P with simultanous movement (meaning each player can do any moves/orders he wishes, resolved according to game timestamp, movements from different players close to each other and close in time (like <1s) should work a bit different: later move should be canceled with short lived popup telling player that action was canceled due to other player moving (timing should be of course set up by players and saved in game_option) 
+	
+Implementation Guidelines
+UI Elements (Buttons, Panels)
+
+Self-contained objects
+Handle own rendering and input
+Notify observers of interactions
+No game logic
+
+Game Objects (Units, Hexes)
+
+Reference data in GameState
+Handle own rendering based on data
+Detect interactions and notify observers
+Visual-only updates (animations)
+
+Managers
+
+Observe relevant events
+Create commands based on events
+Never directly modify instances
+Handle all game logic
+
+GameState
+
+Single source of truth
+Modified only by command processing
+Completely serializable
+No references to instances

@@ -1,5 +1,48 @@
 /// @description Data manager functions for creating default game data
 
+enum Unit_UseRoads {
+	NO,
+	YES
+}
+
+enum Unit_UseTransportTubes {
+	NO,
+	YES
+}
+
+enum Unit_SurviveInSpace {
+	NO,
+	TEMPORARY,
+	YES,
+	SPACE_ONLY
+}
+
+enum Unit_Planetfall {
+	NEVER,
+	SPACEPORT,
+	BUILDING,
+	ANYWHERE
+}
+
+enum Unit_LaunchToSpace {
+	NEVER,
+	SPACEPORT,
+	ANYWHERE
+}
+
+enum Unit_FuelType {
+	NOTHING,
+	USED_PER_MOVE,
+	USED_PER_TURN
+}
+
+enum Unit_Refuel {
+	NOWHERE,
+	MILITARY_BUILDINGS,
+	CIVILIAN_BUILDINGS,
+	ANYWHERE	
+}
+
 /// @function data_manager_create_default_units()
 /// @description Create default unit definitions and save to JSON
 function data_manager_create_default_units() {
