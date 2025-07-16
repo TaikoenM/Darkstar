@@ -5,6 +5,7 @@ if (!variable_global_exists("game_data")) {
     global.game_data = {};
 }
 
+#region enums
 // Enums for unit properties
 enum Unit_UseRoads {
     NO,
@@ -49,6 +50,9 @@ enum Unit_Refuel {
     ANYWHERE    
 }
 
+
+
+
 /// @function variable_struct_names_count(struct)
 /// @description Get the number of variables in a struct
 /// @param {struct} struct The struct to count
@@ -64,7 +68,7 @@ function variable_struct_names_count(struct) {
 /// @return {struct} Parsed CSV data with headers array and rows array
 function csv_parse_file(filepath, has_headers = true) {
     logger_write(LogLevel.DEBUG, "DataManager", "Starting CSV parse", string("File: {0}", filepath));
-    
+	
     // Check if file exists
     if (!file_exists(filepath)) {
         logger_write(LogLevel.ERROR, "DataManager", "CSV file not found", filepath);
@@ -87,6 +91,7 @@ function csv_parse_file(filepath, has_headers = true) {
         while (!file_text_eof(file)) {
             var line = file_text_read_string(file);
             file_text_readln(file);
+			
             line_number++;
             
             // Skip empty lines
@@ -651,6 +656,10 @@ function data_manager_get_faction_definition(faction_id) {
     return undefined;
 }
 
+
+	
+	
+	
 /// @function data_manager_get_terrain_definition(terrain_type)
 /// @description Get terrain definition by type
 /// @param {string} terrain_type Terrain type key
@@ -658,6 +667,153 @@ function data_manager_get_faction_definition(faction_id) {
 function data_manager_get_terrain_definition(terrain_type) {
     if (variable_struct_exists(global.terrain_definitions, terrain_type)) {
         return global.terrain_definitions[$ terrain_type];
+    }
+    return undefined;
+}
+
+/// @function data_manager_load_unit_types(filepath)
+/// @description Load unit types from CSV file and parse enum columns
+/// @param {string} filepath Path to the UnitTypes.csv file
+/// @return {struct|undefined} Struct of unit types with parsed enums or undefined on error
+function data_manager_load_unit_types(filepath) {
+    logger_write(LogLevel.INFO, "DataManager", "Loading unit types", filepath);
+    
+    // First load the CSV data generically
+    var csv_data = csv_parse_file(filepath, true);
+    
+    if (is_undefined(csv_data)) {
+        logger_write(LogLevel.ERROR, "DataManager", "Failed to parse unit types CSV", filepath);
+        return undefined;
+    }
+    
+    // Check if we have headers and rows
+    if (array_length(csv_data.headers) == 0) {
+        logger_write(LogLevel.ERROR, "DataManager", "Unit types CSV has no headers", filepath);
+        return undefined;
+    }
+    
+    if (array_length(csv_data.rows) == 0) {
+        logger_write(LogLevel.WARNING, "DataManager", "Unit types CSV has no data rows", filepath);
+        return {}; // Return empty struct
+    }
+    
+    // Create result struct to hold all unit types
+    var unit_types = {};
+    
+    // Define which columns should be parsed as enums
+    var enum_columns = {
+        "use_roads": "Unit_UseRoads",
+        "use_tubes": "Unit_UseTransportTubes", 
+        "space": "Unit_SurviveInSpace",
+        "planetfall": "Unit_Planetfall",
+        "launch_to_space": "Unit_LaunchToSpace",
+        "fuel_type": "Unit_FuelType",
+        "refuels": "Unit_Refuel"
+    };
+    
+    // Process each row
+    for (var row_index = 0; row_index < array_length(csv_data.rows); row_index++) {
+        var row = csv_data.rows[row_index];
+        
+        // Validate row has enough columns for non-empty headers
+        var required_columns = 0;
+        for (var i = 0; i < array_length(csv_data.headers); i++) {
+            if (csv_data.headers[i] != "") {
+                required_columns = i + 1;
+            }
+        }
+        
+        if (array_length(row) < required_columns) {
+            logger_write(LogLevel.WARNING, "DataManager", "Skipping incomplete unit type row", 
+                        string("Row {0} has {1} columns, expected at least {2}", 
+                               row_index + 2, array_length(row), required_columns));
+            continue;
+        }
+        
+        // Create unit type struct for this row
+        var unit_type = {};
+        
+        // Get the first column as the unit ID
+        var unit_id = row[0];
+        if (unit_id == "") {
+            logger_write(LogLevel.WARNING, "DataManager", "Skipping unit type with empty ID", 
+                        string("Row {0}", row_index + 2));
+            continue;
+        }
+        
+        // Map all columns to the unit type
+        var num_columns = min(array_length(csv_data.headers), array_length(row));
+        for (var col = 0; col < num_columns; col++) {
+            var header = csv_data.headers[col];
+            
+            // Skip empty headers
+            if (header == "" || is_undefined(header)) {
+                continue;
+            }
+            
+            var value = row[col];
+            
+            // Check if this column should be parsed as an enum
+            if (variable_struct_exists(enum_columns, header)) {
+                var enum_type = enum_columns[$ header];
+                var enum_value = csv_parse_enum_value(value, enum_type);
+                
+                if (enum_value != -1) {
+                    unit_type[$ header] = enum_value;
+                } else {
+                    logger_write(LogLevel.WARNING, "DataManager", "Invalid enum value in unit types", 
+                                string("Unit: {0}, Column: {1}, Value: {2}", unit_id, header, value));
+                    unit_type[$ header] = value; // Store original string as fallback
+                }
+            } else {
+                // Try to parse as number if it looks like one
+                var numeric_value = string_digits(value);
+                if (numeric_value == value && value != "" && string_length(value) > 0) {
+                    value = real(value);
+                }
+                // Check for decimal numbers
+                else if (string_pos(".", value) > 0) {
+                    var decimal_test = string_replace_all(value, ".", "");
+                    decimal_test = string_replace_all(decimal_test, "-", "");
+                    if (string_digits(decimal_test) == decimal_test && string_count(".", value) == 1) {
+                        value = real(value);
+                    }
+                }
+                // Check for negative integers
+                else if (string_char_at(value, 1) == "-" && string_length(value) > 1) {
+                    var negative_test = string_delete(value, 1, 1);
+                    if (string_digits(negative_test) == negative_test) {
+                        value = real(value);
+                    }
+                }
+                
+                // Store the value
+                unit_type[$ header] = value;
+            }
+        }
+        
+        // Add unit type to result using first column as key
+        unit_types[$ unit_id] = unit_type;
+        
+        logger_write(LogLevel.DEBUG, "DataManager", "Loaded unit type", 
+                    string("ID: {0}, Name: {1}", unit_id, unit_type[$ "Name"]));
+    }
+    
+    logger_write(LogLevel.INFO, "DataManager", "Unit types loaded successfully", 
+                string("Count: {0}", variable_struct_names_count(unit_types)));
+    
+    return unit_types;
+}
+
+/// @function data_manager_get_unit_type_from_csv(unit_type_id)
+/// @description Get unit type definition from CSV data
+/// @param {string} unit_type_id Unit type ID from CSV
+/// @return {struct|undefined} Unit type definition or undefined
+function data_manager_get_unit_type_from_csv(unit_type_id) {
+    if (variable_global_exists("game_data") && 
+        variable_struct_exists(global.game_data, "unit_types") &&
+        variable_struct_exists(global.game_data.unit_types, unit_type_id)) {
+        return global.game_data.unit_types[$ unit_type_id];
     }
     return undefined;
 }
