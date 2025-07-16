@@ -13,6 +13,11 @@ global.technology_definitions = {};
 global.faction_definitions = {};
 global.terrain_definitions = {};
 
+// Initialize global.game_data if not exists
+if (!variable_global_exists("game_data")) {
+    global.game_data = {};
+}
+
 // Ensure data directory exists
 var data_dir = working_directory + DATA_PATH;
 if (!directory_exists(data_dir)) {
@@ -23,6 +28,26 @@ if (!directory_exists(data_dir)) {
         logger_write(LogLevel.ERROR, "DataManager", "Failed to create data directory", string(error));
     }
 }
+
+// Load Unit Types
+
+var unittypes_file = data_dir + "UnitTypes.csv";
+if (file_exists(unittypes_file)) {
+    var unittypes_data = data_manager_load_unit_types(unittypes_file);
+    if (!is_undefined(unittypes_data)) {
+        global.game_data.unit_types = unittypes_data;
+        logger_write(LogLevel.INFO, "DataManager", "Unit Types definitions loaded", 
+                    string("Count: {0}", array_length(variable_struct_get_names(unittypes_data))));
+					
+    }
+	else {
+		show_error("Invalid UnitTypes.csv DATA FILE!", true)	
+	}
+} else {
+	show_error("Missing UnitTypes.csv DATA FILE!", true)	
+}
+
+
 
 // Load unit definitions
 var units_file = data_dir + "units.json";

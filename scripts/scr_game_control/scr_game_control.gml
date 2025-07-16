@@ -6,11 +6,20 @@
 /// @param {real} hex_r Hex coordinate R
 /// @return {string} Unit ID or empty string on failure
 function unit_factory_create(unit_type, faction, hex_q, hex_r) {
-    // Get unit definition from loaded data
-    var unit_def = data_manager_get_unit_definition(unit_type);
-    if (is_undefined(unit_def)) {
-        logger_write(LogLevel.ERROR, "UnitFactory", "Unit type not found in definitions", unit_type);
-        return "";
+    // First try to get unit definition from CSV data
+    var unit_def = data_manager_get_unit_type_from_csv(unit_type);
+    var use_csv_data = false;
+    
+    if (!is_undefined(unit_def)) {
+        logger_write(LogLevel.DEBUG, "UnitFactory", "Using CSV data for unit type", unit_type);
+        use_csv_data = true;
+    } else {
+        // Fall back to JSON definitions
+        unit_def = data_manager_get_unit_definition(unit_type);
+        if (is_undefined(unit_def)) {
+            logger_write(LogLevel.ERROR, "UnitFactory", "Unit type not found in definitions", unit_type);
+            return "";
+        }
     }
     
     // Get faction definition for color
@@ -54,27 +63,74 @@ function unit_factory_create(unit_type, faction, hex_q, hex_r) {
     var pixel_coords = hex_axial_to_pixel(hex_q, hex_r);
     
     // Create unit data from definition
-    var unit_data = {
-        type: unit_type,
-        name: unit_def.name,
-        faction: faction,
-        hex_q: hex_q,
-        hex_r: hex_r,
-        x: pixel_coords.x,
-        y: pixel_coords.y,
-        health: unit_def.stats.health,
-        max_health: unit_def.stats.health,
-        movement: unit_def.stats.movement,
-        movement_remaining: unit_def.stats.movement,
-        attack: unit_def.stats.attack,
-        defense: unit_def.stats.defense,
-        range: unit_def.stats.range,
-        experience: 0,
-        level: 1,
-        abilities: unit_def.abilities,
-        sprite_name: "unit_" + string_lower(unit_type),
-        faction_color: faction_color
-    };
+    var unit_data = {};
+    
+    if (use_csv_data) {
+        // Create from CSV data - only use what's actually in the CSV
+        unit_data = {
+            type: unit_type,
+            name: variable_struct_exists(unit_def, "Name") ? unit_def.Name : unit_type,
+            faction: faction,
+            hex_q: hex_q,
+            hex_r: hex_r,
+            x: pixel_coords.x,
+            y: pixel_coords.y,
+            // Copy all CSV properties
+            csv_data: unit_def,
+            // Visual properties
+            sprite_name: "unit_" + string_lower(unit_type),
+            faction_color: faction_color
+        };
+        
+        // If the CSV has enum columns, parse them
+        var enum_mappings = {
+            "UseRoads": "Unit_UseRoads",
+            "UseTransportTubes": "Unit_UseTransportTubes",
+            "SurviveInSpace": "Unit_SurviveInSpace",
+            "Planetfall": "Unit_Planetfall",
+            "LaunchToSpace": "Unit_LaunchToSpace",
+            "FuelType": "Unit_FuelType",
+            "Refuel": "Unit_Refuel"
+        };
+        
+        var enum_names = variable_struct_get_names(enum_mappings);
+        for (var i = 0; i < array_length(enum_names); i++) {
+            var csv_column = enum_names[i];
+            var enum_type = enum_mappings[$ csv_column];
+            
+            if (variable_struct_exists(unit_def, csv_column)) {
+                var string_value = string(unit_def[$ csv_column]);
+                var enum_value = csv_parse_enum_value(string_value, enum_type);
+                if (enum_value != -1) {
+                    unit_data[$ string_lower(csv_column)] = enum_value;
+                }
+            }
+        }
+        
+    } else {
+        // Create from JSON data (legacy)
+        unit_data = {
+            type: unit_type,
+            name: unit_def.name,
+            faction: faction,
+            hex_q: hex_q,
+            hex_r: hex_r,
+            x: pixel_coords.x,
+            y: pixel_coords.y,
+            health: unit_def.stats.health,
+            max_health: unit_def.stats.health,
+            movement: unit_def.stats.movement,
+            movement_remaining: unit_def.stats.movement,
+            attack: unit_def.stats.attack,
+            defense: unit_def.stats.defense,
+            range: unit_def.stats.range,
+            experience: 0,
+            level: 1,
+            abilities: unit_def.abilities,
+            sprite_name: "unit_" + string_lower(unit_type),
+            faction_color: faction_color
+        };
+    }
     
     // Add to game state
     var unit_id = gamestate_add_unit(unit_data);
@@ -87,7 +143,7 @@ function unit_factory_create(unit_type, faction, hex_q, hex_r) {
         
         logger_write(LogLevel.INFO, "UnitFactory", 
                     string("Created unit: {0}", unit_id), 
-                    string("Type: {0}, Faction: {1}, Hex: ({2},{3})", unit_def.name, faction, hex_q, hex_r));
+                    string("Type: {0}, Faction: {1}, Hex: ({2},{3})", unit_data.name, faction, hex_q, hex_r));
     } else {
         // Failed to create instance, remove from game state
         gamestate_remove_unit(unit_id);

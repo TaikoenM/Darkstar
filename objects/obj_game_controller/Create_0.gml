@@ -29,6 +29,7 @@ instance_create_layer(0, 0, "Managers", obj_DevConsole);
 // Pre-load critical assets
 assets_load_sprite("mainmenu_background");
 
+
 // Register game controller as observer for game events
 gamestate_add_observer(EVENT_UNIT_CLICKED, game_controller_handle_unit_click);
 gamestate_add_observer(EVENT_UNIT_ORDER_ISSUED, game_controller_handle_unit_order);

@@ -1084,3 +1084,208 @@ function test_run_hex_tests_captured() {
     
     return results;
 }
+
+// ============================================================================
+// CSV PARSING TESTS
+// ============================================================================
+
+/// @function test_run_csv_tests()
+/// @description Test CSV parsing functionality
+function test_run_csv_tests() {
+    dev_console_log("=== CSV Parsing Tests ===", global.dev_console.info_color);
+    
+    var passed = 0;
+    var total = 0;
+    
+    // Test 1: string_trim function
+    total++;
+    if (test_assert_equals(string_trim("  hello  "), "hello", "Trim both sides")) passed++;
+    total++;
+    if (test_assert_equals(string_trim("hello  "), "hello", "Trim right")) passed++;
+    total++;
+    if (test_assert_equals(string_trim("  hello"), "hello", "Trim left")) passed++;
+    total++;
+    if (test_assert_equals(string_trim("hello"), "hello", "No trim needed")) passed++;
+    total++;
+    if (test_assert_equals(string_trim("   "), "", "All spaces")) passed++;
+    
+    // Test 2: Create test CSV file
+    var test_csv = working_directory + "test_units.csv";
+    var file = file_text_open_write(test_csv);
+    file_text_write_string(file, "// Test comment line\n");
+    file_text_write_string(file, "UnitID,Name,Cost,Health\n");
+    file_text_write_string(file, "infantry,Infantry,100,50\n");
+    file_text_write_string(file, "  tank  ,  Tank  ,  300  ,  150  \n");
+    file_text_write_string(file, "// Another comment\n");
+    file_text_write_string(file, "\n"); // Empty line
+    file_text_write_string(file, "artillery,Artillery,250,75\n");
+    file_text_close(file);
+    
+    // Test 3: Parse test CSV
+    var csv_data = csv_parse_file(test_csv, true);
+    total++;
+    if (test_assert_exists(csv_data, "CSV parse returns data")) passed++;
+    
+    if (!is_undefined(csv_data)) {
+        // Test headers
+        total++;
+        if (test_assert_equals(array_length(csv_data.headers), 4, "Header count")) passed++;
+        total++;
+        if (test_assert_equals(csv_data.headers[0], "UnitID", "First header")) passed++;
+        
+        // Test rows (should be 3 - comments and empty lines excluded)
+        total++;
+        if (test_assert_equals(array_length(csv_data.rows), 3, "Row count")) passed++;
+        
+        // Test trimming
+        if (array_length(csv_data.rows) >= 2) {
+            total++;
+            if (test_assert_equals(csv_data.rows[1][0], "tank", "Trimmed value")) passed++;
+            total++;
+            if (test_assert_equals(csv_data.rows[1][1], "Tank", "Trimmed name")) passed++;
+        }
+    }
+    
+    // Test 4: Enum parsing
+    total++;
+    if (test_assert_equals(csv_parse_enum_value("YES", "Unit_UseRoads"), Unit_UseRoads.YES, "Parse YES enum")) passed++;
+    total++;
+    if (test_assert_equals(csv_parse_enum_value("no", "Unit_UseRoads"), Unit_UseRoads.NO, "Parse NO enum (lowercase)")) passed++;
+    total++;
+    if (test_assert_equals(csv_parse_enum_value("SPACE_ONLY", "Unit_SurviveInSpace"), Unit_SurviveInSpace.SPACE_ONLY, "Parse SPACE_ONLY")) passed++;
+    total++;
+    if (test_assert_equals(csv_parse_enum_value("INVALID", "Unit_UseRoads"), -1, "Invalid enum value")) passed++;
+    
+    // Test 5: Missing file handling
+    var result = csv_parse_file("nonexistent_file.csv", true);
+    total++;
+    if (test_assert(is_undefined(result), "Missing file returns undefined")) passed++;
+    
+    // Cleanup test file
+    file_delete(test_csv);
+    
+    // Test 6: Generic CSV loading
+    if (file_exists(working_directory + DATA_PATH + "UnitTypes.csv")) {
+        var unit_types = data_manager_load_csv_to_struct("UnitTypes.csv");
+        total++;
+        if (test_assert_exists(unit_types, "CSV loads successfully")) passed++;
+        
+        if (!is_undefined(unit_types)) {
+            total++;
+            var unit_count = variable_struct_names_count(unit_types);
+            if (test_assert(unit_count > 0, "CSV has entries")) passed++;
+            
+            // Test retrieving an entry
+            var unit_names = variable_struct_get_names(unit_types);
+            if (array_length(unit_names) > 0) {
+                var first_unit = unit_types[$ unit_names[0]];
+                total++;
+                if (test_assert_exists(first_unit, "Can retrieve CSV entry")) passed++;
+                
+                if (!is_undefined(first_unit)) {
+                    // Check that the first column value matches the key
+                    var headers = variable_struct_get_names(first_unit);
+                    if (array_length(headers) > 0) {
+                        total++;
+                        if (test_assert_equals(first_unit[$ headers[0]], unit_names[0], "First column is ID")) passed++;
+                    }
+                }
+            }
+        }
+    } else {
+        dev_console_log("  ! UnitTypes.csv not found - skipping load test", global.dev_console.info_color);
+    }
+    
+    dev_console_log(string("CSV tests: {0}/{1} passed", passed, total), 
+                   passed == total ? global.dev_console.success_color : global.dev_console.error_color);
+}
+
+/// @function test_run_csv_tests_captured()
+/// @description Run CSV tests and capture results
+/// @return {struct} Test results summary
+function test_run_csv_tests_captured() {
+    var results = { name: "CSV", total: 0, passed: 0, failed: 0, failed_names: [] };
+    
+    // Test 1: string_trim function
+    results.total++;
+    if (string_trim("  hello  ") == "hello") {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Trim both sides");
+    }
+    
+    results.total++;
+    if (string_trim("   ") == "") {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Trim all spaces");
+    }
+    
+    // Test 2: Create and parse test CSV
+    var test_csv = working_directory + "test_units_temp.csv";
+    try {
+        var file = file_text_open_write(test_csv);
+        file_text_write_string(file, "// Comment\n");
+        file_text_write_string(file, "ID,Name\n");
+        file_text_write_string(file, "test,Test Unit\n");
+        file_text_close(file);
+        
+        var csv_data = csv_parse_file(test_csv, true);
+        results.total++;
+        if (!is_undefined(csv_data)) {
+            results.passed++;
+        } else {
+            results.failed++;
+            array_push(results.failed_names, "Parse test CSV");
+        }
+        
+        if (!is_undefined(csv_data)) {
+            results.total++;
+            if (array_length(csv_data.headers) == 2 && array_length(csv_data.rows) == 1) {
+                results.passed++;
+            } else {
+                results.failed++;
+                array_push(results.failed_names, "CSV structure");
+            }
+        }
+        
+        file_delete(test_csv);
+    } catch (error) {
+        results.total++;
+        results.failed++;
+        array_push(results.failed_names, "CSV file operations");
+    }
+    
+    // Test 3: Enum parsing
+    results.total++;
+    if (csv_parse_enum_value("YES", "Unit_UseRoads") == Unit_UseRoads.YES) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Parse YES enum");
+    }
+    
+    results.total++;
+    if (csv_parse_enum_value("INVALID", "Unit_UseRoads") == -1) {
+        results.passed++;
+    } else {
+        results.failed++;
+        array_push(results.failed_names, "Invalid enum returns -1");
+    }
+    
+    // Test 5: Generic CSV loading
+    if (file_exists(working_directory + DATA_PATH + "UnitTypes.csv")) {
+        var unit_types = data_manager_load_csv_to_struct("UnitTypes.csv");
+        results.total++;
+        if (!is_undefined(unit_types)) {
+            results.passed++;
+        } else {
+            results.failed++;
+            array_push(results.failed_names, "Load UnitTypes.csv");
+        }
+    }
+}
+
+// ============================================================================
