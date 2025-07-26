@@ -6,9 +6,10 @@ The game is structured around a deep, turn-based system where players make all t
 
 #### **Core Gameplay Structure**
 
-The gameplay is split across two primary views:
+The gameplay is split across three primary views:
 
 *   **Galactic Starmap:** A strategic-level view showing star systems connected by a fixed network of interstellar travel routes. This map is used for directing fleets between planets, managing interstellar trade, and getting a high-level overview of faction territories.
+*   **System View:** A star system view (or just some part of star system) with main star, planets, cosmic anomalies to explore, wormholes and progenitor FTL gate network. Hex map where players can move starships, build space stations etc.
 *   **Planetary View:** When focusing on a planet, the game shifts to a detailed tactical map built on a **hexagonal grid**. This is where the majority of the game's core mechanics play out. All unit movement, city construction, resource gathering, and combat on a planet's surface are managed on this hex-based map.
 
 #### **Factions and Politics**
@@ -304,13 +305,6 @@ Additional considerations:
     * All hex logic in scr_hex_utils (hex_distance, hex_neighbors, hex_line_of_sight)
     * Separate hex data (in GameState) from hex instance, which should hold reference to structure with hex data
 
-initialization order:
-obj_GameController (orchestrates everything)
-  ├─ obj_DataManager (loads first - all JSON data)
-  ├─ obj_ConfigManager (user settings)
-  ├─ obj_GameState (initialized with data)
-  ├─ obj_InputManager (needs gamestate reference)
-  └─ obj_AIManager (reads gamestate)
   
  Various game screens - I want a button that will show current input bindings with option to change (and save new to file) input bindings
 Game options, unit values, hex properties etc. should be kept as a structure data type

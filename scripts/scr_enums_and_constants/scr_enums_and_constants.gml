@@ -91,6 +91,19 @@ enum ButtonID {
 #macro EVENT_CITY_CLICKED "city_clicked"
 #macro EVENT_TURN_ENDED "turn_ended"
 #macro EVENT_SCENE_CHANGED "scene_changed"
+// Editor events
+#macro EVENT_EDITOR_HEX_CLICKED "editor_hex_clicked"
+#macro EVENT_EDITOR_HEX_HOVER "editor_hex_hover"
+#macro EVENT_EDITOR_BUTTON_CLICKED "editor_button_clicked"
+#macro EVENT_EDITOR_QUICK_SLOT_CLICKED "editor_quick_slot_clicked"
+#macro EVENT_EDITOR_MINIMAP_CLICKED "editor_minimap_clicked"
+#macro EVENT_EDITOR_DROPDOWN_CHANGED "editor_dropdown_changed"
+#macro EVENT_EDITOR_MENU_ITEM_CLICKED "editor_menu_item_clicked"
+#macro EVENT_EDITOR_VIEW_FLAGS_CHANGED "editor_view_flags_changed"
+#macro EVENT_EDITOR_PLANET_MODIFIED "editor_planet_modified"
+#macro EVENT_EDITOR_PLANET_RESET "editor_planet_reset"
+#macro EVENT_EDITOR_SELECTION_CHANGED "editor_selection_changed"
+
 
 // ============================================================================
 // NETWORK
@@ -217,3 +230,5 @@ enum TerrainType {
 #macro DEBUG_SHOW_HEX_COORDS false  // Show hex coordinates on screen
 #macro DEBUG_SHOW_UNIT_IDS false    // Show unit IDs on screen
 #macro DEBUG_ENABLE_CHEATS false    // Enable debug cheats
+
+// EDITOR

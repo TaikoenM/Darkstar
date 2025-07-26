@@ -27,7 +27,7 @@ logger_write(LogLevel.INFO, "EditorController", "Resized editor room", "w: " + s
 
 // Create the camera controller object
 instance_create_layer(0, 0, "Instances", obj_EditorCamera);
-
+instance_create_layer(0, 0, "Instances", obj_EditorUI);
 // Ensure necessary layers exist
 if (!layer_exists("Instances")) {
     layer_create(0, "Instances");
@@ -35,3 +35,11 @@ if (!layer_exists("Instances")) {
 
 // Create the entire hex grid at once, now that the room is large enough
 editor_create_full_hex_grid();
+// Register observers for editor events
+
+gamestate_add_observer(EVENT_EDITOR_HEX_CLICKED, editor_handle_hex_click);
+gamestate_add_observer(EVENT_EDITOR_BUTTON_CLICKED, editor_handle_button_click);
+gamestate_add_observer(EVENT_EDITOR_QUICK_SLOT_CLICKED, editor_handle_quick_slot);
+gamestate_add_observer(EVENT_EDITOR_MINIMAP_CLICKED, editor_handle_minimap_click);
+gamestate_add_observer(EVENT_EDITOR_DROPDOWN_CHANGED, editor_handle_dropdown);
+gamestate_add_observer(EVENT_EDITOR_MENU_ITEM_CLICKED, editor_handle_menu_click);
