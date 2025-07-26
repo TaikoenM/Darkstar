@@ -323,13 +323,15 @@ function main_menu_handle_button_click(event_data) {
             logger_write(LogLevel.INFO, "MainMenuManager", "Input bindings not implemented", "Feature pending");
             break;
             
-        case ButtonID.MAP_EDITOR:
-            logger_write(LogLevel.DEBUG, "MenuSystem", "Processing MAP_EDITOR", "Changing scene state");
-            logger_write(LogLevel.INFO, "MainMenuManager", "Opening map editor", "Button action");
-            // Change to map editor state
-            scenestate_change(SceneState.MAP_EDITOR, "Opening map editor");
-            logger_write(LogLevel.DEBUG, "MenuSystem", "MAP_EDITOR scene change initiated", "Scene state changed");
-            break;
+		case ButtonID.MAP_EDITOR:
+		    logger_write(LogLevel.DEBUG, "MenuSystem", "Processing MAP_EDITOR", "Changing to Planet Editor scene");
+		    logger_write(LogLevel.INFO, "MainMenuManager", "Opening Planet Editor", "Button action");
+
+		    // Change to planet editor state and go to the editor room
+		    scenestate_change(SceneState.PLANET_EDITOR, "Opening planet editor");
+		    room_goto(room_editor); // Go to the new editor room
+		    logger_write(LogLevel.DEBUG, "MenuSystem", "PLANET_EDITOR scene change initiated", "Scene state changed");
+		    break;
             
         case ButtonID.RUN_TESTS:
             logger_write(LogLevel.DEBUG, "MenuSystem", "Processing RUN_TESTS", "Running test suites");

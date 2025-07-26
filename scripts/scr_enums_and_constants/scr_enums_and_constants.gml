@@ -11,7 +11,8 @@ enum SceneState {
     PAUSED,         // Game is paused
     MAP_EDITOR,     // Map editor is active
     OPTIONS,        // Options menu is displayed
-    TESTING         // Automated testing mode
+    TESTING,         // Automated testing mode
+	PLANET_EDITOR
 }
 
 // ============================================================================
@@ -168,8 +169,9 @@ enum TerrainType {
 // ============================================================================
 // HEX GRID
 // ============================================================================
-#macro DEFAULT_HEX_SIZE 32          // Default hex tile size in pixels
+#macro DEFAULT_HEX_SIZE 200         // Default hex tile size in pixels
 #macro HEX_SQRT3 1.732050807568877  // Square root of 3 constant
+#macro EDITOR_HEX_HEIGHT 200
 
 // ============================================================================
 // UI CONSTANTS
