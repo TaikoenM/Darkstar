@@ -852,3 +852,319 @@ function data_manager_process_csv_enums(data, enum_mappings) {
     
     return data;
 }
+
+/// @function filename_get_name_only(path);
+/// @description Gets the filename from a path, without the extension.
+/// @param {string} path The full path to the file.
+function filename_get_name_only(path) {
+    var _last_slash = string_last_pos("\\", path) + string_last_pos("/", path);
+    var _filename = string_copy(path, _last_slash + 1, string_length(path));
+    var _last_dot = string_last_pos(".", _filename);
+
+    if (_last_dot > 0) {
+        return string_copy(_filename, 1, _last_dot - 1);
+    }
+
+    return _filename;
+}
+
+/// @function path_get_directory_name(path)
+/// @description Extracts the final directory name from a full path string.
+/// @param {string} path      The full path to the directory.
+/// @return {string}
+function path_get_directory_name(path) {
+    var _path = path;
+
+    // First, remove any trailing slashes to correctly handle paths like "C:/Users/Test/"
+    while (string_length(_path) > 0) {
+        var last_char = string_char_at(_path, string_length(_path));
+        if (last_char == "/" || last_char == "\\") {
+            _path = string_copy(_path, 1, string_length(_path) - 1);
+        } else {
+            break;
+        }
+    }
+
+    // Find the position of the last separator (either / or \)
+    var last_sep_pos = max(string_last_pos("/", _path), string_last_pos("\\", _path));
+
+    // If a separator was found, return the part of the string after it
+    if (last_sep_pos > 0) {
+        return string_copy(_path, last_sep_pos + 1, string_length(_path) - last_sep_pos);
+    }
+    
+    // Otherwise, the path itself is the directory name
+    return _path;
+}
+
+/// @function sprite_create_from_frames(directory)
+/// @description Creates an animated sprite from a sequence of PNG files in a directory.
+/// @param {string} directory The directory containing the PNG frames.
+function sprite_create_from_frames(directory) {
+
+    var image_files = ds_list_create();
+    var file = file_find_first(directory + "/*.png", 0);
+
+    // Find all PNG files in the directory
+    while (file != "") {
+        ds_list_add(image_files, directory + "/" + file);
+        file = file_find_next();
+    }
+    file_find_close();
+
+    // Sort the files to ensure correct frame order
+    ds_list_sort(image_files, true);
+
+    if (ds_list_size(image_files) == 0) {
+        show_debug_message("No PNG files found in directory: " + directory);
+        ds_list_destroy(image_files);
+        return -1;
+    }
+
+    // Create the sprite from the first image
+    var first_frame_path = image_files[| 0];
+    var new_sprite = sprite_add(first_frame_path, 0, false, false, 0, 0);
+
+    if (new_sprite < 0) {
+        show_debug_message("Failed to create sprite from: " + first_frame_path);
+        ds_list_destroy(image_files);
+        return -1;
+    }
+
+    // If there are more frames, add them
+    if (ds_list_size(image_files) > 1) {
+        // Get the dimensions from the created sprite
+        var w = sprite_get_width(new_sprite);
+        var h = sprite_get_height(new_sprite);
+
+        // Create a surface to draw the other frames on
+        var temp_surface = surface_create(w, h);
+
+        // Add the rest of the images as new frames
+        for (var i = 1; i < ds_list_size(image_files); i++) {
+            var frame_path = image_files[| i];
+            var frame_sprite = sprite_add(frame_path, 1, false, false, 0, 0);
+
+            if (frame_sprite >= 0) {
+                surface_set_target(temp_surface);
+                draw_clear_alpha(c_black, 0); // Clear the surface
+                draw_sprite(frame_sprite, 0, 0, 0);
+                surface_reset_target();
+                
+                // Add the surface as a new frame to our main sprite
+                sprite_add_from_surface(new_sprite, temp_surface, 0, 0, w, h, false, false);
+                
+                sprite_delete(frame_sprite); // Clean up the temporary sprite
+            }
+        }
+        
+        // Clean up the surface
+        surface_free(temp_surface);
+    }
+    
+    // Clean up the list
+    ds_list_destroy(image_files);
+
+    // Return the index of the newly created animated sprite
+    return new_sprite;
+}
+	
+/// @function load_sprites_from_directory(directory, prefix);
+/// @description loads sprites from directory and creates spr_prefix_dir sprites
+/// @param {string} directory The path to the main directory to search in.
+/// @param {string} prefix    The string to prefix to the created sprite assets.
+/// @param {map} dsmap: place to store sprites with names
+function load_sprites_from_directory(directory, prefix, dsmap) {
+    // This is a recursive helper function to find all subdirectories
+    function find_subdirectories(dir, sub_dir_list) {
+		
+        var file = file_find_first(dir + "*", fa_directory);
+        while (file != "") {
+            if (directory_exists(dir + file) && file != "." && file != "..") {
+                ds_list_add(sub_dir_list, dir + file);
+            }
+            file = file_find_next();
+        }
+        file_find_close();
+    }
+
+    var all_subdirectories = ds_list_create();
+    find_subdirectories(directory, all_subdirectories);
+    ds_list_add(all_subdirectories, directory); // Include the root directory as well
+
+	logger_write(LogLevel.INFO, "DataManager", "Loadeding "+string(ds_list_size(all_subdirectories)) + " sprites", load_sprites_from_directory);
+
+    // Iterate through each found subdirectory
+    for (var i = 0; i < ds_list_size(all_subdirectories); i++) {
+        var current_dir = all_subdirectories[| i];
+		var dir_name = path_get_directory_name(current_dir)
+
+		var new_sprite = sprite_create_from_frames(current_dir)
+
+        // Assign the new sprite a name in the asset browser
+        var sprite_name = dir_name;
+        ds_map_add(dsmap, sprite_name, new_sprite);
+		logger_write(LogLevel.INFO, "DataManager", "Added "+prefix+" Sprite: "+sprite_name);
+
+    }
+
+    ds_list_destroy(all_subdirectories);
+}
+	
+	
+/// @function read_file_and_strip_comments(filepath)
+/// @description Reads a file into a single string, removing any lines that start with "//".
+/// @param {string} filepath      The path to the file to read.
+/// @return {string} A single string containing the file's content with comments removed.
+function read_file_and_strip_comments(filepath) {
+    var file = file_text_open_read(filepath);
+    if (file < 0) {
+        show_debug_message("Error: Could not open file for stripping comments: " + filepath);
+        return "";
+    }
+    
+    var cleaned_content = "";
+    
+    // Read the file line by line
+    while (!file_text_eof(file)) {
+        var current_line = file_text_readln(file);
+        var trimmed_line = string_trim(current_line);
+        
+        // If the line is valid (not empty and not a comment), add it to our result string
+        if (string_length(trimmed_line) > 0 && string_pos("//", trimmed_line) != 1) {
+            cleaned_content += current_line + "\n"; // Add the original line plus a newline char
+        }
+    }
+    
+    file_text_close(file);
+    return cleaned_content;
+}
+	
+/// @function load_keyed_database_from_csv(filepath)
+/// @description Loads a CSV into a ds_map of ds_maps. First column must be "ID".
+///              Automatically converts numeric values to reals and skips commented (//) lines.
+/// @param {string} filepath      The path to the CSV file.
+/// @return {Id.DsMap} A ds_map of ds_maps, or -1 on failure.
+function load_keyed_database_from_csv(filepath) {
+    
+    logger_write(LogLevel.INFO, "AssetManager", "Loading CSV at " + filepath);
+    if (!file_exists(filepath)) {
+        logger_write(LogLevel.ERROR, "AssetManager", "CSV file not found.", filepath);
+        return -1;
+    }
+
+    var file = file_text_open_read(filepath);
+    if (file < 0) {
+        logger_write(LogLevel.ERROR, "AssetManager", "Could not open file.", filepath);
+        return -1;
+    }
+
+    var database_map = ds_map_create();
+    var headers = -1;
+    var line_number = 0;
+
+    while (!file_text_eof(file)) {
+        line_number++;
+        var current_line = file_text_readln(file);
+        var trimmed_line = string_trim(current_line);
+
+        if (string_length(trimmed_line) == 0 || string_pos("//", trimmed_line) == 1) {
+            continue;
+        }
+
+        var values = string_split(trimmed_line, ",");
+
+        if (headers == -1) { // This is the header row
+            headers = values;
+            if (array_length(headers) == 0 || string_trim(headers[0]) != "ID") {
+                logger_write(LogLevel.ERROR, "AssetManager", "The first column in header must be 'ID'.", filepath);
+                ds_map_destroy(database_map);
+                file_text_close(file);
+                return -1;
+            }
+        } else { // This is a data row
+            if (array_length(values) == 0 || string_length(values[0]) == 0) continue; // Skip empty rows
+
+            var object_id_string = string_trim(values[0]);
+            var object_id;
+
+            // Per the documentation, real() will throw an error on non-numeric strings.
+            // We use try...catch to handle this exact behavior.
+            try {
+                object_id = floor(real(object_id_string));
+            }
+            catch (_ex) {
+                logger_write(LogLevel.ERROR, "AssetManager", "Skipping non-numeric ID ('" + object_id_string + "') on line " + string(line_number), filepath);
+                continue; // Skip this row and move to the next
+            }
+            
+            if (ds_map_exists(database_map, object_id)) {
+                logger_write(LogLevel.ERROR, "AssetManager", "Duplicate ID " + string(object_id) + " found. Overwriting.", filepath);
+            }
+
+            var properties_map = ds_map_create();
+            for (var i = 0; i < array_length(headers); i++) {
+                var key = string_trim(headers[i]);
+                var value_string = (i < array_length(values)) ? string_trim(values[i]) : "";
+                
+                // Here we apply the same try...catch logic for every value in the row
+                // to achieve automatic type conversion.
+                var final_value;
+                try {
+                    // Attempt the conversion. This will succeed for "15", "5.5", etc.
+                    final_value = real(value_string);
+                }
+                catch (_ex) {
+                    // This block executes if real() throws an error (e.g., for "Sword").
+                    // In that case, we keep it as a string.
+                    final_value = value_string;
+                }
+                
+                ds_map_add(properties_map, key, final_value);
+            }
+            
+            ds_map_add(database_map, object_id, properties_map);
+        }
+    }
+
+    file_text_close(file);
+
+    if (ds_map_empty(database_map)) {
+        logger_write(LogLevel.ERROR, "AssetManager", "No valid data loaded.", filepath);
+        ds_map_destroy(database_map);
+        return -1;
+    }
+
+    logger_write(LogLevel.INFO, "AssetManager", "Successfully loaded " + string(ds_map_size(database_map)) + " entries.", filepath);
+    return database_map;
+}
+	
+/// @function destroy_nested_maps(map)
+/// @description Destroys target map with any maps included inside
+function destroy_nested_maps(map) {
+	if (ds_exists(map, ds_type_map)) {
+	    var key = ds_map_find_first(map);
+	    while (ds_map_exists(map, key)) {
+	        // Get the inner map and destroy it
+	        var inner_map = map[? key];
+	        ds_map_destroy(inner_map);
+        
+	        key = ds_map_find_next(map, key);
+	    }
+	    // Finally, destroy the outer map
+	    ds_map_destroy(map);
+	}	
+}
+
+/// @function get_hex_property(hex_id, property)
+/// @description Returns value for hex definition as read from hex.csv
+function get_hex_property(hex_id, property) {
+	if (ds_map_exists(global.hex_definitons, hex_id)) {
+	    var properties = global.item_database[? hex_id];
+	    return properties[? property];
+
+	} else {
+	    logger_write(LogLevel.WARNING, "DataManager", "Hex with ID " + string(hex_id) + " not found in database.");
+		return undefined
+	}	
+}

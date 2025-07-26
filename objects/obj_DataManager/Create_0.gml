@@ -7,7 +7,7 @@ persistent = true;
 logger_write(LogLevel.INFO, "DataManager", "Starting data loading", "System initialization");
 
 // Initialize global data structures
-global.unit_definitions = {};
+
 global.building_definitions = {};
 global.technology_definitions = {};
 global.faction_definitions = {};
@@ -30,38 +30,22 @@ if (!directory_exists(data_dir)) {
 }
 
 // Load Unit Types
-
 var unittypes_file = data_dir + "UnitTypes.csv";
 if (file_exists(unittypes_file)) {
-    var unittypes_data = data_manager_load_unit_types(unittypes_file);
-    if (!is_undefined(unittypes_data)) {
-        global.game_data.unit_types = unittypes_data;
-        logger_write(LogLevel.INFO, "DataManager", "Unit Types definitions loaded", 
-                    string("Count: {0}", array_length(variable_struct_get_names(unittypes_data))));
-					
-    }
-	else {
-		show_error("Invalid UnitTypes.csv DATA FILE!", true)	
-	}
+    global.unit_types_definitions = load_keyed_database_from_csv(unittypes_file)
 } else {
 	show_error("Missing UnitTypes.csv DATA FILE!", true)	
 }
 
-
-
-// Load unit definitions
-var units_file = data_dir + "units.json";
-if (file_exists(units_file)) {
-    var units_data = json_load_file(units_file);
-    if (!is_undefined(units_data)) {
-        global.unit_definitions = units_data;
-        logger_write(LogLevel.INFO, "DataManager", "Unit definitions loaded", 
-                    string("Count: {0}", array_length(variable_struct_get_names(units_data))));
-    }
+// Load Hex Types
+var hex_file = data_dir + "Terrain.csv";
+if (file_exists(hex_file)) {
+    global.hex_definitions = load_keyed_database_from_csv(hex_file)
 } else {
-    // Create default unit definitions
-    data_manager_create_default_units();
+	show_error("Missing Terrain.csv DATA FILE!", true)	
 }
+
+
 
 // Load building definitions
 var buildings_file = data_dir + "buildings.json";

@@ -1,12 +1,17 @@
 /// @description Enhanced asset management system with detailed logging and proper paths
 function assets_init() {
     global.loaded_sprites = ds_map_create();
+	global.asset_hex_sprite = ds_map_create();
     global.loaded_sounds = ds_map_create();
     global.asset_manifest = ds_map_create();
     
+	show_debug_message("======== ASSETS ========")
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "AssetManager", "Asset manager initialized", "System startup");
     }
+	// Load Sprites
+
+	load_sprites_from_directory(working_directory + IMAGES_PATH + "hex\\","hex", global.asset_hex_sprite)
     
     assets_load_manifest();
 }
@@ -290,6 +295,7 @@ function assets_cleanup() {
     ds_map_destroy(global.loaded_sprites);
     ds_map_destroy(global.loaded_sounds);
     ds_map_destroy(global.asset_manifest);
+	ds_map_destroy(global.asset_hex_sprite);
     
     if (variable_global_exists("log_enabled") && global.log_enabled) {
         logger_write(LogLevel.INFO, "AssetManager", "Asset manager cleanup complete", 

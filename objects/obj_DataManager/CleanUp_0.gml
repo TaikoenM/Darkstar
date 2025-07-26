@@ -1,0 +1,2 @@
+destroy_nested_maps(global.unit_types_definitions)
+destroy_nested_maps(global.hex_definitions)

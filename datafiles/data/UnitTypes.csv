@@ -1,9 +1,9 @@
 // Unit Types and rules,,,,,,,,,
-"// SPACE: 0 – land only, 1 – can survive in space temporary, 2 – space and land unit, 3 – space only",,,,,,,,,
-"// PLANETFALL: 0 – no, 1 – spaceport only or heavy dmg, 2 – building or dmg, 3 - anywhere ",,,,,,,,,
-"// LAUNCH TO SPACE: 0 – no, 1 – needs space port, 2 – anywhere",,,,,,,,,
-"// FUEL: 0 -  not needed, 1 – per move, 2 – per turn",,,,,,,,,
-"// REFUELS: 0 – nowhere, 1 – military buildings & carriers, 2 – buildings & carriers, 3 – nowhere",,,,,,,,,
+// SPACE: 0 – land only, 1 – can survive in space temporary, 2 – space and land unit, 3 – space only",,,,,,,,,
+// PLANETFALL: 0 – no, 1 – spaceport only or heavy dmg, 2 – building or dmg, 3 - anywhere ",,,,,,,,,
+// LAUNCH TO SPACE: 0 – no, 1 – needs space port, 2 – anywhere",,,,,,,,,
+// FUEL: 0 -  not needed, 1 – per move, 2 – per turn",,,,,,,,,
+// REFUELS: 0 – nowhere, 1 – military buildings & carriers, 2 – buildings & carriers, 3 – nowhere",,,,,,,,,
 ID,Name,Abr,use_roads,use_tubes,space,planetfall,launch_to_space,fuel_type,refuels
 1,Light Infantry,Lt Inf,1,1,0,0,0,0,0
 2,Heavy Infantry,Hv Inf,1,1,0,0,0,0,0
