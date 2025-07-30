@@ -1,17 +1,17 @@
 # Project Summary
-**Generated on:** 2025-07-26 17:05:56
+**Generated on:** 2025-07-30 10:38:03
 **Project Path:** I:/Darkstar
 
 ---
 ## Part A: All Files in Project
-**Total Files:** 811
+**Total Files:** 874
 
 ### .CSV Files (3 files)
 - `datafiles\data\Terrain.csv` (250 bytes)
 - `datafiles\data\UnitTypes.csv` (1301 bytes)
 - `datafiles\data\UnitTypes2.csv` (2550 bytes)
 
-### .GML Files (51 files)
+### .GML Files (71 files)
 - `objects\oTest\Create_0.gml` (1768 bytes)
 - `objects\obj_AutoTest\Alarm_0.gml` (19 bytes)
 - `objects\obj_AutoTest\Create_0.gml` (3106 bytes)
@@ -23,6 +23,20 @@
 - `objects\obj_DevConsole\Create_0.gml` (168 bytes)
 - `objects\obj_DevConsole\Draw_64.gml` (6665 bytes)
 - `objects\obj_DevConsole\Step_0.gml` (2817 bytes)
+- `objects\obj_EditorCamera\Create_0.gml` (977 bytes)
+- `objects\obj_EditorCamera\Step_0.gml` (2508 bytes)
+- `objects\obj_EditorCamera\Step_2.gml` (495 bytes)
+- `objects\obj_EditorController\CleanUp_0.gml` (649 bytes)
+- `objects\obj_EditorController\Create_0.gml` (2003 bytes)
+- `objects\obj_EditorController\Draw_64.gml` (2905 bytes)
+- `objects\obj_EditorHex\Create_0.gml` (452 bytes)
+- `objects\obj_EditorHex\Draw_0.gml` (240 bytes)
+- `objects\obj_EditorMenuButton\Create_0.gml` (1348 bytes)
+- `objects\obj_EditorMenuButton\Draw_64.gml` (3654 bytes)
+- `objects\obj_EditorMenuButton\Mouse_7.gml` (1352 bytes)
+- `objects\obj_EditorMenuButton\Step_0.gml` (1449 bytes)
+- `objects\obj_EditorUI\Create_0.gml` (341 bytes)
+- `objects\obj_EditorUI\Draw_64.gml` (934 bytes)
 - `objects\obj_GameState\Create_0.gml` (737 bytes)
 - `objects\obj_InputManager\Create_0.gml` (399 bytes)
 - `objects\obj_InputManager\Step_0.gml` (179 bytes)
@@ -46,11 +60,17 @@
 - `objects\obj_game_controller\Other_4.gml` (1642 bytes)
 - `objects\obj_game_controller\Step_0.gml` (2628 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.gml` (12093 bytes)
+- `scripts\scr_camera\scr_camera.gml` (1973 bytes)
 - `scripts\scr_config_manager\scr_config_manager.gml` (12343 bytes)
 - `scripts\scr_data_manager\scr_data_manager.gml` (43526 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.gml` (2290 bytes)
 - `scripts\scr_dev_console\scr_dev_console.gml` (23221 bytes)
-- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (9201 bytes)
+- `scripts\scr_editor_controller\scr_editor_controller.gml` (2309 bytes)
+- `scripts\scr_editor_handler_placeholders\scr_editor_handler_placeholders.gml` (5860 bytes)
+- `scripts\scr_editor_helpers\scr_editor_helpers.gml` (14787 bytes)
+- `scripts\scr_editor_menu_actions\scr_editor_menu_actions.gml` (13235 bytes)
+- `scripts\scr_editor_menu_system\scr_editor_menu_system.gml` (7876 bytes)
+- `scripts\scr_enums_and_constants\scr_enums_and_constants.gml` (9959 bytes)
 - `scripts\scr_game_control\scr_game_control.gml` (8410 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.gml` (9942 bytes)
 - `scripts\scr_gamestate_observer\scr_gamestate_observer.gml` (12106 bytes)
@@ -58,18 +78,20 @@
 - `scripts\scr_input_manager\scr_input_manager.gml` (8867 bytes)
 - `scripts\scr_json_utils\scr_json_utils.gml` (7217 bytes)
 - `scripts\scr_logger\scr_logger.gml` (7086 bytes)
-- `scripts\scr_menu_system\scr_menu_system.gml` (19579 bytes)
+- `scripts\scr_menu_system\scr_menu_system.gml` (19651 bytes)
 - `scripts\scr_scene_state_manager\scr_scene_state_manager.gml` (4951 bytes)
 - `scripts\scr_test_suites\scr_test_suites.gml` (47646 bytes)
 - `scripts\scr_text_util\scr_text_util.gml` (2184 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.gml` (7590 bytes)
 
-### .MD Files (3 files)
+### .MD Files (5 files)
+- `planet-editor-design-doc (1).md` (25859 bytes)
+- `planet-editor-design-doc.md` (8345 bytes)
 - `pomysły.md` (565 bytes)
-- `project_full_report.md` (282675 bytes)
-- `project_summary.md` (32392 bytes)
+- `project_full_report.md` (465520 bytes)
+- `project_summary.md` (87908 bytes)
 
-### .PNG Files (658 files)
+### .PNG Files (676 files)
 - `datafiles\assets\images\button\0e096622-5b94-488b-bf04-3eb3a0cb0977.png` (53783 bytes)
 - `datafiles\assets\images\button\24e6aeff-431f-4695-92c0-8234043a165a.png` (180505 bytes)
 - `datafiles\assets\images\button\2a01c631-9228-4874-b66a-6810ba72131a.png` (4962 bytes)
@@ -430,6 +452,12 @@
 - `datafiles\assets\images\terrain_features\spr_road\layers\b310af53-e178-49f3-9288-60524009485d\90602a32-ac70-4824-b750-368c41757366.png` (31008 bytes)
 - `datafiles\assets\images\terrain_features\spr_road\layers\c1d6f9cf-c700-46b0-8fbd-4b4609792aa5\90602a32-ac70-4824-b750-368c41757366.png` (26940 bytes)
 - `datafiles\assets\images\terrain_features\spr_road\layers\df9f161c-fffa-4a6b-8027-7b88b9ba75e7\90602a32-ac70-4824-b750-368c41757366.png` (16498 bytes)
+- `fonts\fnt_editor_small\fnt_editor_small.old.png` (10106 bytes)
+- `fonts\fnt_editor_small\fnt_editor_small.png` (7732 bytes)
+- `fonts\fnt_ui_medium\fnt_ui_medium.old.png` (10106 bytes)
+- `fonts\fnt_ui_medium\fnt_ui_medium.png` (14695 bytes)
+- `fonts\fnt_ui_small\fnt_ui_small.old.png` (10106 bytes)
+- `fonts\fnt_ui_small\fnt_ui_small.png` (10106 bytes)
 - `grafiki_future\1\3aa28343-7e2f-475d-972f-7c11c77daf2f.png` (86239 bytes)
 - `grafiki_future\1\4b2b6d42-4416-4d7a-8b27-b46b58eaf094.png` (84105 bytes)
 - `grafiki_future\1\88b2589f-0025-4b0f-85ff-95fa94b363c1.png` (82019 bytes)
@@ -728,23 +756,46 @@
 - `grafiki_future\tundra2.514Z.png` (1595501 bytes)
 - `sprites\spr_button\38752966-343f-47bb-a30f-4897623cb5d6.png` (403 bytes)
 - `sprites\spr_button\layers\38752966-343f-47bb-a30f-4897623cb5d6\4c04fe41-176e-4945-844b-e2ec1689ccad.png` (403 bytes)
+- `sprites\spr_hex\f1c3330b-7976-4feb-ba94-5f6d56d2ab47.png` (295699 bytes)
+- `sprites\spr_hex\layers\f1c3330b-7976-4feb-ba94-5f6d56d2ab47\35e606c8-768f-4609-a2a4-1cb60826872f.png` (295699 bytes)
+- `sprites\spr_hex_grid\76550cbb-6593-4c3b-a916-b3df4c341e1e.png` (308 bytes)
+- `sprites\spr_hex_grid\layers\76550cbb-6593-4c3b-a916-b3df4c341e1e\e3003d96-85ee-4939-a472-52932afc3c90.png` (308 bytes)
+- `sprites\spr_hex_highlight\5e483279-5d75-406b-bc67-1abbfe50d8dc.png` (308 bytes)
+- `sprites\spr_hex_highlight\layers\5e483279-5d75-406b-bc67-1abbfe50d8dc\6a1e6717-8f75-47d6-a4a8-96e5efb507de.png` (308 bytes)
+- `sprites\spr_hex_selection\4cb67457-d74b-41d7-9797-dbb4a707147b.png` (308 bytes)
+- `sprites\spr_hex_selection\layers\4cb67457-d74b-41d7-9797-dbb4a707147b\3fab21fe-ab30-4498-98ae-21f7c37051e3.png` (308 bytes)
+- `sprites\spr_planet_icon_temperate\979af5b3-8e62-4c91-b922-da6bb6ff4369.png` (308 bytes)
+- `sprites\spr_planet_icon_temperate\layers\979af5b3-8e62-4c91-b922-da6bb6ff4369\deb5bd8d-c2b6-4d08-ab7b-9108f7131051.png` (308 bytes)
+- `sprites\spr_quick_slot\abf2cfe0-c16e-47e1-8861-3b670bc76b8f.png` (308 bytes)
+- `sprites\spr_quick_slot\layers\abf2cfe0-c16e-47e1-8861-3b670bc76b8f\4acfd87e-6804-4bad-911d-397acf98783d.png` (308 bytes)
 
 ### .RESOURCE_ORDER Files (1 files)
-- `DarkStar.resource_order` (3897 bytes)
+- `DarkStar.resource_order` (5742 bytes)
 
 ### .TXT Files (2 files)
 - `datafiles\data\UnitTypes.txt` (2530 bytes)
-- `project_description.txt` (25071 bytes)
+- `project_description.txt` (25000 bytes)
 
-### .YY Files (41 files)
+### .YY Files (64 files)
 - `datafiles\assets\images\core\spr_path_begin\spr_path_begin.yy` (6694 bytes)
 - `datafiles\assets\images\core\spr_path_end\spr_path_end.yy` (6692 bytes)
 - `datafiles\assets\images\core\spr_path_middle\spr_path_middle.yy` (14939 bytes)
 - `datafiles\assets\images\terrain_features\spr_road\spr_road.yy` (14933 bytes)
+- `fonts\fnt_editor_small\fnt_editor_small.old.yy` (11582 bytes)
+- `fonts\fnt_editor_small\fnt_editor_small.yy` (10300 bytes)
+- `fonts\fnt_ui_medium\fnt_ui_medium.old.yy` (11576 bytes)
+- `fonts\fnt_ui_medium\fnt_ui_medium.yy` (12421 bytes)
+- `fonts\fnt_ui_small\fnt_ui_small.old.yy` (11574 bytes)
+- `fonts\fnt_ui_small\fnt_ui_small.yy` (11574 bytes)
 - `objects\oTest\oTest.yy` (869 bytes)
 - `objects\obj_AutoTest\obj_AutoTest.yy` (1364 bytes)
 - `objects\obj_DataManager\obj_DataManager.yy` (1050 bytes)
 - `objects\obj_DevConsole\obj_DevConsole.yy` (1369 bytes)
+- `objects\obj_EditorCamera\obj_EditorCamera.yy` (1217 bytes)
+- `objects\obj_EditorController\obj_EditorController.yy` (1227 bytes)
+- `objects\obj_EditorHex\obj_EditorHex.yy` (1115 bytes)
+- `objects\obj_EditorMenuButton\obj_EditorMenuButton.yy` (1386 bytes)
+- `objects\obj_EditorUI\obj_EditorUI.yy` (1050 bytes)
 - `objects\obj_GameState\obj_GameState.yy` (885 bytes)
 - `objects\obj_InputManager\obj_InputManager.yy` (1051 bytes)
 - `objects\obj_MainMenuManager\obj_MainMenuManager.yy` (1058 bytes)
@@ -755,15 +806,21 @@
 - `options\main\options_main.yy` (913 bytes)
 - `options\operagx\options_operagx.yy` (989 bytes)
 - `options\windows\options_windows.yy` (1618 bytes)
-- `rooms\room_editor\room_editor.yy` (3461 bytes)
+- `rooms\room_editor\room_editor.yy` (4861 bytes)
 - `rooms\room_game_init\room_game_init.yy` (4463 bytes)
-- `rooms\room_main_menu\room_main_menu.yy` (5045 bytes)
+- `rooms\room_main_menu\room_main_menu.yy` (5461 bytes)
 - `roomui\RoomUI\RoomUI.yy` (496 bytes)
 - `scripts\scr_asset_manager\scr_asset_manager.yy` (267 bytes)
+- `scripts\scr_camera\scr_camera.yy` (243 bytes)
 - `scripts\scr_config_manager\scr_config_manager.yy` (269 bytes)
 - `scripts\scr_data_manager\scr_data_manager.yy` (265 bytes)
 - `scripts\scr_debug_file_system\scr_debug_file_system.yy` (265 bytes)
 - `scripts\scr_dev_console\scr_dev_console.yy` (253 bytes)
+- `scripts\scr_editor_controller\scr_editor_controller.yy` (271 bytes)
+- `scripts\scr_editor_handler_placeholders\scr_editor_handler_placeholders.yy` (291 bytes)
+- `scripts\scr_editor_helpers\scr_editor_helpers.yy` (265 bytes)
+- `scripts\scr_editor_menu_actions\scr_editor_menu_actions.yy` (275 bytes)
+- `scripts\scr_editor_menu_system\scr_editor_menu_system.yy` (273 bytes)
 - `scripts\scr_enums_and_constants\scr_enums_and_constants.yy` (269 bytes)
 - `scripts\scr_game_control\scr_game_control.yy` (255 bytes)
 - `scripts\scr_game_state_manager\scr_game_state_manager.yy` (277 bytes)
@@ -778,9 +835,15 @@
 - `scripts\scr_text_util\scr_text_util.yy` (249 bytes)
 - `scripts\scr_ui_manager\scr_ui_manager.yy` (261 bytes)
 - `sprites\spr_button\spr_button.yy` (3193 bytes)
+- `sprites\spr_hex\spr_hex.yy` (3175 bytes)
+- `sprites\spr_hex_grid\spr_hex_grid.yy` (3197 bytes)
+- `sprites\spr_hex_highlight\spr_hex_highlight.yy` (3227 bytes)
+- `sprites\spr_hex_selection\spr_hex_selection.yy` (3227 bytes)
+- `sprites\spr_planet_icon_temperate\spr_planet_icon_temperate.yy` (3275 bytes)
+- `sprites\spr_quick_slot\spr_quick_slot.yy` (3209 bytes)
 
 ### .YYP Files (1 files)
-- `DarkStar.yyp` (91577 bytes)
+- `DarkStar.yyp` (93842 bytes)
 
 ### .ZIP Files (49 files)
 - `grafiki_future\AppleTrees.zip` (727959 bytes)
@@ -840,7 +903,7 @@
 
 ---
 ## Part B: GameMaker Objects and Events
-**Total Objects:** 11
+**Total Objects:** 16
 
 ### Object: oTest
 **Description:** No description available
@@ -905,6 +968,81 @@
 - **Step_0** (Step Event)
   - *Description:* Handle console input and updates
   - *Path:* `objects\obj_DevConsole\Step_0.gml`
+
+
+### Object: obj_EditorCamera
+**Description:** Initialize camera
+**Path:** `objects\obj_EditorCamera`
+**Events (3):**
+- **Create_0** (Create Event)
+  - *Description:* Initialize camera
+  - *Path:* `objects\obj_EditorCamera\Create_0.gml`
+
+- **Step_0** (Step Event)
+  - *Path:* `objects\obj_EditorCamera\Step_0.gml`
+
+- **Step_2** (Step Event)
+  - *Path:* `objects\obj_EditorCamera\Step_2.gml`
+
+
+### Object: obj_EditorController
+**Description:** Clean up editor resources
+**Path:** `objects\obj_EditorController`
+**Events (3):**
+- **CleanUp_0** (Clean Up Event)
+  - *Description:* Clean up editor resources
+  - *Path:* `objects\obj_EditorController\CleanUp_0.gml`
+
+- **Create_0** (Create Event)
+  - *Path:* `objects\obj_EditorController\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Path:* `objects\obj_EditorController\Draw_64.gml`
+
+
+### Object: obj_EditorHex
+**Description:** No description available
+**Path:** `objects\obj_EditorHex`
+**Events (2):**
+- **Create_0** (Create Event)
+  - *Path:* `objects\obj_EditorHex\Create_0.gml`
+
+- **Draw_0** (Draw Event)
+  - *Path:* `objects\obj_EditorHex\Draw_0.gml`
+
+
+### Object: obj_EditorMenuButton
+**Description:** Initialize menu button
+**Path:** `objects\obj_EditorMenuButton`
+**Events (4):**
+- **Create_0** (Create Event)
+  - *Description:* Initialize menu button
+  - *Path:* `objects\obj_EditorMenuButton\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Description:* Draw menu button and dropdown
+  - *Path:* `objects\obj_EditorMenuButton\Draw_64.gml`
+
+- **Mouse_7** (Mouse Event)
+  - *Description:* Handle menu clicks
+  - *Path:* `objects\obj_EditorMenuButton\Mouse_7.gml`
+
+- **Step_0** (Step Event)
+  - *Description:* Update hover states
+  - *Path:* `objects\obj_EditorMenuButton\Step_0.gml`
+
+
+### Object: obj_EditorUI
+**Description:** Initialize editor UI
+**Path:** `objects\obj_EditorUI`
+**Events (2):**
+- **Create_0** (Create Event)
+  - *Description:* Initialize editor UI
+  - *Path:* `objects\obj_EditorUI\Create_0.gml`
+
+- **Draw_64** (Draw GUI Event)
+  - *Description:* Draw UI panel backgrounds
+  - *Path:* `objects\obj_EditorUI\Draw_64.gml`
 
 
 ### Object: obj_GameState
@@ -1028,7 +1166,7 @@
 
 ---
 ## Part C: Script Files and Functions
-**Total Scripts:** 18
+**Total Scripts:** 24
 
 ### Script: scr_asset_manager
 **Description:** Enhanced asset management system with detailed logging and proper paths
@@ -1050,6 +1188,27 @@
 
 - **`assets_load_sprite(asset_key)`**
   - *Arguments:* asset_key
+
+
+### Script: scr_camera
+**Description:** CORRECTED: Converts axial hex coordinates to pixel coordinates for a vertically-stacked FLAT-TOP grid.
+**Path:** `scripts\scr_camera\scr_camera.gml`
+**Functions (6):**
+- **`editor_camera_init()`**
+
+- **`editor_camera_init()`**
+
+- **`editor_hex_axial_to_pixel(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_hex_axial_to_pixel(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
+
+- **`editor_pixel_to_axial(px, py)`**
+  - *Arguments:* px, py
 
 
 ### Script: scr_config_manager
@@ -1387,6 +1546,317 @@
 
 - **`string_split(str, delimiter)`**
   - *Arguments:* str, delimiter
+
+
+### Script: scr_editor_controller
+**Description:** Initializes the entire planet editor state.
+**Path:** `scripts\scr_editor_controller\scr_editor_controller.gml`
+**Functions (4):**
+- **`editor_create_full_hex_grid()`**
+
+- **`editor_create_full_hex_grid()`**
+
+- **`editor_init()`**
+
+- **`editor_init()`**
+
+
+### Script: scr_editor_handler_placeholders
+**Description:** Placeholder handler functions for editor events @function editor_handle_hex_click(event_data) Handle hex tile clicks in the editor
+**Path:** `scripts\scr_editor_handler_placeholders\scr_editor_handler_placeholders.gml`
+**Functions (14):**
+- **`editor_cleanup_data()`**
+
+- **`editor_cleanup_data()`**
+
+- **`editor_handle_button_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_button_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_dropdown(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_dropdown(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_hex_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_hex_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_minimap_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_minimap_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_quick_slot(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_quick_slot(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_init()`**
+
+- **`editor_init_placeholder_temp()`**
+
+
+### Script: scr_editor_helpers
+**Description:** Get the visible view bounds @return {Struct} Struct with left, top, right, bottom
+**Path:** `scripts\scr_editor_helpers\scr_editor_helpers.gml`
+**Functions (50):**
+- **`draw_line_width(x1, y1, x2, y2, width)`**
+  - *Arguments:* x1, y1, x2, y2, width
+
+- **`draw_line_width(x1, y1, x2, y2, width)`**
+  - *Arguments:* x1, y1, x2, y2, width
+
+- **`draw_text_outline(x, y, text, text_color, outline_color)`**
+  - *Arguments:* x, y, text, text_color, outline_color
+
+- **`draw_text_outline(x, y, text, text_color, outline_color)`**
+  - *Arguments:* x, y, text, text_color, outline_color
+
+- **`ds_map_keys_to_array(map)`**
+  - *Arguments:* map
+
+- **`ds_map_keys_to_array(map)`**
+  - *Arguments:* map
+
+- **`editor_activate_quick_slot(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_activate_quick_slot(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_create_command_clear_all_buildings()`**
+
+- **`editor_create_command_clear_all_buildings()`**
+
+- **`editor_create_command_clear_all_resources()`**
+
+- **`editor_create_command_clear_all_resources()`**
+
+- **`editor_create_command_clear_all_units()`**
+
+- **`editor_create_command_clear_all_units()`**
+
+- **`editor_execute_command(cmd)`**
+  - *Arguments:* cmd
+
+- **`editor_execute_command(cmd)`**
+  - *Arguments:* cmd
+
+- **`editor_get_hex_data(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_get_hex_data(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_get_quick_slot_key(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_get_quick_slot_key(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_get_slot_key_name(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_get_slot_key_name(slot_index)`**
+  - *Arguments:* slot_index
+
+- **`editor_get_view_bounds()`**
+
+- **`editor_get_view_bounds()`**
+
+- **`editor_hex_is_visible(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_hex_is_visible(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_mark_all_dirty()`**
+
+- **`editor_mark_all_dirty()`**
+
+- **`editor_mark_hex_dirty(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_mark_hex_dirty(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_mark_view_dirty()`**
+
+- **`editor_mark_view_dirty()`**
+
+- **`editor_pipette_from_hex(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_pipette_from_hex(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_redo()`**
+
+- **`editor_redo()`**
+
+- **`editor_save_planet(filename)`**
+  - *Arguments:* filename
+
+- **`editor_save_planet(filename)`**
+  - *Arguments:* filename
+
+- **`editor_set_hex_terrain(q, r, terrain_type)`**
+  - *Arguments:* q, r, terrain_type
+
+- **`editor_set_hex_terrain(q, r, terrain_type)`**
+  - *Arguments:* q, r, terrain_type
+
+- **`editor_undo()`**
+
+- **`editor_undo()`**
+
+- **`editor_update_hex_instances()`**
+
+- **`editor_update_hex_instances()`**
+
+- **`editor_zoom_in()`**
+
+- **`editor_zoom_in()`**
+
+- **`editor_zoom_out()`**
+
+- **`editor_zoom_out()`**
+
+- **`point_in_rectangle(px, py, x1, y1, x2, y2)`**
+  - *Arguments:* px, py, x1, y1, x2, y2
+
+- **`point_in_rectangle(px, py, x1, y1, x2, y2)`**
+  - *Arguments:* px, py, x1, y1, x2, y2
+
+
+### Script: scr_editor_menu_actions
+**Description:** Create a command to place a building @param {Real} q Hex Q coordinate @param {Real} r Hex R coordinate @param {String} building_type The building type to place @param {Real} faction The faction owner @return {Struct} Command object
+**Path:** `scripts\scr_editor_menu_actions\scr_editor_menu_actions.gml`
+**Functions (36):**
+- **`editor_can_place_building(q, r, building_type)`**
+  - *Arguments:* q, r, building_type
+
+- **`editor_can_place_building(q, r, building_type)`**
+  - *Arguments:* q, r, building_type
+
+- **`editor_confirm_clear_buildings()`**
+
+- **`editor_confirm_clear_buildings()`**
+
+- **`editor_confirm_clear_resources()`**
+
+- **`editor_confirm_clear_resources()`**
+
+- **`editor_confirm_clear_units()`**
+
+- **`editor_confirm_clear_units()`**
+
+- **`editor_create_command_erase_hex(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_create_command_erase_hex(q, r)`**
+  - *Arguments:* q, r
+
+- **`editor_create_command_paint_terrain(hexes, terrain_type)`**
+  - *Arguments:* hexes, terrain_type
+
+- **`editor_create_command_paint_terrain(hexes, terrain_type)`**
+  - *Arguments:* hexes, terrain_type
+
+- **`editor_create_command_place_building(q, r, building_type, faction)`**
+  - *Arguments:* q, r, building_type, faction
+
+- **`editor_create_command_place_building(q, r, building_type, faction)`**
+  - *Arguments:* q, r, building_type, faction
+
+- **`editor_export_to_json()`**
+
+- **`editor_export_to_json()`**
+
+- **`editor_has_unsaved_changes()`**
+
+- **`editor_has_unsaved_changes()`**
+
+- **`editor_import_from_json()`**
+
+- **`editor_import_from_json()`**
+
+- **`editor_mark_saved()`**
+
+- **`editor_mark_saved()`**
+
+- **`editor_new_planet(width, height)`**
+  - *Arguments:* width, height
+
+- **`editor_new_planet(width, height)`**
+  - *Arguments:* width, height
+
+- **`editor_save_current()`**
+
+- **`editor_save_current()`**
+
+- **`editor_show_new_planet_dialog()`**
+
+- **`editor_show_new_planet_dialog()`**
+
+- **`editor_show_properties_dialog()`**
+
+- **`editor_show_properties_dialog()`**
+
+- **`editor_show_random_planet_dialog()`**
+
+- **`editor_show_random_planet_dialog()`**
+
+- **`editor_show_resize_dialog()`**
+
+- **`editor_show_resize_dialog()`**
+
+- **`editor_show_save_as_dialog()`**
+
+- **`editor_show_save_as_dialog()`**
+
+
+### Script: scr_editor_menu_system
+**Description:** Editor menu system functions @function editor_menu_get_dropdown_height() Calculate total height of dropdown menu
+**Path:** `scripts\scr_editor_menu_system\scr_editor_menu_system.gml`
+**Functions (12):**
+- **`editor_create_planet_menu()`**
+
+- **`editor_create_planet_menu()`**
+
+- **`editor_create_view_menu()`**
+
+- **`editor_create_view_menu()`**
+
+- **`editor_handle_menu_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_menu_click(event_data)`**
+  - *Arguments:* event_data
+
+- **`editor_handle_planet_menu_item(item_id)`**
+  - *Arguments:* item_id
+
+- **`editor_handle_planet_menu_item(item_id)`**
+  - *Arguments:* item_id
+
+- **`editor_handle_view_menu_item(item_id, event_data)`**
+  - *Arguments:* item_id, event_data
+
+- **`editor_handle_view_menu_item(item_id, event_data)`**
+  - *Arguments:* item_id, event_data
+
+- **`editor_menu_get_dropdown_height()`**
+
+- **`editor_menu_get_dropdown_height()`**
 
 
 ### Script: scr_enums_and_constants
