@@ -119,28 +119,3 @@ function editor_init_placeholder_temp() {
     }
 }
 
-/// @function editor_cleanup_data()
-/// @description Clean up editor data structures
-function editor_cleanup_data() {
-    if (variable_global_exists("editor_state")) {
-        // Clean up data structures
-        if (ds_exists(global.editor_state.planet_data.hexes, ds_type_map)) {
-            ds_map_destroy(global.editor_state.planet_data.hexes);
-        }
-        if (ds_exists(global.editor_state.planet_data.buildings, ds_type_map)) {
-            ds_map_destroy(global.editor_state.planet_data.buildings);
-        }
-        if (ds_exists(global.editor_state.planet_data.units, ds_type_map)) {
-            ds_map_destroy(global.editor_state.planet_data.units);
-        }
-        if (ds_exists(global.editor_state.planet_data.unit_stacks, ds_type_map)) {
-            ds_map_destroy(global.editor_state.planet_data.unit_stacks);
-        }
-        if (ds_exists(global.editor_state.command_history, ds_type_list)) {
-            ds_list_destroy(global.editor_state.command_history);
-        }
-        if (ds_exists(global.editor_state.dirty_regions, ds_type_list)) {
-            ds_list_destroy(global.editor_state.dirty_regions);
-        }
-    }
-}

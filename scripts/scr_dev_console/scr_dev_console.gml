@@ -233,7 +233,7 @@ function dev_console_register_commands() {
     ds_map_add(global.dev_commands, "test_input", dev_cmd_test_input);
     ds_map_add(global.dev_commands, "test_observer", dev_cmd_test_observer);
     ds_map_add(global.dev_commands, "test_json", dev_cmd_test_json);
-    ds_map_add(global.dev_commands, "benchmark", dev_cmd_benchmark);
+    ds_map_add(global.dev_commands, "benchmark", dev_cmd_test_benchmark);
     
     logger_write(LogLevel.DEBUG, "DevConsole", "dev_console_register_commands completed", string("Registered {0} commands", ds_map_size(global.dev_commands)));
 }
@@ -470,64 +470,6 @@ function dev_cmd_room_goto(args) {
     }
 }
 
-/// @function dev_cmd_test(args)
-/// @description Run specific test suite
-function dev_cmd_test(args) {
-    logger_write(LogLevel.INFO, "DevConsole", "Test command executed", string("Args: {0}", array_length(args)));
-    
-    if (array_length(args) == 0) {
-        dev_console_log("Available test suites:", global.dev_console.info_color);
-        dev_console_log("  config, logger, assets, input, observer, json, hex", c_white);
-        dev_console_log("Usage: test [suite_name]", c_white);
-        return;
-    }
-    
-    var suite = string_lower(args[0]);
-    dev_console_log("Running test suite: " + suite, global.dev_console.info_color);
-    
-    switch (suite) {
-        case "config": test_run_config_tests(); break;
-        case "logger": test_run_logger_tests(); break;
-        case "assets": test_run_asset_tests(); break;
-        case "input": test_run_input_tests(); break;
-        case "observer": test_run_observer_tests(); break;
-        case "json": test_run_json_tests(); break;
-        case "hex": test_run_hex_tests(); break;
-        default:
-            dev_console_log("Unknown test suite: " + suite, global.dev_console.error_color);
-    }
-}
-
-/// @function dev_cmd_test_all(args)
-/// @description Run all test suites
-function dev_cmd_test_all(args) {
-    logger_write(LogLevel.INFO, "DevConsole", "Test all command executed", "Running all test suites");
-    
-    dev_console_log("=== Running All Tests ===", global.dev_console.info_color);
-    
-    var start_time = get_timer();
-    
-    test_run_config_tests();
-    test_run_logger_tests();
-    test_run_asset_tests();
-    test_run_input_tests();
-    test_run_observer_tests();
-    test_run_json_tests();
-    test_run_hex_tests();
-    
-    var elapsed = (get_timer() - start_time) / 1000;
-    dev_console_log("All tests completed in " + string_format(elapsed, 1, 2) + "ms", global.dev_console.success_color);
-}
-
-/// @function dev_cmd_benchmark(args)
-/// @description Run performance benchmarks
-function dev_cmd_benchmark(args) {
-    logger_write(LogLevel.INFO, "DevConsole", "Benchmark command executed", "Running performance tests");
-    
-    dev_console_log("=== Running Benchmarks ===", global.dev_console.info_color);
-    test_run_benchmarks();
-}
-
 // Shortcut command implementations for testing
 function dev_cmd_test_config(args) { 
     logger_write(LogLevel.INFO, "DevConsole", "Test config command executed", "Running config tests");
@@ -570,4 +512,217 @@ function os_type_string() {
         case os_ios: return "iOS";
         default: return "Unknown";
     }
+}
+
+
+/// @/// @function dev_cmd_test(args)
+/// @description Run specific test suite - Updated with new test suites
+function dev_cmd_test(args) {
+    logger_write(LogLevel.INFO, "DevConsole", "Test command executed", string("Args: {0}", array_length(args)));
+    
+    if (array_length(args) == 0) {
+        dev_console_log("Available test suites:", global.dev_console.info_color);
+        dev_console_log("  Core Systems:", c_white);
+        dev_console_log("    config    - Configuration management", c_gray);
+        dev_console_log("    logger    - Logging system", c_gray);
+        dev_console_log("    assets    - Asset loading and caching", c_gray);
+        dev_console_log("    input     - Input and command processing", c_gray);
+        dev_console_log("    observer  - Observer pattern implementation", c_gray);
+        dev_console_log("", c_white);
+        dev_console_log("  Data Systems:", c_white);
+        dev_console_log("    json      - JSON parsing and serialization", c_gray);
+        dev_console_log("    csv       - CSV file handling", c_gray);
+        dev_console_log("    save      - Save/Load functionality", c_gray);
+        dev_console_log("", c_white);
+        dev_console_log("  Game Systems:", c_white);
+        dev_console_log("    gamestate - Game state management", c_gray);
+        dev_console_log("    command   - Command validation and processing", c_gray);
+        dev_console_log("    scene     - Scene state transitions", c_gray);
+        dev_console_log("    hex       - Hexagonal grid utilities", c_gray);
+        dev_console_log("    combat    - Combat calculations", c_gray);
+        dev_console_log("    resource  - Resource management", c_gray);
+        dev_console_log("    faction   - Faction relationships", c_gray);
+        dev_console_log("    unit      - Unit factory and creation", c_gray);
+        dev_console_log("    multi     - Multiplayer determinism", c_gray);
+        dev_console_log("", c_white);
+        dev_console_log("Usage: test [suite_name] or test all", c_yellow);
+        return;
+    }
+    
+    var suite = string_lower(args[0]);
+    
+    // Handle 'all' command
+    if (suite == "all") {
+        dev_cmd_test_all(args);
+        return;
+    }
+    
+    dev_console_log("Running test suite: " + suite, global.dev_console.info_color);
+    
+    switch (suite) {
+        // Core Systems
+        case "config": test_run_config_tests(); break;
+        case "logger": test_run_logger_tests(); break;
+        case "assets": test_run_asset_tests(); break;
+        case "input": test_run_input_tests(); break;
+        case "observer": test_run_observer_tests(); break;
+        
+        // Data Systems
+        case "json": test_run_json_tests(); break;
+        case "csv": test_run_csv_tests(); break;
+        case "save": test_run_save_load_tests(); break;
+        
+        // Game Systems
+        case "gamestate": test_run_gamestate_tests(); break;
+        case "command": test_run_command_tests(); break;
+        case "scene": test_run_scenestate_tests(); break;
+        case "hex": test_run_hex_tests(); break;
+        case "combat": test_run_combat_tests(); break;
+        case "resource": test_run_resource_tests(); break;
+        case "faction": test_run_faction_tests(); break;
+        case "unit": test_run_unit_factory_tests(); break;
+        case "multi": test_run_multiplayer_tests(); break;
+        
+        default:
+            dev_console_log("Unknown test suite: " + suite, global.dev_console.error_color);
+            dev_console_log("Type 'test' to see available suites", c_gray);
+    }
+}
+
+/// @function dev_cmd_test_all(args)
+/// @description Run all test suites with enhanced GUI display
+function dev_cmd_test_all(args) {
+    logger_write(LogLevel.INFO, "DevConsole", "Test all command executed", "Running all test suites");
+    
+    dev_console_log("=== Running All Tests ===", global.dev_console.info_color);
+    
+    // Check if AutoTest object exists
+    if (!instance_exists(obj_AutoTest)) {
+        // Create AutoTest object if it doesn't exist
+        instance_create_layer(0, 0, "Instances", obj_AutoTest);
+    }
+    
+    // Run tests through the AutoTest object for GUI display
+    with (obj_AutoTest) {
+        test_results = test_run_all_captured();
+        display_visible = true;
+        display_timer = display_duration;
+    }
+    
+    // Also output summary to console
+    var results = obj_AutoTest.test_results;
+    
+    dev_console_log(string("Completed {0} test suites in {1}ms", 
+                          array_length(results.suite_results),
+                          string_format(results.execution_time, 1, 2)), 
+                   global.dev_console.info_color);
+    
+    dev_console_log(string("Overall: {0}/{1} tests passed ({2}%)", 
+                          results.passed_tests,
+                          results.total_tests,
+                          string_format((results.passed_tests / max(1, results.total_tests)) * 100, 1, 1)), 
+                   results.passed_tests == results.total_tests ? 
+                   global.dev_console.success_color : global.dev_console.error_color);
+    
+    // Show failed tests in console
+    if (array_length(results.failed_test_names) > 0) {
+        dev_console_log("Failed tests:", global.dev_console.error_color);
+        for (var i = 0; i < min(5, array_length(results.failed_test_names)); i++) {
+            dev_console_log("  • " + results.failed_test_names[i], c_orange);
+        }
+        if (array_length(results.failed_test_names) > 5) {
+            dev_console_log(string("  ... and {0} more", 
+                                 array_length(results.failed_test_names) - 5), c_gray);
+        }
+    }
+}
+
+/// @function dev_cmd_test_benchmark(args)
+/// @description Run performance benchmarks for critical systems
+function dev_cmd_test_benchmark(args) {
+    dev_console_log("=== Running Performance Benchmarks ===", global.dev_console.info_color);
+    
+    var iterations = 1000;
+    if (array_length(args) > 0) {
+        iterations = real(args[0]);
+    }
+    
+    // Hex distance calculations
+    var start_time = get_timer();
+    for (var i = 0; i < iterations; i++) {
+        hex_distance(0, 0, irandom(20), irandom(20));
+    }
+    var hex_time = (get_timer() - start_time) / 1000;
+    
+    // Command creation
+    start_time = get_timer();
+    for (var i = 0; i < iterations; i++) {
+        input_create_command(CommandType.PAUSE, {}, 0);
+    }
+    var cmd_time = (get_timer() - start_time) / 1000;
+    
+    // Observer notifications
+    start_time = get_timer();
+    for (var i = 0; i < iterations; i++) {
+        gamestate_notify_observers("benchmark_event", {test: i});
+    }
+    var observer_time = (get_timer() - start_time) / 1000;
+    
+    dev_console_log(string("Benchmark Results ({0} iterations):", iterations), c_white);
+    dev_console_log(string("  Hex Distance:      {0}ms ({1}μs/op)", 
+                          string_format(hex_time, 1, 2),
+                          string_format(hex_time * 1000 / iterations, 1, 2)), c_aqua);
+    dev_console_log(string("  Command Creation:  {0}ms ({1}μs/op)", 
+                          string_format(cmd_time, 1, 2),
+                          string_format(cmd_time * 1000 / iterations, 1, 2)), c_aqua);
+    dev_console_log(string("  Observer Notify:   {0}ms ({1}μs/op)", 
+                          string_format(observer_time, 1, 2),
+                          string_format(observer_time * 1000 / iterations, 1, 2)), c_aqua);
+}
+
+/// @function dev_cmd_test_report(args)
+/// @description Generate a detailed test report
+function dev_cmd_test_report(args) {
+    dev_console_log("Generating test report...", global.dev_console.info_color);
+    
+    // Run all tests silently
+    var results = test_run_all_captured();
+    
+    // Generate report
+    var report = "4X GRAND STRATEGY GAME - TEST REPORT\n";
+    report += "=====================================\n\n";
+    report += "Generated: " + string(date_datetime_string(date_current_datetime())) + "\n";
+    report += "Game Version: " + (variable_global_exists("GAME_VERSION") ? GAME_VERSION : "Unknown") + "\n\n";
+    
+    report += "SUMMARY\n";
+    report += "-------\n";
+    report += string("Total Tests: {0}\n", results.total_tests);
+    report += string("Passed: {0}\n", results.passed_tests);
+    report += string("Failed: {0}\n", results.failed_tests);
+    report += string("Success Rate: {0}%\n", 
+                    string_format((results.passed_tests / max(1, results.total_tests)) * 100, 1, 1));
+    report += string("Execution Time: {0}ms\n\n", string_format(results.execution_time, 1, 2));
+    
+    report += "SUITE BREAKDOWN\n";
+    report += "---------------\n";
+    for (var i = 0; i < array_length(results.suite_results); i++) {
+        var suite = results.suite_results[i];
+        report += string("{0}: {1}/{2} passed\n", suite.name, suite.passed, suite.total);
+    }
+    
+    if (array_length(results.failed_test_names) > 0) {
+        report += "\nFAILED TESTS\n";
+        report += "-------------\n";
+        for (var i = 0; i < array_length(results.failed_test_names); i++) {
+            report += "- " + results.failed_test_names[i] + "\n";
+        }
+    }
+    
+    // Save report
+    var filename = "test_report_" + string(current_time) + ".txt";
+    var file = file_text_open_write(filename);
+    file_text_write_string(file, report);
+    file_text_close(file);
+    
+    dev_console_log("Test report saved to: " + filename, global.dev_console.success_color);
 }

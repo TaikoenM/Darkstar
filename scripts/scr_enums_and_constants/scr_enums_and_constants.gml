@@ -46,6 +46,9 @@ enum CommandType {
     ADD_TO_SELECTION,   // Add unit to current selection
     TOGGLE_SELECTION,   // Toggle unit selection
     UNIT_ORDER,         // Issue order to unit(s)
+	MOVE_UNIT,
+	ATTACK,
+	CUSTOM,
     
     // UI commands
     PAUSE,              // Pause/unpause game
